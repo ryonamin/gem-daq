@@ -1,5 +1,5 @@
 var dgram = require('dgram');
-var udp = dgram.createSocket('udp4');
+var udp = dgram.createSocket({ type: 'udp4', reuseAddr : true });
 
 var ipaddr = "192.168.0.161";
 var port = 50001;
@@ -8,15 +8,18 @@ var packetId = 0;
 var packetsCallback = new Array();
 var packetsTimeOut = new Array();
 
+
+udp.bind();
+
 /*
  * Receive responses
  */
 
-udp.on('message', function (message) {
+udp.on('message', function(message) {
     // Response
     var data = {
         ipbusVersion: (message[0] >> 4),
-        packetId: (message[1] << 8) || message[2],
+        packetId: ((message[4] & 0xf) << 8) | message[5],
         packetType: (message[7] & 0xf0) >> 4,
         infoCode: (message[3] & 0x0f)
     }
@@ -31,13 +34,9 @@ udp.on('message', function (message) {
         packetsCallback[data.packetId](data);
         delete packetsCallback[data.packetId];
         delete packetsTimeOut[data.packetId];
-
-        console.log('UDP: received packet ', data);
     }
-    else console.log('UDP: received packet but NO callback :( ', data);
+    else console.log('UDP: received packet', data.packetId, 'but NO callback :(');
 });
-
-udp.bind(50001);
 
 /*
  * Handle timeouts
@@ -71,12 +70,12 @@ function ipbus_read(addr, localCallback) {
     var data = new Buffer([
         // Transaction Header
         0x20, // Protocol version & RSVD
-        ((packetId & 0xff00) >> 8), // Packet ID MSB
-        (packetId & 0x00ff), // Packet ID LSB
+        0x0, // Transaction ID (0 or bug)
+        0x0, // Transaction ID (0 or bug)
         0xf0, // Packet order & type
         // Packet Header
         (0x20 | ((packetId & 0xf00) >> 8)), // Protocol version & Packet ID MSB
-        (packetId & 0x0ff), // Packet ID MSB,
+        (packetId & 0xff), // Packet ID MSB,
         0x1, // Words
         0x0f, // Type & Info code
         // Read address
@@ -101,8 +100,8 @@ function ipbus_write(addr, val, localCallback) {
     var data = new Buffer([
         // Transaction Header
         0x20, // Protocol version & RSVD
-        ((packetId & 0xff00) >> 8), // Packet ID MSB
-        (packetId & 0x00ff), // Packet ID LSB
+        0x0, // Transaction ID (0 or bug)
+        0x0, // Transaction ID (0 or bug)
         0xf0, // Packet order & type
         // Packet Header
         (0x20 | ((packetId & 0xf00) >> 8)), // Protocol version & Packet ID MSB
@@ -138,7 +137,6 @@ module.exports = function(io) {
 
         // IPBus read
         socket.on('ipbus_read', function(request, clientCallback) {
-            console.log('Socket.IO: received READ request');
             ipbus_read(request.addr, function(response) {
                 clientCallback(response);
             });
@@ -146,7 +144,6 @@ module.exports = function(io) {
 
         // IPBus write
         socket.on('ipbus_write', function(request, clientCallback) {
-            console.log('Socket.IO: received WRITE request');
             ipbus_write(request.addr, request.data, function(response) {
                 clientCallback(response);
             });
