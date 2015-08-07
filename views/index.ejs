@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/ipbus.js"></script>
+<script>
+  
+ipbus_read(0x4004010a, function(data) {
+    if (data < 0) data = 0xFFFFFFFF + data + 1;
+    alert(data.toString(16).toUpperCase());
+});
+</script>
+  </body>
+</html>
