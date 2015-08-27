@@ -1,0 +1,65 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+{% raw %}
+
+
+<div ng-controller="glibCtrl">
+
+    <h1>GLIB monitoring and control</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>{{ opticalLinks[0].name }}</th>
+                <th>{{ opticalLinks[1].name }}</th>
+                <th>{{ opticalLinks[2].name }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Optical link errors</td>
+                <td>{{ opticalLinks[0].error_counter | hex }}</td>
+                <td>{{ opticalLinks[1].error_counter | hex }}</td>
+                <td>{{ opticalLinks[2].error_counter | hex }}</td>
+            </tr>
+            <tr>
+                <td>VFAT2 TX transactions</td>
+                <td>{{ opticalLinks[0].vfat2_tx_counter | hex }}</td>
+                <td>{{ opticalLinks[1].vfat2_tx_counter | hex }}</td>
+                <td>{{ opticalLinks[2].vfat2_tx_counter | hex }}</td>
+            </tr>
+            <tr>
+                <td>VFAT2 RX transactions</td>
+                <td>{{ opticalLinks[0].vfat2_rx_counter | hex }}</td>
+                <td>{{ opticalLinks[1].vfat2_rx_counter | hex }}</td>
+                <td>{{ opticalLinks[2].vfat2_rx_counter | hex }}</td>
+            </tr>
+            <tr>
+                <td>Registers TX transactions</td>
+                <td>{{ opticalLinks[0].reg_tx_counter | hex }}</td>
+                <td>{{ opticalLinks[1].reg_tx_counter | hex }}</td>
+                <td>{{ opticalLinks[2].reg_tx_counter | hex }}</td>
+            </tr>
+            <tr>
+                <td>Registers RX transactions</td>
+                <td>{{ opticalLinks[0].reg_rx_counter | hex }}</td>
+                <td>{{ opticalLinks[1].reg_rx_counter | hex }}</td>
+                <td>{{ opticalLinks[2].reg_rx_counter | hex }}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><a ng-click="reset_link_counter(0)" class="button tiny expand" href="#">Reset counters</a></td>
+                <td><a ng-click="reset_link_counter(1)" class="button tiny expand" href="#">Reset counters</a></td>
+                <td><a ng-click="reset_link_counter(2)" class="button tiny expand" href="#">Reset counters</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+{% endraw %}
+
+{% endblock %}

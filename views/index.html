@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<htmll ng-app="app">
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="/stylesheets/style.css">
+        <link rel="stylesheet" href="http://cdn.foundation5.zurb.com/foundation.css">
+    </head>
+    <body>
+
+        <nav class="top-bar" data-topbar role="navigation">
+            <ul class="title-area">
+                <li class="name">
+                    <h1><a href="/">GEM DAQ</a></h1>
+                </li>
+                <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+            </ul>
+
+            <section class="top-bar-section">
+                <ul class="left">
+                    <li class="divider"></li>
+                    <li><a href="/glib">GLIB</a></li>
+                    <li><a href="/vfat2">VFAT2</a></li>
+                </ul>
+                <ul class="right">
+                    <li class="has-form">
+                        <a href="http://foundation.zurb.com/docs" class="button">Get Lucky</a>
+                    </li>
+                </ul>
+            </section>
+        </nav>
+
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="http://cdn.foundation5.zurb.com/foundation.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/javascripts/angular.js"></script>
+        <script src="/javascripts/tools.js"></script>
+        <script src="/javascripts/glib.js"></script>
+        <script src="/javascripts/vfat2.js"></script>
+    </body>
+</html>

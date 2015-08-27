@@ -86,8 +86,8 @@ function ipbus_read(addr, localCallback) {
     ]);
 
     packetsCallback[packetId] = localCallback;
-    packetsTimeOut[packetId] = 100;
-    packetId = (packetId == 100 ? 0 : ++packetId); 
+    packetsTimeOut[packetId] = 10000;
+    packetId = (packetId == 2000 ? 0 : ++packetId); 
 
     udp.send(data, 0, data.length, port, ipaddr);        
 };
@@ -121,8 +121,8 @@ function ipbus_write(addr, val, localCallback) {
     ]);
 
     packetsCallback[packetId] = localCallback;
-    packetsTimeOut[packetId] = 100;
-    packetId = (packetId == 100 ? 0 : ++packetId); 
+    packetsTimeOut[packetId] = 10000;
+    packetId = (packetId == 2000 ? 0 : ++packetId); 
 
     udp.send(data, 0, data.length, port, ipaddr);       
 };
