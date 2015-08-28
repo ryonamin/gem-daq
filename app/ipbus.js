@@ -4,15 +4,26 @@ var udp = dgram.createSocket({ type: 'udp4', reuseAddr : true });
 var ipaddr = "192.168.0.161";
 var port = 50001;
 
+var packets = new Array();
 var packetId = 0;
-var packetsCallback = new Array();
-var packetsTimeOut = new Array();
+var packet = undefined;
 
 
 udp.bind();
 
 /*
- * Receive responses
+ * Send transactions
+ */
+
+setInterval(function() {
+    if (packet === undefined && packets.length > 1) {
+        packet = packets.shift();
+        udp.send(packet.data, 0, packet.data.length, port, ipaddr); 
+    }
+}, 1);  
+
+/*
+ * Receive transactions
  */
 
 udp.on('message', function(message) {
@@ -21,19 +32,18 @@ udp.on('message', function(message) {
         ipbusVersion: (message[0] >> 4),
         packetId: ((message[4] & 0xf) << 8) | message[5],
         packetType: (message[7] & 0xf0) >> 4,
-        infoCode: (message[3] & 0x0f)
-    }
-
+        infoCode: (message[3] & 0x0f),
+        data: null
+    };
     // Read
     if (data.packetType == 0) data.data = (message[8] << 24) | (message[9] << 16) | (message[10] << 8) | message[11];
     // Write
     else if (data.packetType == 1) data.data = 0;
 
     // Callback
-    if (packetsCallback[data.packetId] !== undefined) {
-        packetsCallback[data.packetId](data);
-        delete packetsCallback[data.packetId];
-        delete packetsTimeOut[data.packetId];
+    if (packet !== undefined) {
+        (packet.callback)(data);
+        packet = undefined;
     }
     else console.log('UDP: received packet', data.packetId, 'but NO callback :(');
 });
@@ -43,88 +53,83 @@ udp.on('message', function(message) {
  */
 
 setInterval(function() {
-    for (var i = 0; i < packetsTimeOut.length; ++i) {
-        if (packetsTimeOut[i] !== undefined) {
-            if (packetsTimeOut[i] != 0) --packetsTimeOut[i];
-            else {
-                var data = {
-                    packetId: i,
-                    packetType: null,
-                    infoCode: 0x6,
-                    data: null
-                }
-                packetsCallback[i](data);
-                delete packetsCallback[i];
-                delete packetsTimeOut[i];
-                console.log('Timeout: transaction', i, 'timed out :(')
-            }
+    if (packet !== undefined) {
+        if (packet.timeout > 0) --packet.timeout;
+        else {
+            (packet.callback)({
+                ipbusVersion: 0x2,
+                packetId: packet.id,
+                packetType: null,
+                infoCode: 0x6,
+                data: null
+            });
+            console.log('Timeout: transaction', packet.id, 'timed out :(');
+            packet = undefined;
         }
     }
-}, 10); 
+}, 10);  
 
 /*
- * Read function
+ * IPBus read transaction in queue
  */
 
-function ipbus_read(addr, localCallback) {
-    var data = new Buffer([
-        // Transaction Header
-        0x20, // Protocol version & RSVD
-        0x0, // Transaction ID (0 or bug)
-        0x0, // Transaction ID (0 or bug)
-        0xf0, // Packet order & type
-        // Packet Header
-        (0x20 | ((packetId & 0xf00) >> 8)), // Protocol version & Packet ID MSB
-        (packetId & 0xff), // Packet ID MSB,
-        0x1, // Words
-        0x0f, // Type & Info code
-        // Read address
-        ((addr & 0xff000000) >> 24),
-        ((addr & 0x00ff0000) >> 16),
-        ((addr & 0x0000ff00) >> 8),
-        (addr & 0x000000ff)
-    ]);
-
-    packetsCallback[packetId] = localCallback;
-    packetsTimeOut[packetId] = 10000;
-    packetId = (packetId == 2000 ? 0 : ++packetId); 
-
-    udp.send(data, 0, data.length, port, ipaddr);        
+function ipbus_read(addr, callback) {
+    packets.push({
+        id: packetId++,
+        data: new Buffer([
+            // Transaction Header
+            0x20, // Protocol version & RSVD
+            0x0, // Transaction ID (0 or bug)
+            0x0, // Transaction ID (0 or bug)
+            0xf0, // Packet order & type
+            // Packet Header
+            (0x20 | ((packetId & 0xf00) >> 8)), // Protocol version & Packet ID MSB
+            (packetId & 0xff), // Packet ID MSB,
+            0x1, // Words
+            0x0f, // Type & Info code
+            // Read address
+            ((addr & 0xff000000) >> 24),
+            ((addr & 0x00ff0000) >> 16),
+            ((addr & 0x0000ff00) >> 8),
+            (addr & 0x000000ff)
+        ]),
+        callback: callback,
+        timeout: 5
+    });      
 };
 
 /*
- * Write function
+ * IPBus write transaction in queue
  */
 
-function ipbus_write(addr, val, localCallback) {
-    var data = new Buffer([
-        // Transaction Header
-        0x20, // Protocol version & RSVD
-        0x0, // Transaction ID (0 or bug)
-        0x0, // Transaction ID (0 or bug)
-        0xf0, // Packet order & type
-        // Packet Header
-        (0x20 | ((packetId & 0xf00) >> 8)), // Protocol version & Packet ID MSB
-        (packetId & 0x0ff), // Packet ID MSB,
-        0x1, // Words
-        0x1f, // Type & Info code
-        // Write address
-        ((addr & 0xff000000) >> 24),
-        ((addr & 0x00ff0000) >> 16),
-        ((addr & 0x0000ff00) >> 8),
-        (addr & 0x000000ff),
-        // Write data
-        ((val & 0xff000000) >> 24),
-        ((val & 0x00ff0000) >> 16),
-        ((val & 0x0000ff00) >> 8),
-        (val & 0x000000ff)
-    ]);
-
-    packetsCallback[packetId] = localCallback;
-    packetsTimeOut[packetId] = 10000;
-    packetId = (packetId == 2000 ? 0 : ++packetId); 
-
-    udp.send(data, 0, data.length, port, ipaddr);       
+function ipbus_write(addr, data, callback) {
+    packets.push({
+        id: packetId++,
+        data: new Buffer([
+            // Transaction Header
+            0x20, // Protocol version & RSVD
+            0x0, // Transaction ID (0 or bug)
+            0x0, // Transaction ID (0 or bug)
+            0xf0, // Packet order & type
+            // Packet Header
+            (0x20 | ((packetId & 0xf00) >> 8)), // Protocol version & Packet ID MSB
+            (packetId & 0x0ff), // Packet ID MSB,
+            0x1, // Words
+            0x1f, // Type & Info code
+            // Write address
+            ((addr & 0xff000000) >> 24),
+            ((addr & 0x00ff0000) >> 16),
+            ((addr & 0x0000ff00) >> 8),
+            (addr & 0x000000ff),
+            // Write data
+            ((data & 0xff000000) >> 24),
+            ((data & 0x00ff0000) >> 16),
+            ((data & 0x0000ff00) >> 8),
+            (data & 0x000000ff)
+        ]),
+        callback: callback,
+        timeout: 5
+    });      
 };
 
 /*
@@ -136,17 +141,13 @@ module.exports = function(io) {
     io.on('connection', function (socket) {
 
         // IPBus read
-        socket.on('ipbus_read', function(request, clientCallback) {
-            ipbus_read(request.addr, function(response) {
-                clientCallback(response);
-            });
+        socket.on('ipbus_read', function(request, callback) {
+            ipbus_read(request.addr, callback);
         });
 
         // IPBus write
-        socket.on('ipbus_write', function(request, clientCallback) {
-            ipbus_write(request.addr, request.data, function(response) {
-                clientCallback(response);
-            });
+        socket.on('ipbus_write', function(request, callback) {
+            ipbus_write(request.addr, request.data, callback);
         });
 
     });
