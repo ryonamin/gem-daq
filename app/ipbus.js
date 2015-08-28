@@ -94,7 +94,7 @@ function ipbus_read(addr, callback) {
             (addr & 0x000000ff)
         ]),
         callback: callback,
-        timeout: 5
+        timeout: 100
     });      
 };
 
@@ -128,7 +128,7 @@ function ipbus_write(addr, data, callback) {
             (data & 0x000000ff)
         ]),
         callback: callback,
-        timeout: 5
+        timeout: 100
     });      
 };
 

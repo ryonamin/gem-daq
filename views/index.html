@@ -1,45 +1,48 @@
 <!DOCTYPE html>
-<htmll ng-app="app">
+<html ng-app="app">
     <head>
-        <title></title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>GEM Web DAQ interface</title>
+        <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
         <link rel="stylesheet" href="/stylesheets/style.css">
-        <link rel="stylesheet" href="http://cdn.foundation5.zurb.com/foundation.css">
     </head>
     <body>
 
-        <nav class="top-bar" data-topbar role="navigation">
-            <ul class="title-area">
-                <li class="name">
-                    <h1><a href="/">GEM DAQ</a></h1>
-                </li>
-                <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-            </ul>
-
-            <section class="top-bar-section">
-                <ul class="left">
-                    <li class="divider"></li>
-                    <li><a href="/glib">GLIB</a></li>
-                    <li><a href="/vfat2">VFAT2</a></li>
-                </ul>
-                <ul class="right">
-                    <li class="has-form">
-                        <a href="http://foundation.zurb.com/docs" class="button">Get Lucky</a>
-                    </li>
-                </ul>
-            </section>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">GEM Web DAQ</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/glib">GLIB</a></li>
+                        <li><a href="/oh">OptoHybrid</a></li>
+                        <li><a href="/vfat2">VFAT2</a></li>
+                    </ul>
+                </div>
+            </div>
         </nav>
 
-        <div id="content">
+        <div class="container-fluid">
             {% block content %}{% endblock %}
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="http://cdn.foundation5.zurb.com/foundation.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="/javascripts/angular.js"></script>
         <script src="/javascripts/tools.js"></script>
         <script src="/javascripts/glib.js"></script>
+        <script src="/javascripts/oh.js"></script>
         <script src="/javascripts/vfat2.js"></script>
     </body>
 </html>

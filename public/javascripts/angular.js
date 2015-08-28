@@ -51,6 +51,7 @@ app.factory('socket', function ($rootScope) {
 
 app.filter('hex', function() {
     return function(n) {
+        n = parseInt(n);
         if (n < 0) n += 0xFFFFFFFF + 1;
         return '0x' + n.toString(16).toUpperCase();
     };
