@@ -1,4 +1,4 @@
-app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {    
+app.controller('latencyCtrl', ['$scope', 'socket', function($scope, socket) {    
 
     /* Models */
 
@@ -29,7 +29,7 @@ app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {
     /* Launch the scan */
 
     $scope.start_scan = function() {   
-        socket.ipbus_write(0x42000001, 0);
+        socket.ipbus_write(0x42000001, 2);
         socket.ipbus_write(0x42000002, $scope.vfat2ID);
         socket.ipbus_write(0x42000004, $scope.minVal);
         socket.ipbus_write(0x42000005, $scope.maxVal);
@@ -57,7 +57,7 @@ app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {
 
         var options = {
             hAxis: {
-                title: 'Threshold'
+                title: 'Latency'
             },
             vAxis: {
                 title: 'Percentage'
@@ -68,7 +68,7 @@ app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {
             }
         };  
 
-        var chart = new google.visualization.LineChart(document.getElementById('threshold_chart'));
+        var chart = new google.visualization.LineChart(document.getElementById('latency_chart'));
 
         for (var i = 0; i <= nSamples; ++i) {
             socket.ipbus_read(0x42000008, function(data) {
