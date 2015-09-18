@@ -16,7 +16,7 @@ udp.bind();
  */
 
 setInterval(function() {
-    if (packet === undefined && packets.length > 1) {
+    if (packet === undefined && packets.length > 0) {
         packet = packets.shift();
         udp.send(packet.data, 0, packet.data.length, port, ipaddr); 
     }
@@ -95,7 +95,7 @@ function ipbus_read(addr, callback) {
         ]),
         callback: callback,
         timeout: 100
-    });      
+    });     
 };
 
 /*

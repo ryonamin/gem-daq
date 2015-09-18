@@ -2,6 +2,49 @@
 
 {% block content %}
 
-{% raw %}{% endraw %}
+
+<div class="jumbotron">
+    <div class="container">
+        <h1>GEM DAQ Interface</h1>
+        <div class="row">
+            <div class="col-md-4">                
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Hardware components</h3>
+                    </div>
+                    <div class="panel-body">
+                        <a class="btn btn-block btn-default btn-xs" href="glib">GLIB</a>
+                        <a class="btn btn-block btn-default btn-xs" href="oh">OptoHybrid</a>
+                        <a class="btn btn-block btn-default btn-xs" href="vfat2">VFAT2s</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">       
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Low level functionalities</h3>
+                    </div>
+                    <div class="panel-body">
+                        <a class="btn btn-block btn-default btn-xs" href="i2c">VFAT2 I2C</a>
+                        <a class="btn btn-block btn-default btn-xs" href="adc">ADC</a>
+                    </div>
+                </div>                
+            </div>
+            <div class="col-md-4">       
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">High level functionalities</h3>
+                    </div>
+                    <div class="panel-body">
+                        <a class="btn btn-block btn-default btn-xs" href="threhsold">Threshold scan</a>
+                        <a class="btn btn-block btn-default btn-xs" href="latency">Latency scan</a>
+                        <a class="btn btn-block btn-default btn-xs" href="t1">T1 generation</a>
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}

@@ -4,7 +4,7 @@
 
 {% raw %}
 
-<div ng-controller="vfat2Ctrl" class="vfat2-controller">
+<div ng-controller="vfat2Ctrl">
     <h1>VFAT2 monitoring and control</h1>
     <div class="row">
         <div class="col-md-4">
@@ -40,12 +40,21 @@
                     </p>
                 </div>
             </div>
-
         </div>
-        <div class="col-md-8" ng-show="inspectinVFAT2 != 99">    
+        <div class="col-md-8" ng-show="selectedVFAT2 == 99">  
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">VFAT2 #{{ inspectinVFAT2 }} Monitoring and Fine Control</h3>
+                    <h3 class="panel-title">No VFAT2 selected</h3>
+                </div>  
+                <div class="panel-body">
+                    <p>Select a VFAT2 in the left panel to see more information about it.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8" ng-show="selectedVFAT2 != 99">    
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">VFAT2 #{{ selectedVFAT2 }} Monitoring and Fine Control</h3>
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -61,44 +70,44 @@
                                 <tbody>
                                     <tr>
                                         <td>Control Register 0</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].ctrl0 | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].ctrl0 | hex }}</td>
                                         <td>
-                                            <span class="label label-danger" ng-show="vfat2s[inspectinVFAT2].ctrl0 != defaultVFAT2.ctrl0"><span class="glyphicon glyphicon-remove"></span></span>
-                                            <span class="label label-success" ng-show="vfat2s[inspectinVFAT2].ctrl0 == defaultVFAT2.ctrl0"><span class="glyphicon glyphicon-ok"></span></span>
+                                            <span class="label label-danger" ng-show="vfat2s[selectedVFAT2].ctrl0 != defaultVFAT2.ctrl0"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="label label-success" ng-show="vfat2s[selectedVFAT2].ctrl0 == defaultVFAT2.ctrl0"><span class="glyphicon glyphicon-ok"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Control Register 1</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].ctrl1 | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].ctrl1 | hex }}</td>
                                         <td>
-                                            <span class="label label-danger" ng-show="vfat2s[inspectinVFAT2].ctrl1 != defaultVFAT2.ctrl1"><span class="glyphicon glyphicon-remove"></span></span>
-                                            <span class="label label-success" ng-show="vfat2s[inspectinVFAT2].ctrl1 == defaultVFAT2.ctrl1"><span class="glyphicon glyphicon-ok"></span></span>
+                                            <span class="label label-danger" ng-show="vfat2s[selectedVFAT2].ctrl1 != defaultVFAT2.ctrl1"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="label label-success" ng-show="vfat2s[selectedVFAT2].ctrl1 == defaultVFAT2.ctrl1"><span class="glyphicon glyphicon-ok"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Control Register 2</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].ctrl2 | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].ctrl2 | hex }}</td>
                                         <td>
-                                            <span class="label label-danger" ng-show="vfat2s[inspectinVFAT2].ctrl2 != defaultVFAT2.ctrl2"><span class="glyphicon glyphicon-remove"></span></span>
-                                            <span class="label label-success" ng-show="vfat2s[inspectinVFAT2].ctrl2 == defaultVFAT2.ctrl2"><span class="glyphicon glyphicon-ok"></span></span>
+                                            <span class="label label-danger" ng-show="vfat2s[selectedVFAT2].ctrl2 != defaultVFAT2.ctrl2"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="label label-success" ng-show="vfat2s[selectedVFAT2].ctrl2 == defaultVFAT2.ctrl2"><span class="glyphicon glyphicon-ok"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Control Register 3</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].ctrl3 | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].ctrl3 | hex }}</td>
                                         <td>
-                                            <span class="label label-danger" ng-show="vfat2s[inspectinVFAT2].ctrl3 != defaultVFAT2.ctrl3"><span class="glyphicon glyphicon-remove"></span></span>
-                                            <span class="label label-success" ng-show="vfat2s[inspectinVFAT2].ctrl3 == defaultVFAT2.ctrl3"><span class="glyphicon glyphicon-ok"></span></span>
+                                            <span class="label label-danger" ng-show="vfat2s[selectedVFAT2].ctrl3 != defaultVFAT2.ctrl3"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="label label-success" ng-show="vfat2s[selectedVFAT2].ctrl3 == defaultVFAT2.ctrl3"><span class="glyphicon glyphicon-ok"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>ChipID0</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].chipId0 | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].chipId0 | hex }}</td>
                                         <td></td>
                                     </tr>
                                     <tr>
                                         <td>ChipID1</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].chipId1 | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].chipId1 | hex }}</td>
                                         <td></td>
                                     </tr>
                                 </tbody>
@@ -115,79 +124,87 @@
                                 <tbody>                          
                                     <tr>
                                         <td>IPreampIn</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].iPreampIn | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].iPreampIn | hex }}</td>
                                         <td>
-                                            <span class="label label-danger" ng-show="vfat2s[inspectinVFAT2].iPreampIn != defaultVFAT2.iPreampIn"><span class="glyphicon glyphicon-remove"></span></span>
-                                            <span class="label label-success" ng-show="vfat2s[inspectinVFAT2].iPreampIn == defaultVFAT2.iPreampIn"><span class="glyphicon glyphicon-ok"></span></span>
+                                            <span class="label label-danger" ng-show="vfat2s[selectedVFAT2].iPreampIn != defaultVFAT2.iPreampIn"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="label label-success" ng-show="vfat2s[selectedVFAT2].iPreampIn == defaultVFAT2.iPreampIn"><span class="glyphicon glyphicon-ok"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>IPreampFeed</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].iPremapFeed | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].iPremapFeed | hex }}</td>
                                         <td>
-                                            <span class="label label-danger" ng-show="vfat2s[inspectinVFAT2].iPremapFeed != defaultVFAT2.iPremapFeed"><span class="glyphicon glyphicon-remove"></span></span>
-                                            <span class="label label-success" ng-show="vfat2s[inspectinVFAT2].iPremapFeed == defaultVFAT2.iPremapFeed"><span class="glyphicon glyphicon-ok"></span></span>
+                                            <span class="label label-danger" ng-show="vfat2s[selectedVFAT2].iPremapFeed != defaultVFAT2.iPremapFeed"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="label label-success" ng-show="vfat2s[selectedVFAT2].iPremapFeed == defaultVFAT2.iPremapFeed"><span class="glyphicon glyphicon-ok"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>IPreampOut</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].iPreampOut | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].iPreampOut | hex }}</td>
                                         <td>
-                                            <span class="label label-danger" ng-show="vfat2s[inspectinVFAT2].iPreampOut != defaultVFAT2.iPreampOut"><span class="glyphicon glyphicon-remove"></span></span>
-                                            <span class="label label-success" ng-show="vfat2s[inspectinVFAT2].iPreampOut == defaultVFAT2.iPreampOut"><span class="glyphicon glyphicon-ok"></span></span>
+                                            <span class="label label-danger" ng-show="vfat2s[selectedVFAT2].iPreampOut != defaultVFAT2.iPreampOut"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="label label-success" ng-show="vfat2s[selectedVFAT2].iPreampOut == defaultVFAT2.iPreampOut"><span class="glyphicon glyphicon-ok"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>IShaper</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].iShaper | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].iShaper | hex }}</td>
                                         <td>
-                                            <span class="label label-danger" ng-show="vfat2s[inspectinVFAT2].iShaper != defaultVFAT2.iShaper"><span class="glyphicon glyphicon-remove"></span></span>
-                                            <span class="label label-success" ng-show="vfat2s[inspectinVFAT2].iShaper == defaultVFAT2.iShaper"><span class="glyphicon glyphicon-ok"></span></span>
+                                            <span class="label label-danger" ng-show="vfat2s[selectedVFAT2].iShaper != defaultVFAT2.iShaper"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="label label-success" ng-show="vfat2s[selectedVFAT2].iShaper == defaultVFAT2.iShaper"><span class="glyphicon glyphicon-ok"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>IShaperFeed</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].iShaperFeed | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].iShaperFeed | hex }}</td>
                                         <td>
-                                            <span class="label label-danger" ng-show="vfat2s[inspectinVFAT2].iShaperFeed != defaultVFAT2.iShaperFeed"><span class="glyphicon glyphicon-remove"></span></span>
-                                            <span class="label label-success" ng-show="vfat2s[inspectinVFAT2].iShaperFeed == defaultVFAT2.iShaperFeed"><span class="glyphicon glyphicon-ok"></span></span>
+                                            <span class="label label-danger" ng-show="vfat2s[selectedVFAT2].iShaperFeed != defaultVFAT2.iShaperFeed"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="label label-success" ng-show="vfat2s[selectedVFAT2].iShaperFeed == defaultVFAT2.iShaperFeed"><span class="glyphicon glyphicon-ok"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>IComp</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].iComp | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].iComp | hex }}</td>
                                         <td>
-                                            <span class="label label-danger" ng-show="vfat2s[inspectinVFAT2].iComp != defaultVFAT2.iComp"><span class="glyphicon glyphicon-remove"></span></span>
-                                            <span class="label label-success" ng-show="vfat2s[inspectinVFAT2].iComp == defaultVFAT2.iComp"><span class="glyphicon glyphicon-ok"></span></span>
+                                            <span class="label label-danger" ng-show="vfat2s[selectedVFAT2].iComp != defaultVFAT2.iComp"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="label label-success" ng-show="vfat2s[selectedVFAT2].iComp == defaultVFAT2.iComp"><span class="glyphicon glyphicon-ok"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Latency</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].latency | hex }}</td>
-                                        <td></td>
+                                        <td>{{ vfat2s[selectedVFAT2].latency | hex }}</td>
+                                        <td>
+                                            <span class="label label-warning"><span class="glyphicon glyphicon-th"></span></span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>VThreshold1</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].vthreshold1 | hex }}</td>
-                                        <td></td>
+                                        <td>{{ vfat2s[selectedVFAT2].vthreshold1 | hex }}</td>
+                                        <td>
+                                            <span class="label label-warning"><span class="glyphicon glyphicon-th"></span></span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>VThreshold2</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].vthreshold2 | hex }}</td>
+                                        <td>{{ vfat2s[selectedVFAT2].vthreshold2 | hex }}</td>
                                         <td>
-                                            <span class="label label-danger" ng-show="vfat2s[inspectinVFAT2].vthreshold2 != defaultVFAT2.vthreshold2"><span class="glyphicon glyphicon-remove"></span></span>
-                                            <span class="label label-success" ng-show="vfat2s[inspectinVFAT2].vthreshold2 == defaultVFAT2.vthreshold2"><span class="glyphicon glyphicon-ok"></span></span>
+                                            <span class="label label-danger" ng-show="vfat2s[selectedVFAT2].vthreshold2 != defaultVFAT2.vthreshold2"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="label label-success" ng-show="vfat2s[selectedVFAT2].vthreshold2 == defaultVFAT2.vthreshold2"><span class="glyphicon glyphicon-ok"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>VCal</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].vcal | hex }}</td>
-                                        <td></td>
+                                        <td>{{ vfat2s[selectedVFAT2].vcal | hex }}</td>
+                                        <td>
+                                            <span class="label label-warning"><span class="glyphicon glyphicon-th"></span></span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>Calibration Phase</td>
-                                        <td>{{ vfat2s[inspectinVFAT2].calphase | hex }}</td>
-                                        <td></td>
+                                        <td>{{ vfat2s[selectedVFAT2].calphase | hex }}</td>
+                                        <td>
+                                            <span class="label label-warning"><span class="glyphicon glyphicon-th"></span></span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table> 
