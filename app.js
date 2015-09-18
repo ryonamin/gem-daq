@@ -32,6 +32,7 @@ app.get('/oh', function (req, res) { res.render('oh.html'); });
 app.get('/vfat2', function (req, res) { res.render('vfat2.html'); });
 app.get('/i2c', function (req, res) { res.render('i2c.html'); });
 app.get('/threshold', function (req, res) { res.render('threshold.html'); });
+app.get('/t1', function (req, res) { res.render('t1.html'); });
 
 
 // catch 404 and forward to error handler

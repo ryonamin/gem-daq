@@ -158,7 +158,7 @@ app.controller('i2cCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.vfat2ID = 0;
 
-    $scope.vfat2Register = 0;
+    $scope.vfat2Register = '0';
 
     $scope.vfat2Data = 0;
 
@@ -182,7 +182,7 @@ app.controller('i2cCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.vfat2smask = "000000";
 
-    $scope.vfat2sRegister = 0;
+    $scope.vfat2sRegister = '0';
 
     $scope.vfat2sData = 0;
 
@@ -218,6 +218,11 @@ app.controller('i2cCtrl', ['$scope', 'socket', function($scope, socket) {
                 $scope.writesResult = true;
             });
         });
+    };
+
+    $scope.reset_module = function() {
+        $scope.vfat2smask = "000000";
+        socket.ipbus_write(0x41000102, 1);
     };
 
 }]);

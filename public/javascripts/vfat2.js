@@ -1,5 +1,7 @@
 app.controller('vfat2Ctrl', ['$scope', 'socket', function($scope, socket) {    
 
+    /* Models */
+
     $scope.vfat2s = [];
 
     $scope.selectedVFAT2 = 99;
@@ -43,7 +45,6 @@ app.controller('vfat2Ctrl', ['$scope', 'socket', function($scope, socket) {
         calphase: 0
     });
 
-
     /* Check if a VFAT2 is ON or OFF (and extract other information from the CTRL0 register) */
         
     function get_vfat2_onoff(vfat2) {
@@ -66,6 +67,12 @@ app.controller('vfat2Ctrl', ['$scope', 'socket', function($scope, socket) {
 
     get_vfat2_onoff_loop();
 
+    /* Show the VFAT2 to inspect */
+
+    $scope.vfat2Inspect = function(vfat2) {
+        $scope.selectedVFAT2 = vfat2;
+        get_vfat2_details(vfat2);
+    };
 
     /* Readout all the registers from a VFAT2 */
 
@@ -89,18 +96,16 @@ app.controller('vfat2Ctrl', ['$scope', 'socket', function($scope, socket) {
         socket.ipbus_read(vfat2_reg(vfat2, 148), function(data) { $scope.vfat2s[vfat2].calphase = data; });
     }
 
-    /* Open the modal dialog */
+    function get_vfat2_details_loop() {
+        if ($scope.selectedVFAT2 != 99) get_vfat2_details($scope.selectedVFAT2);
+        setTimeout(get_vfat2_details_loop, 10000);
+    }     
 
-    $scope.vfat2Inspect = function(vfat2) {
-        $scope.selectedVFAT2 = vfat2;
-        get_vfat2_details(vfat2);
-    };
-
+    get_vfat2_details_loop();
 
     /* Restore the default parameters of a VFAT2 */
     
     $scope.restore_defaults = function(vfat2) {
-        if (vfat2 === undefined) vfat2 = $scope.selectedVFAT2;
         // Write the changes        
         socket.ipbus_write(vfat2_reg(vfat2, 1), $scope.defaultVFAT2.ctrl1);
         socket.ipbus_write(vfat2_reg(vfat2, 149), $scope.defaultVFAT2.ctrl2);
@@ -125,23 +130,19 @@ app.controller('vfat2Ctrl', ['$scope', 'socket', function($scope, socket) {
         socket.ipbus_read(vfat2_reg(vfat2, 147), function(data) { $scope.vfat2s[vfat2].vthreshold2 = data; });
     };
 
-
     /* Start and stop the VFAT2 */
 
     $scope.start_vfat2 = function(vfat2) {
-        if (vfat2 === undefined) vfat2 = $scope.selectedVFAT2;
         socket.ipbus_write(vfat2_reg(vfat2, 0), $scope.defaultVFAT2.ctrl0);
         socket.ipbus_read(vfat2_reg(vfat2, 0), function(data) { $scope.vfat2s[vfat2].ctrl0 = data; });
         get_vfat2_onoff(vfat2);
     };
 
     $scope.stop_vfat2 = function(vfat2) {
-        if (vfat2 === undefined) vfat2 = $scope.selectedVFAT2;
         socket.ipbus_write(vfat2_reg(vfat2, 0), 0);
         socket.ipbus_read(vfat2_reg(vfat2, 0), function(data) { $scope.vfat2s[vfat2].ctrl0 = data; });
         get_vfat2_onoff(vfat2);
     };
-
 
     /* Apply to all VFAT2s */
 

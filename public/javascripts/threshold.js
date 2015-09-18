@@ -1,6 +1,8 @@
 app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {    
 
-    /* Scan parameters */
+    /* Models */
+
+    $scope.scan_is_running = false;
 
     $scope.vfat2ID = 0;
 
@@ -11,6 +13,18 @@ app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {
     $scope.steps = 1;
 
     $scope.nEvents = 1000;
+
+    /* Get the current values */
+        
+    function get_current_values() {
+        socket.ipbus_read(0x42000002, function(data) { $scope.vfat2ID = data; });
+        socket.ipbus_read(0x42000004, function(data) { $scope.minVal = data; });
+        socket.ipbus_read(0x42000005, function(data) { $scope.maxVal = data; });
+        socket.ipbus_read(0x42000006, function(data) { $scope.steps = data; });
+        socket.ipbus_read(0x42000007, function(data) { $scope.nEvents = data; });    
+    };
+
+    get_current_values();
 
     /* Launch the scan */
 
@@ -25,6 +39,15 @@ app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {
 
         setTimeout(collect_result, 1000);
     };
+
+    /* Reset the module */
+
+    $scope.reset_scan = function() {
+        socket.ipbus_write(0x4200000A, 1);
+        get_current_values();
+    };
+
+    /* Collect the results when the scan is done */
 
     function collect_result() {
         if ($scope.scan_is_running) setTimeout(collect_result, 1000);
@@ -66,9 +89,7 @@ app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {
         chart.draw(chartData, options);
     }
 
-    /* Scan status*/
-
-    $scope.scan_is_running = false;
+    /* Scan status */
         
     function is_scan_running() {
         socket.ipbus_read(0x42000009, function(data) { 
