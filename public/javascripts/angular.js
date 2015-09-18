@@ -1,3 +1,6 @@
+// Load the Visualization API and the piechart package.
+google.load('visualization', '1.0', { 'packages': ['corechart'] });
+
 var app = angular.module('app', []);
 
 app.factory('socket', function ($rootScope) {

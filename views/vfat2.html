@@ -8,15 +8,15 @@
     <h1>VFAT2 monitoring and control</h1>
     <div class="row">
         <div class="col-md-4">
-            <div class="panel panel-info">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Overview</h3>
                 </div>
                 <div class="panel-body">
                     <p>
                         <span class="vfat2-item" ng-repeat="vfat2 in vfat2s">
-                            <a class="btn btn-block btn-success btn-xs" ng-show="vfat2.isPresent && vfat2.isOn" href="#" ng-click="vfat2Inspect(vfat2.id)">VFAT2 #{{ vfat2.id }}</a>
-                            <a class="btn btn-block btn-danger btn-xs" ng-show="vfat2.isPresent && !vfat2.isOn" href="#" ng-click="vfat2Inspect(vfat2.id)">VFAT2 #{{ vfat2.id }}</a>
+                            <a class="btn btn-block btn-success btn-xs" href="#" ng-show="vfat2.isPresent && vfat2.isOn" ng-click="vfat2Inspect(vfat2.id)">VFAT2 #{{ vfat2.id }}</a>
+                            <a class="btn btn-block btn-danger btn-xs" href="#" ng-show="vfat2.isPresent && !vfat2.isOn" ng-click="vfat2Inspect(vfat2.id)">VFAT2 #{{ vfat2.id }}</a>
                             <a class="btn btn-block btn-default btn-xs" disabled="disabled" ng-show="!vfat2.isPresent">VFAT2 #{{ vfat2.id }}</a>
                         </span>
                     </p>
@@ -28,13 +28,13 @@
                     </p>
                 </div>
             </div>
-            <div class="panel panel-info">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Global Control</h3>
                 </div>
                 <div class="panel-body">
                     <p>
-                        <a class="btn btn-primary btn-xs btn-block" href="#" ng-click="restore_defaults_all()">Set default parameters</a>
+                        <a class="btn btn-primary btn-xs btn-block" href="#" ng-click="restore_defaults_all()">Apply default parameters to all VFAT2s</a>
                         <a class="btn btn-success btn-xs btn-block" href="#" ng-click="start_vfat2_all()">Start all VFAT2s</a>
                         <a class="btn btn-danger btn-xs btn-block" href="#" ng-click="stop_vfat2_all()">Stop all VFAT2s</a>
                     </p>
@@ -42,19 +42,19 @@
             </div>
         </div>
         <div class="col-md-8" ng-show="selectedVFAT2 == 99">  
-            <div class="panel panel-info">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">No VFAT2 selected</h3>
                 </div>  
                 <div class="panel-body">
-                    <p>Select a VFAT2 in the left panel to see more information about it.</p>
+                    <p>Select a VFAT2 in the left panel to display more information.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-8" ng-show="selectedVFAT2 != 99">    
-            <div class="panel panel-info">
+            <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">VFAT2 #{{ selectedVFAT2 }} Monitoring and Fine Control</h3>
+                    <h3 class="panel-title">VFAT2 #{{ selectedVFAT2 }} monitoring and control</h3>
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -211,7 +211,7 @@
                         </div>
                     </div>
                     <div class="btn-group btn-group-justified">
-                        <a class="btn btn-primary btn-xs" href="#" ng-click="restore_defaults()">Set default parameters</a>
+                        <a class="btn btn-primary btn-xs" href="#" ng-click="restore_defaults()">Apply default parameters</a>
                         <a class="btn btn-success btn-xs" href="#" ng-click="start_vfat2()">Start the VFAT2</a>
                         <a class="btn btn-danger btn-xs" href="#" ng-click="stop_vfat2()">Stop the VFAT2</a>
                     </div>

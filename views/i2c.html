@@ -8,7 +8,7 @@
     <h1>VFAT2 I2C requests</h1>
     <div class="row">
         <div class="col-md-4">
-            <div class="panel panel-info">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Basic I2C request</h3>
                 </div>
@@ -47,7 +47,7 @@
             </div>
         </div>       
         <div class="col-md-8">    
-            <div class="panel panel-info">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Extended I2C requests</h3>
                 </div>
@@ -56,7 +56,7 @@
                         <div class="col-md-6">
                             <div class="form-horizontal">
                                 <div class="form-group">
-                                    <label class="col-sm-4 control-label">VFAT2s</label>
+                                    <label class="col-sm-4 control-label">VFAT2s mask</label>
                                     <div class="col-sm-8">
                                         <div class="input-group">
                                             <div class="input-group-addon">0x</div>
@@ -86,21 +86,25 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6" ng-show="opsResult.length > 0">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>VFAT2</th>
-                                        <th>Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="result in opsResult">
-                                        <td>{{ result.vfat2 }}</td>
-                                        <td>{{ result.data | hex }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="col-md-6">
+                            <div ng-show="readsResult.length > 0">
+                                <p>Results of the read operations</p> 
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>VFAT2</th>
+                                            <th>Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="result in readsResult">
+                                            <td>{{ result.vfat2 }}</td>
+                                            <td>{{ result.data | hex }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="well" ng-show="writesResult != null">Write operations performed</b></div>
                         </div>
                     </div>
                 </div>
