@@ -4,7 +4,7 @@ app.controller('vfat2Ctrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.vfat2s = [];
 
-    $scope.selectedVFAT2 = 99;
+    $scope.selectedVFAT2 = ((window.location.href.split('/'))[4] === undefined ? 99 : (window.location.href.split('/'))[4]);
    
     $scope.defaultVFAT2 = {
         ctrl0: 55, 

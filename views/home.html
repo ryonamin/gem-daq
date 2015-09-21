@@ -15,9 +15,9 @@
                             <h3 class="panel-title">Hardware components</h3>
                         </div>
                         <div class="panel-body">
-                            <a class="btn btn-block btn-default btn-xs" href="glib">GLIB</a>
-                            <a class="btn btn-block btn-default btn-xs" href="oh">OptoHybrid</a>
-                            <a class="btn btn-block btn-default btn-xs" href="vfat2">VFAT2s</a>
+                            <a class="btn btn-block btn-default btn-xs" href="/glib">GLIB</a>
+                            <a class="btn btn-block btn-default btn-xs" href="/oh">OptoHybrid</a>
+                            <a class="btn btn-block btn-default btn-xs" href="/vfat2">VFAT2s</a>
                         </div>
                     </div>
                 </div>
@@ -27,8 +27,8 @@
                             <h3 class="panel-title">Low level functionalities</h3>
                         </div>
                         <div class="panel-body">
-                            <a class="btn btn-block btn-default btn-xs" href="i2c">VFAT2 I2C</a>
-                            <a class="btn btn-block btn-default btn-xs" href="adc">ADC</a>
+                            <a class="btn btn-block btn-default btn-xs" href="/i2c">VFAT2 I2C</a>
+                            <a class="btn btn-block btn-default btn-xs" href="/adc">ADC</a>
                         </div>
                     </div>                
                 </div>
@@ -38,9 +38,9 @@
                             <h3 class="panel-title">High level functionalities</h3>
                         </div>
                         <div class="panel-body">
-                            <a class="btn btn-block btn-default btn-xs" href="threshold">Threshold scan</a>
-                            <a class="btn btn-block btn-default btn-xs" href="latency">Latency scan</a>
-                            <a class="btn btn-block btn-default btn-xs" href="t1">T1 generation</a>
+                            <a class="btn btn-block btn-default btn-xs" href="/threshold">Threshold scan</a>
+                            <a class="btn btn-block btn-default btn-xs" href="/latency">Latency scan</a>
+                            <a class="btn btn-block btn-default btn-xs" href="/t1">T1 generation</a>
                         </div>
                     </div>                
                 </div>
@@ -78,8 +78,8 @@
                         <div class="panel-body">
                             <p>
                                 <span class="vfat2-item-small" ng-repeat="vfat2 in vfat2s">
-                                    <a class="btn btn-block btn-success btn-xs" href="vfat2" ng-show="vfat2.isPresent && vfat2.isOn">#{{ vfat2.id }}</a>
-                                    <a class="btn btn-block btn-danger btn-xs" href="vfat2" ng-show="vfat2.isPresent && !vfat2.isOn">#{{ vfat2.id }}</a>
+                                    <a class="btn btn-block btn-success btn-xs" href="vfat2/{{ vfat2.id }}" ng-show="vfat2.isPresent && vfat2.isOn">#{{ vfat2.id }}</a>
+                                    <a class="btn btn-block btn-danger btn-xs" href="vfat2/{{ vfat2.id }}" ng-show="vfat2.isPresent && !vfat2.isOn">#{{ vfat2.id }}</a>
                                     <a class="btn btn-block btn-default btn-xs" disabled="disabled" ng-show="!vfat2.isPresent">#{{ vfat2.id }}</a>
                                 </span>
                             </p>

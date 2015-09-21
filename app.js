@@ -30,6 +30,7 @@ app.get('/', function (req, res) { res.render('home.html'); });
 app.get('/glib', function (req, res) { res.render('glib.html'); });
 app.get('/oh', function (req, res) { res.render('oh.html'); });
 app.get('/vfat2', function (req, res) { res.render('vfat2.html'); });
+app.get(/vfat2\/[0-9]+/, function (req, res) { res.render('vfat2.html'); });
 app.get('/i2c', function (req, res) { res.render('i2c.html'); });
 app.get('/threshold', function (req, res) { res.render('threshold.html'); });
 app.get('/latency', function (req, res) { res.render('latency.html'); });
