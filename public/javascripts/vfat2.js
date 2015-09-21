@@ -62,7 +62,7 @@ app.controller('vfat2Ctrl', ['$scope', 'socket', function($scope, socket) {
 
     function get_vfat2_onoff_loop() {
         for (var i = 0; i < 24; ++i) get_vfat2_onoff(i);
-        setTimeout(get_vfat2_onoff_loop, 10000);
+        setTimeout(get_vfat2_onoff_loop, 5000);
     }
 
     get_vfat2_onoff_loop();

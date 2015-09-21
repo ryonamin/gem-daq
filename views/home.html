@@ -24,7 +24,7 @@
                 <div class="col-md-4">       
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Low level functionalities</h3>
+                            <h3 class="panel-title">Functionalities</h3>
                         </div>
                         <div class="panel-body">
                             <a class="btn btn-block btn-default btn-xs" href="/i2c">VFAT2 I2C</a>
@@ -35,7 +35,7 @@
                 <div class="col-md-4">       
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">High level functionalities</h3>
+                            <h3 class="panel-title">Routines</h3>
                         </div>
                         <div class="panel-body">
                             <a class="btn btn-block btn-default btn-xs" href="/threshold">Threshold scan</a>
@@ -77,7 +77,7 @@
                         </div>
                         <div class="panel-body">
                             <p>
-                                <span class="vfat2-item-small" ng-repeat="vfat2 in vfat2s">
+                                <span class="vfat2-item" ng-repeat="vfat2 in vfat2s">
                                     <a class="btn btn-block btn-success btn-xs" href="vfat2/{{ vfat2.id }}" ng-show="vfat2.isPresent && vfat2.isOn">#{{ vfat2.id }}</a>
                                     <a class="btn btn-block btn-danger btn-xs" href="vfat2/{{ vfat2.id }}" ng-show="vfat2.isPresent && !vfat2.isOn">#{{ vfat2.id }}</a>
                                     <a class="btn btn-block btn-default btn-xs" disabled="disabled" ng-show="!vfat2.isPresent">#{{ vfat2.id }}</a>
