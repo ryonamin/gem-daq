@@ -1,8 +1,6 @@
 app.controller('t1Ctrl', ['$scope', 'socket', function($scope, socket) {    
 
-    /* Models */
-
-    $scope.controller_is_running = false;
+    $scope.t1Status = false;
 
     $scope.mode = 0;
 
@@ -13,8 +11,6 @@ app.controller('t1Ctrl', ['$scope', 'socket', function($scope, socket) {
     $scope.interval = 10;
 
     $scope.delay = 5;
-
-    /* Get the current values */
         
     function get_current_values() {
         socket.ipbus_read(0x43000001, function(data) { $scope.mode = data.toString(); });
@@ -25,8 +21,6 @@ app.controller('t1Ctrl', ['$scope', 'socket', function($scope, socket) {
     };
 
     get_current_values();
-
-    /* Launch the scan */
 
     $scope.start_controller = function() {   
         socket.ipbus_write(0x43000001, $scope.mode);
@@ -43,26 +37,22 @@ app.controller('t1Ctrl', ['$scope', 'socket', function($scope, socket) {
         is_controller_running();
     };
 
-    /* Reset the module */
-
     $scope.reset_controller = function() {
         socket.ipbus_write(0x4300000F, 1);
         get_current_values();
     };
-
-    /* Scan status*/
         
-    function is_controller_running() {
+    function get_t1_status() {
         socket.ipbus_read(0x4300000E, function(data) { 
-            $scope.controller_is_running = (data == 0 ? false : true);
+            $scope.t1Status = (data == 0 ? false : true);
         });    
     };
 
-    function is_controller_running_loop() {
-        is_controller_running();
-        setTimeout(is_controller_running_loop, 1000);
+    function get_status_loop() {
+        get_t1_status();
+        setTimeout(get_status_loop, 1000);
     }
 
-    is_controller_running_loop();
+    get_status_loop();
 
 }]);

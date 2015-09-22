@@ -1,0 +1,65 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+{% raw %}
+
+<div ng-controller="tkdataCtrl">
+    <h1>Tracking data readout</h1>
+    <div class="row">
+        <div class="col-md-7">
+            <!-- Tracking data readout -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Event list</h3>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        <a class="btn btn-success btn-xs" ng-click="toggle_readout()" ng-show="!enableReadout">Start data acquisition</a>
+                        <a class="btn btn-danger btn-xs" ng-click="toggle_readout()" ng-show="enableReadout">Stop data acquisition</a>
+                        <a class="btn btn-default btn-xs" ng-click="reset_module()">Empty the tracking data buffer</a>
+                    </p>
+                    <hr>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>BC</th>
+                                <th>EC</th>
+                                <th>Flags</th>
+                                <th>ChipID</th>
+                                <th>Strips</th>
+                                <th>CRC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="event in tkDataEvents track by $index">
+                                <td>{{ event.bc | hex }}</td>
+                                <td>{{ event.ec | hex }}</td>
+                                <td>{{ event.flags | hex }}</td>
+                                <td>{{ event.chipID | hex }}</td>
+                                <td>{{ event.strips0 | hex }} {{ event.strips1 | hex }} {{ event.strips2 | hex }} {{ event.strips3 | hex }}</td>
+                                <td>{{ event.crc | hex }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>          
+        </div>
+        <div class="col-md-5">
+            <!-- Tracking data reset -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">DQM</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="chipid_chart"></div>     
+                </div>
+            </div>          
+
+        </div>
+    </div>
+</div>
+
+{% endraw %}
+
+{% endblock %}

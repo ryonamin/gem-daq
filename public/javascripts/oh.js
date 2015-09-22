@@ -1,111 +1,79 @@
 app.controller('ohCtrl', ['$scope', 'socket', function($scope, socket) {
   
-    $scope.opticalLinks = [
-        {
-            name: "Tracking Data 0",
-            error_counter: 0,
-            vfat2_rx_counter: 0,
-            vfat2_tx_counter: 0,
-            reg_rx_counter: 0,
-            reg_tx_counter: 0,
-        }, 
-        {
-            name: "Tracking Data 1",
-            error_counter: 0,
-            vfat2_rx_counter: 0,
-            vfat2_tx_counter: 0,
-            reg_rx_counter: 0,
-            reg_tx_counter: 0
-        }, 
-        {
-            name: "Tracking Data 2",
-            error_counter: 0,
-            vfat2_rx_counter: 0,
-            vfat2_tx_counter: 0,
-            reg_rx_counter: 0,
-            reg_tx_counter: 0
-        }
+    $scope.wbCounters = [ 
+        { name: 'GTX master', stb: 0, ack: 0 }, 
+        { name: 'Extended I2C master', stb: 0, ack: 0 }, 
+        { name: 'Scan module master', stb: 0, ack: 0 }, 
+        { name: 'DAC module master', stb: 0, ack: 0 }, 
+        { name: 'I2C 0 slave', stb: 0, ack: 0 }, 
+        { name: 'I2C 1 slave', stb: 0, ack: 0 }, 
+        { name: 'I2C 2 slave', stb: 0, ack: 0 }, 
+        { name: 'I2C 3 slave', stb: 0, ack: 0 }, 
+        { name: 'I2C 4 slave', stb: 0, ack: 0 }, 
+        { name: 'I2C 5 slave', stb: 0, ack: 0 }, 
+        { name: 'Extended I2C slave', stb: 0, ack: 0 }, 
+        { name: 'Scan module slave', stb: 0, ack: 0 }, 
+        { name: 'T1 controller slave', stb: 0, ack: 0 }, 
+        { name: 'DAC scan slave', stb: 0, ack: 0 },
+        { name: 'ADC module slave', stb: 0, ack: 0 },
+        { name: 'Clocking module slave', stb: 0, ack: 0 },
+        { name: 'Counter module slave', stb: 0, ack: 0 }, 
+        { name: 'System module slave', stb: 0, ack: 0 }
     ];
 
-    $scope.fastSignals = {
-        lv1a: 0,
-        lv1a_ext: 0,
-        lv1a_int: 0,
-        lv1a_del: 0,
-        calpulse: 0,
-        calpulse_int: 0,
-        calpulse_del: 0,
-        bc0: 0,
-        resync: 0,
-        bx: 0
-    };
-
-    /* Get the data about a single optical link */
-
-    function get_link_data(link) {
-        socket.ipbus_read(addr_link(0x40030000, link), function(data) { $scope.opticalLinks[link].error_counter = data; });
-        socket.ipbus_read(addr_link(0x40030001, link), function(data) { $scope.opticalLinks[link].vfat2_rx_counter = data; });
-        socket.ipbus_read(addr_link(0x40030002, link), function(data) { $scope.opticalLinks[link].vfat2_tx_counter = data; });
-        socket.ipbus_read(addr_link(0x40030003, link), function(data) { $scope.opticalLinks[link].reg_rx_counter = data; });
-        socket.ipbus_read(addr_link(0x40030004, link), function(data) { $scope.opticalLinks[link].reg_tx_counter = data; });
-    };
-
-    /* Loop to continuously check the optical links */
-
-    function get_link_data_loop() {
-        get_link_data(0);
-        get_link_data(1);
-        get_link_data(2);
-        setTimeout(get_link_data_loop, 5000);
+    function get_oh_counters() {
+        // Master strobes
+        socket.ipbus_read(counter_reg(48), function(data) { $scope.wbCounters[0].stb = data; }); 
+        socket.ipbus_read(counter_reg(49), function(data) { $scope.wbCounters[1].stb = data; }); 
+        socket.ipbus_read(counter_reg(50), function(data) { $scope.wbCounters[2].stb = data; }); 
+        socket.ipbus_read(counter_reg(51), function(data) { $scope.wbCounters[3].stb = data; }); 
+        // Master acknowledgments
+        socket.ipbus_read(counter_reg(52), function(data) { $scope.wbCounters[0].ack = data; }); 
+        socket.ipbus_read(counter_reg(53), function(data) { $scope.wbCounters[1].ack = data; }); 
+        socket.ipbus_read(counter_reg(54), function(data) { $scope.wbCounters[2].ack = data; }); 
+        socket.ipbus_read(counter_reg(55), function(data) { $scope.wbCounters[3].ack = data; }); 
+        // Slave strobes        
+        socket.ipbus_read(counter_reg(56), function(data) { $scope.wbCounters[4].stb = data; }); 
+        socket.ipbus_read(counter_reg(57), function(data) { $scope.wbCounters[5].stb = data; }); 
+        socket.ipbus_read(counter_reg(58), function(data) { $scope.wbCounters[6].stb = data; }); 
+        socket.ipbus_read(counter_reg(59), function(data) { $scope.wbCounters[7].stb = data; }); 
+        socket.ipbus_read(counter_reg(60), function(data) { $scope.wbCounters[8].stb = data; }); 
+        socket.ipbus_read(counter_reg(61), function(data) { $scope.wbCounters[9].stb = data; }); 
+        socket.ipbus_read(counter_reg(62), function(data) { $scope.wbCounters[10].stb = data; }); 
+        socket.ipbus_read(counter_reg(63), function(data) { $scope.wbCounters[11].stb = data; }); 
+        socket.ipbus_read(counter_reg(64), function(data) { $scope.wbCounters[12].stb = data; }); 
+        socket.ipbus_read(counter_reg(65), function(data) { $scope.wbCounters[13].stb = data; }); 
+        socket.ipbus_read(counter_reg(66), function(data) { $scope.wbCounters[14].stb = data; }); 
+        socket.ipbus_read(counter_reg(67), function(data) { $scope.wbCounters[15].stb = data; }); 
+        socket.ipbus_read(counter_reg(68), function(data) { $scope.wbCounters[16].stb = data; }); 
+        socket.ipbus_read(counter_reg(69), function(data) { $scope.wbCounters[17].stb = data; }); 
+        // Slave acknowledgments        
+        socket.ipbus_read(counter_reg(70), function(data) { $scope.wbCounters[4].ack = data; }); 
+        socket.ipbus_read(counter_reg(71), function(data) { $scope.wbCounters[5].ack = data; }); 
+        socket.ipbus_read(counter_reg(72), function(data) { $scope.wbCounters[6].ack = data; }); 
+        socket.ipbus_read(counter_reg(73), function(data) { $scope.wbCounters[7].ack = data; }); 
+        socket.ipbus_read(counter_reg(74), function(data) { $scope.wbCounters[8].ack = data; }); 
+        socket.ipbus_read(counter_reg(75), function(data) { $scope.wbCounters[9].ack = data; }); 
+        socket.ipbus_read(counter_reg(76), function(data) { $scope.wbCounters[10].ack = data; }); 
+        socket.ipbus_read(counter_reg(77), function(data) { $scope.wbCounters[11].ack = data; }); 
+        socket.ipbus_read(counter_reg(78), function(data) { $scope.wbCounters[12].ack = data; }); 
+        socket.ipbus_read(counter_reg(49), function(data) { $scope.wbCounters[13].ack = data; }); 
+        socket.ipbus_read(counter_reg(80), function(data) { $scope.wbCounters[14].ack = data; }); 
+        socket.ipbus_read(counter_reg(81), function(data) { $scope.wbCounters[15].ack = data; }); 
+        socket.ipbus_read(counter_reg(82), function(data) { $scope.wbCounters[16].ack = data; }); 
+        socket.ipbus_read(counter_reg(83), function(data) { $scope.wbCounters[17].ack = data; }); 
     }
 
-    get_link_data_loop();
-
-    /* Reset the counters on the optical link */
-
-    $scope.reset_link_counter = function(link) {
-        socket.ipbus_write(addr_link(0x40030005, link), 1);
-        socket.ipbus_write(addr_link(0x40030006, link), 1);
-        socket.ipbus_write(addr_link(0x40030007, link), 1);
-        socket.ipbus_write(addr_link(0x40030008, link), 1);
-        socket.ipbus_write(addr_link(0x40030009, link), 1);
-        get_link_data(link);
+    function get_status_loop() {
+        get_oh_counters();
+        setTimeout(get_status_loop, 5000);
     }
 
-    /* Get the fast signals data */
+    get_status_loop();
 
-     function get_fast_data() {
-        socket.ipbus_read(0x4003005A, function(data) { $scope.fastSignals.lv1a_ext = data; });
-        socket.ipbus_read(0x4003005B, function(data) { $scope.fastSignals.lv1a_int = data; });
-        socket.ipbus_read(0x4003005C, function(data) { $scope.fastSignals.lv1a_del = data; });
-        socket.ipbus_read(0x4003005D, function(data) { $scope.fastSignals.lv1a = data; });
-        socket.ipbus_read(0x4003005E, function(data) { $scope.fastSignals.calpulse_int = data; });
-        socket.ipbus_read(0x4003005F, function(data) { $scope.fastSignals.calpulse_del = data; });
-        socket.ipbus_read(0x40030060, function(data) { $scope.fastSignals.calpulse = data; });
-        socket.ipbus_read(0x40030061, function(data) { $scope.fastSignals.resync = data; });
-        socket.ipbus_read(0x40030062, function(data) { $scope.fastSignals.bc0 = data; });
-        socket.ipbus_read(0x40030063, function(data) { $scope.fastSignals.bx = data; });
-    };   
-
-     function get_fast_data_loop() {
-        get_fast_data();
-        setTimeout(get_fast_data_loop, 5000);
-    };   
-
-    get_fast_data_loop();
-
-    /* Reset the fast counters */
-
-    $scope.reset_fast_data_counter = function() {
-        socket.ipbus_write(0x40030066, 1);
-        socket.ipbus_write(0x40030067, 1);
-        socket.ipbus_write(0x40030068, 1);
-        socket.ipbus_write(0x40030069, 1);
-        socket.ipbus_write(0x4003006A, 1);
-        socket.ipbus_write(0x4003006B, 1);
-        socket.ipbus_write(0x4003006C, 1);
-        socket.ipbus_write(0x4003006D, 1);
-        socket.ipbus_write(0x4003006E, 1);
-        get_fast_data();
+    $scope.reset_counters = function() {       
+        for (var i = 48; i <= 83; ++i) socket.ipbus_write(counter_reg(i), 0);
+        get_oh_counters();
     };
+
 }]);

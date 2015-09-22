@@ -7,123 +7,34 @@
 <div ng-controller="ohCtrl">
     <h1>OptoHybrid monitoring and control</h1>
     <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-info">
+        <div class="col-md-4">
+            <!-- Wishbone counters -->
+            <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Optical Links</h3>
+                    <h3 class="panel-title">Wishbone status</h3>
                 </div>
                 <div class="panel-body">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th></th>
-                                <th>{{ opticalLinks[0].name }}</th>
-                                <th>{{ opticalLinks[1].name }}</th>
-                                <th>{{ opticalLinks[2].name }}</th>
+                                <th>Wishbone module</th>
+                                <th>Strobes</th>
+                                <th>Acknowledgments</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Optical link errors</td>
-                                <td>{{ opticalLinks[0].error_counter | hex }}</td>
-                                <td>{{ opticalLinks[1].error_counter | hex }}</td>
-                                <td>{{ opticalLinks[2].error_counter | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>VFAT2 TX transactions</td>
-                                <td>{{ opticalLinks[0].vfat2_tx_counter | hex }}</td>
-                                <td>{{ opticalLinks[1].vfat2_tx_counter | hex }}</td>
-                                <td>{{ opticalLinks[2].vfat2_tx_counter | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>VFAT2 RX transactions</td>
-                                <td>{{ opticalLinks[0].vfat2_rx_counter | hex }}</td>
-                                <td>{{ opticalLinks[1].vfat2_rx_counter | hex }}</td>
-                                <td>{{ opticalLinks[2].vfat2_rx_counter | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>Registers TX transactions</td>
-                                <td>{{ opticalLinks[0].reg_tx_counter | hex }}</td>
-                                <td>{{ opticalLinks[1].reg_tx_counter | hex }}</td>
-                                <td>{{ opticalLinks[2].reg_tx_counter | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>Registers RX transactions</td>
-                                <td>{{ opticalLinks[0].reg_rx_counter | hex }}</td>
-                                <td>{{ opticalLinks[1].reg_rx_counter | hex }}</td>
-                                <td>{{ opticalLinks[2].reg_rx_counter | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a class="btn btn-block btn-default btn-xs" href="#" ng-click="reset_link_counter(0)">Reset counters</a></td>
-                                <td><a class="btn btn-block btn-default btn-xs" href="#" ng-click="reset_link_counter(1)">Reset counters</a></td>
-                                <td><a class="btn btn-block btn-default btn-xs" href="#" ng-click="reset_link_counter(2)">Reset counters</a></td>
+                            <tr ng-repeat="counter in wbCounters">
+                                <td>{{ counter.name }}</td>
+                                <td>{{ counter.stb | hex }}</td>
+                                <td>{{ counter.ack | hex }}</td>
                             </tr>
                         </tbody>
                     </table>
+                    <hr>
+                    <p><a class="btn btn-warning btn-xs btn-block" ng-click="reset_counters()">Reset the counters</a></p>
                 </div>
             </div>           
-        </div>
-        <div class="col-md-6">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Fast Signals</h3>
-                </div>
-                <div class="panel-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Counter</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>LV1A</td>
-                                <td>{{ fastSignals.lv1a | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>External LV1A</td>
-                                <td>{{ fastSignals.lv1a_ext | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>Internal LV1A</td>
-                                <td>{{ fastSignals.lv1a_int | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>Delayed LV1A</td>
-                                <td>{{ fastSignals.lv1a_del | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>Calibration pulse</td>
-                                <td>{{ fastSignals.calpulse | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>Internal Calibration pulse</td>
-                                <td>{{ fastSignals.calpulse_int | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>Delayed Calibration pulse</td>
-                                <td>{{ fastSignals.calpulse_del | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>Bunch Crossing 0</td>
-                                <td>{{ fastSignals.bc0 | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>Resync</td>
-                                <td>{{ fastSignals.resync | hex }}</td>
-                            </tr>
-                            <tr>
-                                <td>Bunch Crossing Counter</td>
-                                <td>{{ fastSignals.bx | hex }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p><a class="btn btn-block btn-default btn-xs" href="#" ng-click="reset_fast_data_counter()">Reset counters</a></p>
-                </div>
-            </div>           
-        </div>        
+        </div>     
     </div>
 </div>
 

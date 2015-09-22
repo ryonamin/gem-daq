@@ -1,8 +1,6 @@
 app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {    
 
-    /* Models */
-
-    $scope.scan_is_running = false;
+    $scope.scanStatus = false;
 
     $scope.vfat2ID = 0;
 
@@ -12,9 +10,7 @@ app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.steps = 1;
 
-    $scope.nEvents = 1000;
-
-    /* Get the current values */
+    $scope.nEvents = 0xFFFFFF;
         
     function get_current_values() {
         socket.ipbus_read(0x42000002, function(data) { $scope.vfat2ID = data; });
@@ -26,8 +22,6 @@ app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {
 
     get_current_values();
 
-    /* Launch the scan */
-
     $scope.start_scan = function() {   
         socket.ipbus_write(0x42000001, 0);
         socket.ipbus_write(0x42000002, $scope.vfat2ID);
@@ -38,16 +32,12 @@ app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {
         socket.ipbus_write(0x42000000, 1);
     };
 
-    /* Reset the module */
-
     $scope.reset_scan = function() {
         socket.ipbus_write(0x4200000A, 1);
         get_current_values();
     };
 
-    /* Chart */
-
-    $scope.get_results = function() {
+    $scope.plot_results = function() {
         var nSamples = $scope.maxVal - $scope.minVal;
 
         var chartData = new google.visualization.DataTable();
@@ -56,11 +46,12 @@ app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {
         chartData.removeRows(0, chartData.getNumberOfRows());
 
         var options = {
+            title: 'Threshold scan',
             hAxis: {
-                title: 'Threshold'
+                title: 'Threshold (VFAT2 units)'
             },
             vAxis: {
-                title: 'Percentage'
+                title: 'Hit percentage'
             },
             height: 300,
             legend: {
@@ -77,20 +68,18 @@ app.controller('thresholdCtrl', ['$scope', 'socket', function($scope, socket) {
             });
         }
     };
-
-    /* Scan status */
         
-    function is_scan_running() {
+    function get_scan_status() {
         socket.ipbus_read(0x42000009, function(data) { 
-            $scope.scan_is_running = data;
+            $scope.scanStatus = (data == 0 ? false : true);
         });    
     };
 
-    function is_scan_running_loop() {
-        is_scan_running();
-        setTimeout(is_scan_running_loop, 500);
+    function get_status_loop() {
+        get_scan_status();
+        setTimeout(get_status_loop, 500);
     }
 
-    is_scan_running_loop();
+    get_status_loop();
 
 }]);

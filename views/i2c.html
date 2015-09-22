@@ -8,6 +8,7 @@
     <h1>VFAT2 I2C requests</h1>
     <div class="row">
         <div class="col-md-4">
+            <!-- Basic I2C request -->
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Basic I2C request</h3>
@@ -34,8 +35,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-4 col-sm-10">
-                                <a href="#" class="btn btn-primary" ng-click="read()">Read</a>
-                                <a href="#" class="btn btn-primary" ng-click="write()">Write</a>
+                                <a class="btn btn-primary" ng-click="read()">Read</a>
+                                <a class="btn btn-primary" ng-click="write()">Write</a>
                             </div>
                         </div>
                     </div>
@@ -45,6 +46,7 @@
             </div>
         </div>       
         <div class="col-md-8">    
+            <!-- Extended I2C request -->
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Extended I2C requests</h3>
@@ -58,7 +60,7 @@
                                     <div class="col-sm-8">
                                         <div class="input-group">
                                             <div class="input-group-addon">0x</div>
-                                            <input type="text" maxlength="6" class="form-control" ng-model="vfat2smask">
+                                            <input type="text" maxlength="6" class="form-control" ng-model="vfat2sMask">
                                         </div>
                                     </div>
                                 </div>
@@ -76,9 +78,9 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-4 col-sm-10">
-                                        <a href="#" class="btn btn-primary" ng-click="reads()">Read</a>
-                                        <a href="#" class="btn btn-primary" ng-click="writes()">Write</a>
-                                        <a href="#" class="btn btn-warning" ng-click="reset_module()">Reset the module</a>
+                                        <a class="btn btn-primary" ng-click="reads()">Read</a>
+                                        <a class="btn btn-primary" ng-click="writes()">Write</a>
+                                        <a class="btn btn-warning" ng-click="reset_module()">Reset the module</a>
                                     </div>
                                 </div>
                             </div>

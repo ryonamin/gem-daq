@@ -36,6 +36,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="/i2c">VFAT2 I2C</a></li>
                                 <li><a href="/adc">ADC</a></li>
+                                <li><a href="/tkdata">Tracking data readout</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -43,7 +44,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="/threshold">Threshold scan</a></li>
                                 <li><a href="/latency">Latency scan</a></li>
-                                <li><a href="/t1">T1 generation</a></li>
+                                <li><a href="/t1">T1 controller</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -62,13 +63,7 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="/javascripts/angular.js"></script>
         <script src="/javascripts/tools.js"></script>
-        <script src="/javascripts/home.js"></script>
-        <script src="/javascripts/glib.js"></script>
-        <script src="/javascripts/oh.js"></script>
-        <script src="/javascripts/vfat2.js"></script>
-        <script src="/javascripts/i2c.js"></script>
-        <script src="/javascripts/threshold.js"></script>
-        <script src="/javascripts/latency.js"></script>
-        <script src="/javascripts/t1.js"></script>
+        <script src="/javascripts/{{ js }}.js"></script>
+
     </body>
 </html>

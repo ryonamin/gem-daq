@@ -5,9 +5,10 @@
 {% raw %}
 
 <div ng-controller="t1Ctrl">
-    <h1>T1 commands generator</h1>
+    <h1>T1 controller</h1>
     <div class="row">
         <div class="col-md-4">
+            <!-- Parameters -->
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Controller parameters</h3>
@@ -17,7 +18,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Mode</label>
                             <div class="col-sm-8">
-                                <select class="form-control" ng-model="mode" ng-disabled="controller_is_running == true">
+                                <select class="form-control" ng-model="mode" ng-disabled="t1Status">
                                     <option value="0" selected="selected">Mode 0: repetitive commands</option>
                                     <option value="1">Mode 1: delayed Calpulse and LV1A</option>
                                     <option value="2">Mode 2: custom patterns</option>
@@ -27,7 +28,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">T1 command type</label>
                             <div class="col-sm-8">
-                                <select class="form-control" ng-model="t1Type" ng-disabled="controller_is_running == true">
+                                <select class="form-control" ng-model="t1Type" ng-disabled="t1Status">
                                     <option value="0" selected="selected">LV1A</option>
                                     <option value="1">Calpulse</option>
                                     <option value="2">Resync</option>
@@ -38,36 +39,37 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Number of events<br>(0 = infinite)</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" ng-model="nEvents" ng-disabled="controller_is_running == true">
+                                <input type="number" class="form-control" ng-model="nEvents" ng-disabled="t1Status">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Interval</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" ng-model="interval" ng-disabled="controller_is_running == true">
+                                <input type="number" class="form-control" ng-model="interval" ng-disabled="t1Status">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Delay</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" ng-model="delay" ng-disabled="controller_is_running == true">
+                                <input type="number" class="form-control" ng-model="delay" ng-disabled="t1Status">
                             </div>
                         </div>
-                        <a href="#" class="btn btn-success btn-sm btn-block" ng-show="controller_is_running == false" ng-click="start_controller()">Start the controller</a>
-                        <a href="#" class="btn btn-danger btn-sm btn-block" ng-show="controller_is_running == true" ng-click="stop_controller()">Stop the controller</a>
+                        <a href="#" class="btn btn-success btn-sm btn-block" ng-show="!t1Status" ng-click="start_controller()">Start the controller</a>
+                        <a href="#" class="btn btn-danger btn-sm btn-block" ng-show="t1Status" ng-click="stop_controller()">Stop the controller</a>
                         <a href="#" class="btn btn-warning btn-sm btn-block" ng-click="reset_controller()">Reset the module</a>
                     </div>
                 </div>
             </div>
         </div>      
-        <div class="col-md-8">    
+        <div class="col-md-8">
+            <!-- Status -->    
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Status</h3>
                 </div>
                 <div class="panel-body">
-                    <div class="alert alert-info" ng-show="controller_is_running == false">The T1 controller is not running and ready to be used.</div>
-                    <div class="alert alert-warning" ng-show="controller_is_running == true">The T1 controller is running...</div>
+                    <div class="alert alert-info" ng-show="t1Status == false">The T1 controller is not running and ready to be used.</div>
+                    <div class="alert alert-warning" ng-show="t1Status == true">The T1 controller is running...</div>
                     <div id="threshold_chart"></div>
                 </div>
             </div>

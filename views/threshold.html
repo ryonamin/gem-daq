@@ -8,6 +8,7 @@
     <h1>VFAT2 threshold scan</h1>
     <div class="row">
         <div class="col-md-4">
+            <!-- Parameters -->
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Scan parameters</h3>
@@ -17,48 +18,50 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">VFAT2</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" min="0" max="23" ng-model="vfat2ID" ng-disabled="scan_is_running != 0">
+                                <input type="number" class="form-control" min="0" max="23" ng-model="vfat2ID" ng-disabled="scanStatus">
                             </div>
                         </div>  
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Minimum threshold</label>
+                            <label class="col-sm-4 control-label">Minimum threshold<br>(default = 0)</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" min="0" max="255" ng-model="minVal" ng-disabled="scan_is_running != 0">
+                                <input type="number" class="form-control" min="0" max="255" ng-model="minVal" ng-disabled="scanStatus">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Maximum threshold</label>
+                            <label class="col-sm-4 control-label">Maximum threshold<br>(default = 255)</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" min="0" max="255" ng-model="maxVal" ng-disabled="scan_is_running != 0">
+                                <input type="number" class="form-control" min="0" max="255" ng-model="maxVal" ng-disabled="scanStatus">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Steps</label>
+                            <label class="col-sm-4 control-label">Steps<br>(default = 1)</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" ng-model="steps" ng-disabled="scan_is_running != 0">
+                                <input type="number" class="form-control" ng-model="steps" ng-disabled="scanStatus">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Number of events</label>
+                            <label class="col-sm-4 control-label">Number of events<br>(default = 0xFFFFFF)</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" ng-model="nEvents" ng-disabled="scan_is_running != 0">
+                                <input type="number" class="form-control" ng-model="nEvents" ng-disabled="scanStatus">
                             </div>
                         </div>
-                        <a href="#" class="btn btn-success btn-sm btn-block" ng-click="start_scan()" ng-disabled="scan_is_running != 0">Start the scan</a>
+                        <a href="#" class="btn btn-success btn-sm btn-block" ng-click="start_scan()" ng-disabled="scanStatus">Start the scan</a>
                         <a href="#" class="btn btn-warning btn-sm btn-block" ng-click="reset_scan()">Reset the module</a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-8">    
+            <!-- Results -->
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Results</h3>
                 </div>
                 <div class="panel-body">
-                    <div class="alert alert-info" ng-show="scan_is_running == 0">The system is currently free and available to perform a scan.</div>
-                    <div class="alert alert-warning" ng-show="scan_is_running != 0">A scan is currently running on the system...</div>
-                    <a href="#" class="btn btn-xs btn-primary" ng-click="get_results()" ng-disabled="scan_is_running != 0">Plot the results if any</a>
+                    <div class="alert alert-info" ng-show="!scanStatus">The system is currently free and available to perform a scan.</div>
+                    <div class="alert alert-warning" ng-show="scanStatus">A scan is currently running on the system...</div>
+                    <a href="#" class="btn btn-xs btn-primary" ng-click="plot_results()" ng-disabled="scanStatus">Plot the results if any</a>
+                    <hr>
                     <div id="threshold_chart"></div>
                 </div>
             </div>
