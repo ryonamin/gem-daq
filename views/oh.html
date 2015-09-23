@@ -11,7 +11,7 @@
             <!-- Wishbone counters -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Wishbone status</h3>
+                    <h3 class="panel-title">Wishbone counters</h3>
                 </div>
                 <div class="panel-body">
                     <table class="table">
@@ -31,10 +31,62 @@
                         </tbody>
                     </table>
                     <hr>
-                    <p><a class="btn btn-warning btn-xs btn-block" ng-click="reset_counters()">Reset the counters</a></p>
+                    <p><a class="btn btn-warning btn-xs btn-block" ng-click="reset_wb_counters()">Reset the counters</a></p>
                 </div>
             </div>           
-        </div>     
+        </div>             
+        <div class="col-md-4">
+            <!-- T1 counters -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">T1 commands counters</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Counter</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="counter in t1Counters">
+                                <td>{{ counter.name }}</td>
+                                <td>{{ counter.cnt | hex }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <p><a class="btn btn-warning btn-xs btn-block" ng-click="reset_t1_counters()">Reset the counters</a></p>
+                </div>
+            </div>           
+        </div>       
+        <div class="col-md-4">
+            <!-- GTX counters -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">GTX error counters</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Counter</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="counter in gtxCounters">
+                                <td>{{ counter.name }}</td>
+                                <td>{{ counter.cnt | hex }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <p><a class="btn btn-warning btn-xs btn-block" ng-click="reset_gtx_counters()">Reset the counters</a></p>
+                </div>
+            </div>           
+        </div>   
     </div>
 </div>
 

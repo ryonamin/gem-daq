@@ -25,6 +25,7 @@ app.controller('tkdataCtrl', ['$scope', 'socket', function($scope, socket) {
     };
 
     $scope.reset_module = function() {
+        $scope.tkDataEvents = []; 
         socket.ipbus_write(0x50000000, 0);
     };
 
@@ -51,34 +52,35 @@ app.controller('tkdataCtrl', ['$scope', 'socket', function($scope, socket) {
 
     function get_vfat2_event() {
         socket.ipbus_read(0x50000000, function(data) {
-            tmpEvent.bc = ((data >> 16) & 0xFFF);
-            tmpEvent.ec = ((data >> 4) & 0xFF);
-            tmpEvent.flags = (data & 0xF);
-        });
-        socket.ipbus_read(0x50000000, function(data) {
-            tmpEvent.chipID = ((data >> 16) & 0xFFF);
-        });
-        socket.ipbus_read(0x50000000);
-        socket.ipbus_read(0x50000000);
-        socket.ipbus_read(0x50000000);
-        socket.ipbus_read(0x50000000, function(data) {
-            tmpEvent.CRC = (data & 0xFF); 
-            if (tmpEvent.chipID != 0) {
-                $scope.tkDataEvents.push({
-                    bc: tmpEvent.bc,
-                    ec: tmpEvent.ec,
-                    flags: tmpEvent.flags,
-                    chipID: tmpEvent.chipID,
-                    strips0: tmpEvent.strips0,
-                    strips1: tmpEvent.strips1,
-                    strips2: tmpEvent.strips2,
-                    strips3: tmpEvent.strips3,
-                    crc: tmpEvent.crc
-                });       
-                plotData.push([ tmpEvent.chipID ]);
-                plot_graphs();
+            if (((data >> 28) & 0xf) == 0xA) {
+                tmpEvent.bc = ((data >> 16) & 0xFFF);
+                tmpEvent.ec = ((data >> 4) & 0xFF);
+                tmpEvent.flags = (data & 0xF);
+
+                socket.ipbus_read(0x50000000, function(data) {
+                    tmpEvent.chipID = ((data >> 16) & 0xFFF);
+                });
+                socket.ipbus_read(0x50000000);
+                socket.ipbus_read(0x50000000);
+                socket.ipbus_read(0x50000000);
+                socket.ipbus_read(0x50000000, function(data) {
+                    tmpEvent.CRC = (data & 0xFF); 
+                    $scope.tkDataEvents.push({
+                        bc: tmpEvent.bc,
+                        ec: tmpEvent.ec,
+                        flags: tmpEvent.flags,
+                        chipID: tmpEvent.chipID,
+                        strips0: tmpEvent.strips0,
+                        strips1: tmpEvent.strips1,
+                        strips2: tmpEvent.strips2,
+                        strips3: tmpEvent.strips3,
+                        crc: tmpEvent.crc
+                    });       
+                    plotData.push([ tmpEvent.chipID ]);
+                    plot_graphs();
+                });  
             }
-        });  
+        });
     }
 
     function get_status_loop() {

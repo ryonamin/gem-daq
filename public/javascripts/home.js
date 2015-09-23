@@ -18,7 +18,7 @@ app.controller('homeCtrl', ['$scope', 'socket', function($scope, socket) {
     }
 
     function get_vfat2_status(vfat2) {
-        socket.ipbus_read(vfat2_reg(vfat2, 8), function(data) { $scope.vfat2Status[vfat2].isPresent = ((data) == 0 || ((data & 0xF000000) >> 24) == 0x5 ? false : true); });    
+        socket.ipbus_read(vfat2_reg(vfat2, 8), function(data) { $scope.vfat2Status[vfat2].isPresent = ((data & 0xff) == 0 || ((data & 0xF000000) >> 24) == 0x5 ? false : true); });    
         socket.ipbus_read(vfat2_reg(vfat2, 0), function(data) { $scope.vfat2Status[vfat2].isOn = (((data & 0xF000000) >> 24) == 0x5 || (data & 0x1) == 0 ? false : true); });        
     };
         
