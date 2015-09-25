@@ -51,7 +51,7 @@ app.controller('vfat2Ctrl', ['$scope', 'socket', function($scope, socket) {
     });
 
     function get_vfat2_mask() {
-        socket.ipbus_read(0x4B000000, function(data) {
+        socket.ipbus_read(system_reg(0), function(data) {
             for (var i = 0; i < 24; ++i) $scope.tkReadoutStatus[i].masked = (((data >> i) & 0x1) == 1 ? true : false);
         });         
     }
@@ -154,12 +154,16 @@ app.controller('vfat2Ctrl', ['$scope', 'socket', function($scope, socket) {
         }
     };
 
+    $scope.reset_vfat2_all = function() {
+        socket.ipbus_write(0x4B000002, 0);
+    };
+
     $scope.vfat2_toggle_mask = function(vfat2) {
-        socket.ipbus_read(0x4B000000, function(data) {
+        socket.ipbus_read(system_reg(0), function(data) {
             var bit = ((data >> vfat2) & 0x1);
             if (bit == 1) data &= ~(0x1 << vfat2);
             else data |= (0x1 << vfat2);
-            socket.ipbus_write(0x4B000000, data);
+            socket.ipbus_write(system_reg(0), data);
             get_vfat2_mask();
         }); 
     };

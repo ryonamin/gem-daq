@@ -6,6 +6,8 @@ function ei2c_reg(reg) { return 0x41000000 + (reg & 0xff); }
 
 function counter_reg(reg) { return 0x4A000000 + (reg & 0xff); }
 
+function system_reg(reg) { return 0x4B000000 + (reg & 0xff); }
+
 function popcount(n) {
     n >>>= 0;
     for(var popcnt = 0; n; n &= n - 1) popcnt++;
