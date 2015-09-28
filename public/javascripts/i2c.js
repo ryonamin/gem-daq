@@ -1,4 +1,6 @@
-app.controller('i2cCtrl', ['$scope', 'socket', function($scope, socket) {    
+app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {    
+
+    var OHID = (window.sessionStorage === undefined ? 0 : window.sessionStorage.OHID);
 
     $scope.dispRegisters = [
         { name: "ControlReg 0", id: 0 },
@@ -176,12 +178,12 @@ app.controller('i2cCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.read = function() {      
         $scope.readResult = $scope.writeResult = null;
-        socket.ipbus_read(vfat2_reg($scope.vfat2ID, $scope.vfat2Register.id), function(data) { $scope.readResult = data & 0xff; });
+        socket.ipbus_read(vfat2_reg(OHID, $scope.vfat2ID, $scope.vfat2Register.id), function(data) { $scope.readResult = data & 0xff; });
     };
 
     $scope.write = function() {
         $scope.readResult = $scope.writeResult = null;
-        socket.ipbus_write(vfat2_reg($scope.vfat2ID, $scope.vfat2Register.id), $scope.vfat2Data, function(data) { $scope.writeResult = true; });
+        socket.ipbus_write(vfat2_reg(OHID, $scope.vfat2ID, $scope.vfat2Register.id), $scope.vfat2Data, function(data) { $scope.writeResult = true; });
     };
 
     $scope.reads = function() {  
@@ -189,10 +191,10 @@ app.controller('i2cCtrl', ['$scope', 'socket', function($scope, socket) {
         $scope.writesResult = null;
         var mask = parseInt($scope.vfat2sMask, 16);
         var nReads = 24 - popcount(mask);
-        socket.ipbus_write(0x41000100, mask, function() { 
-            socket.ipbus_read(ei2c_reg($scope.vfat2sRegister.id), function() {
+        socket.ipbus_write(oh_ei2c_reg(OHID, 256), mask, function() { 
+            socket.ipbus_read(oh_ei2c_reg(OHID, $scope.vfat2sRegister.id), function() {
                 for (var i = 0; i < nReads; ++i) {
-                    socket.ipbus_read(0x41000101, function(data) {
+                    socket.ipbus_read(oh_ei2c_reg(OHID, 257), function(data) {
                         $scope.readsResult.push({
                             vfat2: (data >> 8) & 0xFF,
                             data: data & 0xFF
@@ -207,8 +209,8 @@ app.controller('i2cCtrl', ['$scope', 'socket', function($scope, socket) {
         $scope.readsResult = [];
         $scope.writesResult = null;
         var mask = parseInt($scope.vfat2sMask, 16);
-        socket.ipbus_write(0x41000100, mask, function() { 
-            socket.ipbus_write(ei2c_reg($scope.vfat2sRegister.id), $scope.vfat2sData, function() {
+        socket.ipbus_write(oh_ei2c_reg(OHID, 256), mask, function() { 
+            socket.ipbus_write(oh_ei2c_reg(OHID, $scope.vfat2sRegister.id), $scope.vfat2sData, function() {
                 $scope.writesResult = true;
             });
         });
@@ -218,7 +220,7 @@ app.controller('i2cCtrl', ['$scope', 'socket', function($scope, socket) {
         $scope.vfat2sMask = "000000";
         $scope.readsResult = [];   
         $scope.writesResult = null;
-        socket.ipbus_write(0x41000102, 1);
+        socket.ipbus_write(oh_ei2c_reg(OHID, 258), 1);
     };
 
 }]);

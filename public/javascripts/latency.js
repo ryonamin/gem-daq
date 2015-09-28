@@ -1,6 +1,8 @@
-app.controller('latencyCtrl', ['$scope', 'socket', function($scope, socket) {    
+app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {    
+    
+    var OHID = (window.sessionStorage === undefined ? 0 : window.sessionStorage.OHID);
 
-    $scope.scan_is_running = false;
+    $scope.scanStatus = false;
 
     $scope.vfat2ID = 0;
 
@@ -13,27 +15,27 @@ app.controller('latencyCtrl', ['$scope', 'socket', function($scope, socket) {
     $scope.nEvents = 0xFFFFFF;
         
     function get_current_values() {
-        socket.ipbus_read(0x42000002, function(data) { $scope.vfat2ID = data; });
-        socket.ipbus_read(0x42000004, function(data) { $scope.minVal = data; });
-        socket.ipbus_read(0x42000005, function(data) { $scope.maxVal = data; });
-        socket.ipbus_read(0x42000006, function(data) { $scope.steps = data; });
-        socket.ipbus_read(0x42000007, function(data) { $scope.nEvents = data; });    
+        socket.ipbus_read(oh_scan_reg(OHID, 2), function(data) { $scope.vfat2ID = data; });
+        socket.ipbus_read(oh_scan_reg(OHID, 4), function(data) { $scope.minVal = data; });
+        socket.ipbus_read(oh_scan_reg(OHID, 5), function(data) { $scope.maxVal = data; });
+        socket.ipbus_read(oh_scan_reg(OHID, 6), function(data) { $scope.steps = data; });
+        socket.ipbus_read(oh_scan_reg(OHID, 7), function(data) { $scope.nEvents = data; });    
     };
 
     get_current_values();
 
     $scope.start_scan = function() {   
-        socket.ipbus_write(0x42000001, 2);
-        socket.ipbus_write(0x42000002, $scope.vfat2ID);
-        socket.ipbus_write(0x42000004, $scope.minVal);
-        socket.ipbus_write(0x42000005, $scope.maxVal);
-        socket.ipbus_write(0x42000006, $scope.steps);
-        socket.ipbus_write(0x42000007, $scope.nEvents);
-        socket.ipbus_write(0x42000000, 1);
+        socket.ipbus_write(oh_scan_reg(OHID, 1), 2);
+        socket.ipbus_write(oh_scan_reg(OHID, 2), $scope.vfat2ID);
+        socket.ipbus_write(oh_scan_reg(OHID, 4), $scope.minVal);
+        socket.ipbus_write(oh_scan_reg(OHID, 5), $scope.maxVal);
+        socket.ipbus_write(oh_scan_reg(OHID, 6), $scope.steps);
+        socket.ipbus_write(oh_scan_reg(OHID, 7), $scope.nEvents);
+        socket.ipbus_write(oh_scan_reg(OHID, 0), 1);
     };
 
     $scope.reset_scan = function() {
-        socket.ipbus_write(0x4200000A, 1);
+        socket.ipbus_write(oh_scan_reg(OHID, 10), 1);
         get_current_values();
     };
 
@@ -62,7 +64,7 @@ app.controller('latencyCtrl', ['$scope', 'socket', function($scope, socket) {
         var chart = new google.visualization.LineChart(document.getElementById('latency_chart'));
 
         for (var i = 0; i <= nSamples; ++i) {
-            socket.ipbus_read(0x42000008, function(data) {
+            socket.ipbus_read(oh_scan_reg(OHID, 8), function(data) {
                 chartData.addRow([ (data >> 24) & 0xFF, (data & 0x00FFFFFF) / (1. * $scope.nEvents) * 100 ]);
                 chart.draw(chartData, options);
             });
@@ -70,7 +72,7 @@ app.controller('latencyCtrl', ['$scope', 'socket', function($scope, socket) {
     };
         
     function get_scan_status() {
-        socket.ipbus_read(0x42000009, function(data) { 
+        socket.ipbus_read(oh_scan_reg(OHID, 9), function(data) { 
             $scope.scanStatus = (data == 0 ? false : true);
         });    
     };
@@ -81,5 +83,10 @@ app.controller('latencyCtrl', ['$scope', 'socket', function($scope, socket) {
     }
 
     get_status_loop();
+
+    $scope.oh_change = function() {
+        get_current_values();
+        get_scan_status();
+    };
 
 }]);

@@ -4,7 +4,7 @@
 
 {% raw %}
 
-<div ng-controller="tkdataCtrl">
+<div>
     <h1>Tracking data readout</h1>
     <div class="row">
         <div class="col-md-7">
@@ -17,7 +17,7 @@
                     <p>
                         <a class="btn btn-success btn-xs" ng-click="toggle_readout()" ng-show="!enableReadout">Start data acquisition</a>
                         <a class="btn btn-danger btn-xs" ng-click="toggle_readout()" ng-show="enableReadout">Stop data acquisition</a>
-                        <a class="btn btn-default btn-xs" ng-click="reset_module()">Empty the tracking data buffer</a>
+                        <a class="btn btn-primary btn-xs" ng-click="reset_module()">Empty the tracking data buffer</a>
                     </p>
                     <hr>
                     <table class="table">

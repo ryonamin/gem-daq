@@ -1,4 +1,6 @@
-app.controller('tkdataCtrl', ['$scope', 'socket', function($scope, socket) {    
+app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {    
+    
+    var OHID = (window.sessionStorage === undefined ? 0 : window.sessionStorage.OHID);
 
     $scope.enableReadout = false;
 
@@ -26,7 +28,7 @@ app.controller('tkdataCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.reset_module = function() {
         $scope.tkDataEvents = []; 
-        socket.ipbus_write(0x50000000, 0);
+        socket.ipbus_write(tkdata_reg(OHID), 0);
     };
 
     function plot_graphs() {
@@ -51,19 +53,19 @@ app.controller('tkdataCtrl', ['$scope', 'socket', function($scope, socket) {
     }
 
     function get_vfat2_event() {
-        socket.ipbus_read(0x50000000, function(data) {
+        socket.ipbus_read(tkdata_reg(OHID), function(data) {
             if (((data >> 28) & 0xf) == 0xA) {
                 tmpEvent.bc = ((data >> 16) & 0xFFF);
                 tmpEvent.ec = ((data >> 4) & 0xFF);
                 tmpEvent.flags = (data & 0xF);
 
-                socket.ipbus_read(0x50000000, function(data) {
+                socket.ipbus_read(tkdata_reg(OHID), function(data) {
                     tmpEvent.chipID = ((data >> 16) & 0xFFF);
                 });
-                socket.ipbus_read(0x50000000);
-                socket.ipbus_read(0x50000000);
-                socket.ipbus_read(0x50000000);
-                socket.ipbus_read(0x50000000, function(data) {
+                socket.ipbus_read(tkdata_reg(OHID));
+                socket.ipbus_read(tkdata_reg(OHID));
+                socket.ipbus_read(tkdata_reg(OHID));
+                socket.ipbus_read(tkdata_reg(OHID), function(data) {
                     tmpEvent.CRC = (data & 0xFF); 
                     $scope.tkDataEvents.push({
                         bc: tmpEvent.bc,

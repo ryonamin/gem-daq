@@ -59,3 +59,14 @@ app.filter('hex', function() {
         return '0x' + n.toString(16).toUpperCase();
     };
 });
+
+app.controller('commonCtrl', ['$scope', 'socket', function($scope, socket) {
+
+    $scope.OHID = (window.sessionStorage === undefined ? 0 : window.sessionStorage.OHID);
+
+    $scope.oh_change = function() {
+        window.sessionStorage.OHID = $scope.OHID;
+        location.reload();
+    };
+
+}]);

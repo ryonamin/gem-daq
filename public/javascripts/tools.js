@@ -1,12 +1,21 @@
-function addr_link(addr, link) { return addr + (link << 8); }
+function vfat2_reg(oh, vfat2, reg) { return 0x40000000 + ((oh & 0xf) << 20) + ((vfat2 & 0xff) << 8) + (reg & 0xff); }
 
-function vfat2_reg(vfat2, reg) { return 0x40000000 + ((vfat2 & 0xff) << 8) + (reg & 0xff); }
 
-function ei2c_reg(reg) { return 0x41000000 + (reg & 0xff); }
+function oh_ei2c_reg(oh, reg) { return 0x41000000 + ((oh & 0xf) << 20) + (reg & 0xfff); }
 
-function counter_reg(reg) { return 0x4A000000 + (reg & 0xff); }
+function oh_scan_reg(oh, reg) { return 0x42000000 + ((oh & 0xf) << 20) + (reg & 0xff); }
 
-function system_reg(reg) { return 0x4B000000 + (reg & 0xff); }
+function oh_t1_reg(oh, reg) { return 0x43000000 + ((oh & 0xf) << 20) + (reg & 0xff); }
+
+function oh_counter_reg(oh, reg) { return 0x4A000000 + ((oh & 0xf) << 20) + (reg & 0xff); }
+
+function oh_system_reg(oh, reg) { return 0x4B000000 + ((oh & 0xf) << 20) + (reg & 0xff); }
+
+
+function tkdata_reg(oh) { return 0x50000000 + ((oh & 0xf) << 20); }
+
+function glib_counter_reg(reg) { return 0x60000000 + (reg & 0xff); }
+
 
 function popcount(n) {
     n >>>= 0;

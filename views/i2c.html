@@ -4,7 +4,7 @@
 
 {% raw %}
 
-<div ng-controller="i2cCtrl">
+<div>
     <h1>VFAT2 I2C requests</h1>
     <div class="row">
         <div class="col-md-4">
@@ -35,8 +35,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-4 col-sm-10">
-                                <a class="btn btn-primary" ng-click="read()">Read</a>
-                                <a class="btn btn-primary" ng-click="write()">Write</a>
+                                <a class="btn btn-xs btn-info" ng-click="read()">Read</a>
+                                <a class="btn btn-xs btn-info" ng-click="write()">Write</a>
                             </div>
                         </div>
                     </div>
@@ -78,9 +78,9 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-4 col-sm-10">
-                                        <a class="btn btn-primary" ng-click="reads()">Read</a>
-                                        <a class="btn btn-primary" ng-click="writes()">Write</a>
-                                        <a class="btn btn-warning" ng-click="reset_module()">Reset the module</a>
+                                        <a class="btn btn-xs btn-info" ng-click="reads()">Read all</a>
+                                        <a class="btn btn-xs btn-info" ng-click="writes()">Write all</a>
+                                        <a class="btn btn-xs btn-primary" ng-click="reset_module()">Reset</a>
                                     </div>
                                 </div>
                             </div>

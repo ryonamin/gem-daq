@@ -4,10 +4,10 @@
 
 {% raw %}
 
-<div ng-controller="ohCtrl">
+<div>
     <h1>OptoHybrid monitoring and control</h1>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <!-- System registers -->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -42,7 +42,7 @@
                                 <input type="number" maxlength="6" min="0" max="23" class="form-control" ng-model="sbitSelect">
                             </div>
                         </div>  
-                        <a href="#" class="btn btn-success btn-sm btn-block" ng-click="set_system_regs()">Apply changes</a>
+                        <a class="btn btn-success btn-xs btn-block" ng-click="set_system_regs()">Apply changes</a>
                     </div>
                 </div>
             </div>            
@@ -65,7 +65,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="counter in wbCounters">
+                            <tr ng-repeat="counter in wbCounters" ng-class="{ danger: counter.stb != counter.ack }">
                                 <td>{{ counter.name }}</td>
                                 <td>{{ counter.stb | hex }}</td>
                                 <td>{{ counter.ack | hex }}</td>
@@ -73,7 +73,7 @@
                         </tbody>
                     </table>
                     <hr>
-                    <p><a class="btn btn-warning btn-xs btn-block" ng-click="reset_wb_counters()">Reset the counters</a></p>
+                    <p><a class="btn btn-primary btn-xs btn-block" ng-click="reset_wb_counters()">Reset the counters</a></p>
                 </div>
             </div>           
         </div>             
@@ -99,7 +99,7 @@
                         </tbody>
                     </table>
                     <hr>
-                    <p><a class="btn btn-warning btn-xs btn-block" ng-click="reset_t1_counters()">Reset the counters</a></p>
+                    <p><a class="btn btn-primary btn-xs btn-block" ng-click="reset_t1_counters()">Reset the counters</a></p>
                 </div>
             </div>           
         </div>       
@@ -125,7 +125,7 @@
                         </tbody>
                     </table>
                     <hr>
-                    <p><a class="btn btn-warning btn-xs btn-block" ng-click="reset_gtx_counters()">Reset the counters</a></p>
+                    <p><a class="btn btn-primary btn-xs btn-block" ng-click="reset_gtx_counters()">Reset the counters</a></p>
                 </div>
             </div>           
         </div>   

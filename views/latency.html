@@ -4,7 +4,7 @@
 
 {% raw %}
 
-<div ng-controller="latencyCtrl">
+<div>
     <h1>VFAT2 latency scan</h1>
     <div class="row">
         <div class="col-md-4">
@@ -45,8 +45,8 @@
                                 <input type="number" class="form-control" ng-model="nEvents" ng-disabled="scanStatus">
                             </div>
                         </div>
-                        <a href="#" class="btn btn-success btn-sm btn-block" ng-click="start_scan()" ng-disabled="scanStatus">Start the scan</a>
-                        <a href="#" class="btn btn-warning btn-sm btn-block" ng-click="reset_scan()">Reset the module</a>
+                        <a href="#" class="btn btn-success btn-xs btn-block" ng-click="start_scan()" ng-disabled="scanStatus">Start the scan</a>
+                        <a href="#" class="btn btn-primary btn-xs btn-block" ng-click="reset_scan()">Reset the module</a>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                 <div class="panel-body">
                     <div class="alert alert-info" ng-show="!scanStatus">The system is currently free and available to perform a scan.</div>
                     <div class="alert alert-warning" ng-show="scanStatus">A scan is currently running on the system...</div>
-                    <a href="#" class="btn btn-xs btn-primary" ng-click="plot_results()" ng-disabled="scanStatus">Plot the results if any</a>                    
+                    <a href="#" class="btn btn-xs btn-success" ng-click="plot_results()" ng-disabled="scanStatus">Plot the results if any</a>                    
                     <hr>
                     <div id="latency_chart"></div>
                 </div>

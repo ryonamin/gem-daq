@@ -4,7 +4,7 @@
 
 {% raw %}
 
-<div ng-controller="t1Ctrl">
+<div>
     <h1>T1 controller</h1>
     <div class="row">
         <div class="col-md-4">
@@ -54,9 +54,9 @@
                                 <input type="number" class="form-control" ng-model="delay" ng-disabled="t1Status">
                             </div>
                         </div>
-                        <a href="#" class="btn btn-success btn-sm btn-block" ng-show="!t1Status" ng-click="start_controller()">Start the controller</a>
-                        <a href="#" class="btn btn-danger btn-sm btn-block" ng-show="t1Status" ng-click="stop_controller()">Stop the controller</a>
-                        <a href="#" class="btn btn-warning btn-sm btn-block" ng-click="reset_controller()">Reset the module</a>
+                        <a href="#" class="btn btn-success btn-xs btn-block" ng-show="!t1Status" ng-click="start_controller()">Start the controller</a>
+                        <a href="#" class="btn btn-danger btn-xs btn-block" ng-show="t1Status" ng-click="stop_controller()">Stop the controller</a>
+                        <a href="#" class="btn btn-primary btn-xs btn-block" ng-click="reset_controller()">Reset the module</a>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,6 @@
-app.controller('t1Ctrl', ['$scope', 'socket', function($scope, socket) {    
+app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {    
+    
+    var OHID = (window.sessionStorage === undefined ? 0 : window.sessionStorage.OHID);
 
     $scope.t1Status = false;
 
@@ -13,37 +15,37 @@ app.controller('t1Ctrl', ['$scope', 'socket', function($scope, socket) {
     $scope.delay = 5;
         
     function get_current_values() {
-        socket.ipbus_read(0x43000001, function(data) { $scope.mode = data.toString(); });
-        socket.ipbus_read(0x43000002, function(data) { $scope.t1Type = data.toString(); });
-        socket.ipbus_read(0x43000003, function(data) { $scope.nEvents = data; });
-        socket.ipbus_read(0x43000004, function(data) { $scope.interval = data; });
-        socket.ipbus_read(0x43000005, function(data) { $scope.delay = data; });    
+        socket.ipbus_read(oh_t1_reg(OHID, 1), function(data) { $scope.mode = data.toString(); });
+        socket.ipbus_read(oh_t1_reg(OHID, 2), function(data) { $scope.t1Type = data.toString(); });
+        socket.ipbus_read(oh_t1_reg(OHID, 3), function(data) { $scope.nEvents = data; });
+        socket.ipbus_read(oh_t1_reg(OHID, 4), function(data) { $scope.interval = data; });
+        socket.ipbus_read(oh_t1_reg(OHID, 5), function(data) { $scope.delay = data; });    
     };
 
     get_current_values();
 
     $scope.start_controller = function() {   
-        socket.ipbus_write(0x43000001, $scope.mode);
-        socket.ipbus_write(0x43000002, $scope.t1Type);
-        socket.ipbus_write(0x43000003, $scope.nEvents);
-        socket.ipbus_write(0x43000004, $scope.interval);
-        socket.ipbus_write(0x43000005, $scope.delay);
-        socket.ipbus_write(0x43000000, 1);
+        socket.ipbus_write(oh_t1_reg(OHID, 1), $scope.mode);
+        socket.ipbus_write(oh_t1_reg(OHID, 2), $scope.t1Type);
+        socket.ipbus_write(oh_t1_reg(OHID, 3), $scope.nEvents);
+        socket.ipbus_write(oh_t1_reg(OHID, 4), $scope.interval);
+        socket.ipbus_write(oh_t1_reg(OHID, 5), $scope.delay);
+        socket.ipbus_write(oh_t1_reg(OHID, 0), 1);
         is_controller_running();
     };
 
     $scope.stop_controller = function() {
-        socket.ipbus_write(0x43000000, 0);
+        socket.ipbus_write(oh_t1_reg(OHID, 0), 0);
         is_controller_running();
     };
 
     $scope.reset_controller = function() {
-        socket.ipbus_write(0x4300000F, 1);
+        socket.ipbus_write(oh_t1_reg(OHID, 15), 1);
         get_current_values();
     };
         
     function get_t1_status() {
-        socket.ipbus_read(0x4300000E, function(data) { 
+        socket.ipbus_read(oh_t1_reg(OHID, 14), function(data) { 
             $scope.t1Status = (data == 0 ? false : true);
         });    
     };

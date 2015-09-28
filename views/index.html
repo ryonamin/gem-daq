@@ -5,55 +5,40 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>GEM Web DAQ interface</title>
-        <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+        <link rel="stylesheet" href="http://bootswatch.com/cosmo/bootstrap.css">
         <link rel="stylesheet" href="/stylesheets/style.css">
     </head>
     <body>
 
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/">GEM Web DAQ</a>
-                </div>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hardware components <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/glib">GLIB</a></li>
-                                <li><a href="/oh">OptoHybrid</a></li>
-                                <li><a href="/vfat2">VFAT2</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Functionalities <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/i2c">VFAT2 I2C</a></li>
-                                <li><a href="/adc">ADC</a></li>
-                                <li><a href="/tkdata">Tracking data readout</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Routines <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/threshold">Threshold scan</a></li>
-                                <li><a href="/latency">Latency scan</a></li>
-                                <li><a href="/t1">T1 controller</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+        <div class="row">
+
+            <div class="col-md-2" ng-controller="commonCtrl">        
+                <h2 class="text-center"><span class="glyphicon glyphicon-fire text-warning"></span> GEM DAQ</h2>
+                {% raw %}
+                    <ul class="nav nav-pills nav-stacked">
+                        <li ng-class=""><a href="/">Home</a></li>
+                        <li><a href="/glib">GLIB</a></li>
+                        <li><a href="/oh">OptoHybrid</a></li>
+                        <li><a href="/vfat2">VFAT2s</a></li>
+                        <li><a href="/i2c">I2C</a></li>
+                        <li><a href="/adc">ADC</a></li>
+                        <li><a href="/tkdata">Tracking Data</a></li>
+                        <li><a href="/threshold">Threshold scan</a></li>
+                        <li><a href="/latency">Latency scan</a></li>
+                        <li><a href="/t1">T1 controller</a></li>                        
+                    </ul>    
+                {% endraw %}
+                <hr>
+                <div class="col-md-offset-1">
+                    <span class="label label-default">GEM Chamber Selection</span>
+                    <div class="radio"><label><input type="radio" name="ohSelect" id="ohSelect" value="0" checked="" ng-model="OHID" ng-value="0" ng-change="oh_change()"> GEM <b>#0</b></label></div>
+                    <div class="radio"><label><input type="radio" name="ohSelect" id="ohSelect" value="1" ng-model="OHID" ng-value="1" ng-change="oh_change()"> GEM <b>#1</b></label></div>   
                 </div>
             </div>
-        </nav>
 
-        <div class="container-fluid">
-            {% block content %}{% endblock %}
+            <div class="col-md-10" ng-controller="appCtrl">
+                {% block content %}{% endblock %}
+            </div>
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
