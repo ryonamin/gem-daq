@@ -7,7 +7,7 @@
 <div>
     <h1>Tracking data readout</h1>
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-6">
             <!-- Tracking data readout -->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -45,14 +45,17 @@
                 </div>
             </div>          
         </div>
-        <div class="col-md-5">
+        <div class="col-md-6">
             <!-- Tracking data reset -->
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">DQM</h3>
                 </div>
                 <div class="panel-body">
-                    <div id="chipid_chart"></div>     
+                    <p>Acquired <b>{{ tkDataEvents.length }}</b> events!</p>
+                    <div id="chipid_chart"></div>
+                    <div id="ec_chart"></div>   
+                    <div id="strips_chart"></div>        
                 </div>
             </div>          
 

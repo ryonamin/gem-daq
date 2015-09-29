@@ -6,10 +6,13 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         { name: "AMC13", id: 0},
         { name: "OptoHybrid", id: 1},
         { name: "External", id: 2},
-        { name: "All", id: 3}
+        { name: "Loopback", id: 3},
+        { name: "All", id: 4}
     ];
 
     $scope.t1Source = 0;
+
+    $scope.loopbackSource = 0;
 
     $scope.clockSourceList = [
         { name: "On board oscillator", id: 0},
@@ -57,6 +60,10 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         { name: 'External Calpulse', cnt: 0 },
         { name: 'External Resync', cnt: 0 },
         { name: 'External BC0', cnt: 0 },
+        { name: 'Loopback LV1A', cnt: 0 },
+        { name: 'Loopback Calpulse', cnt: 0 },
+        { name: 'Loopback Resync', cnt: 0 },
+        { name: 'Loopback BC0', cnt: 0 },
         { name: 'Sent LV1A', cnt: 0 },
         { name: 'Sent Calpulse', cnt: 0 },
         { name: 'Sent Resync', cnt: 0 },
@@ -72,8 +79,9 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         var mask = parseInt($scope.vfat2sMask, 16);
         socket.ipbus_write(oh_system_reg(OHID, 0), mask);
         socket.ipbus_write(oh_system_reg(OHID, 1), $scope.t1Source.id);
-        socket.ipbus_write(oh_system_reg(OHID, 3), $scope.clockSource.id);
-        socket.ipbus_write(oh_system_reg(OHID, 4), $scope.sbitSelect);
+        socket.ipbus_write(oh_system_reg(OHID, 2), $scope.loopbackSource);
+        socket.ipbus_write(oh_system_reg(OHID, 4), $scope.clockSource.id);
+        socket.ipbus_write(oh_system_reg(OHID, 5), $scope.sbitSelect);
         get_oh_system_regs();
     };
 
@@ -84,8 +92,9 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
             else $scope.vfat2sMask = Array(6 - mask.length + 1).join('0') + mask;            
         }); 
         socket.ipbus_read(oh_system_reg(OHID, 1), function(data) { $scope.t1Source = $scope.t1SourceList[data]; }); 
-        socket.ipbus_read(oh_system_reg(OHID, 3), function(data) { $scope.clockSource = $scope.clockSourceList[data]; }); 
-        socket.ipbus_read(oh_system_reg(OHID, 4), function(data) { $scope.sbitSelect = data; }); 
+        socket.ipbus_read(oh_system_reg(OHID, 2), function(data) { $scope.loopbackSource = data; }); 
+        socket.ipbus_read(oh_system_reg(OHID, 4), function(data) { $scope.clockSource = $scope.clockSourceList[data]; }); 
+        socket.ipbus_read(oh_system_reg(OHID, 5), function(data) { $scope.sbitSelect = data; }); 
     }
 
     get_oh_system_regs();
@@ -148,9 +157,13 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         socket.ipbus_read(oh_counter_reg(OHID, 97), function(data) { $scope.t1Counters[13].cnt = data; }); 
         socket.ipbus_read(oh_counter_reg(OHID, 98), function(data) { $scope.t1Counters[14].cnt = data; }); 
         socket.ipbus_read(oh_counter_reg(OHID, 99), function(data) { $scope.t1Counters[15].cnt = data; }); 
+        socket.ipbus_read(oh_counter_reg(OHID, 100), function(data) { $scope.t1Counters[16].cnt = data; }); 
+        socket.ipbus_read(oh_counter_reg(OHID, 101), function(data) { $scope.t1Counters[17].cnt = data; }); 
+        socket.ipbus_read(oh_counter_reg(OHID, 102), function(data) { $scope.t1Counters[18].cnt = data; }); 
+        socket.ipbus_read(oh_counter_reg(OHID, 103), function(data) { $scope.t1Counters[19].cnt = data; }); 
         // GTX
-        socket.ipbus_read(oh_counter_reg(OHID, 100), function(data) { $scope.gtxCounters[0].cnt = data; }); 
-        socket.ipbus_read(oh_counter_reg(OHID, 101), function(data) { $scope.gtxCounters[1].cnt = data; }); 
+        socket.ipbus_read(oh_counter_reg(OHID, 104), function(data) { $scope.gtxCounters[0].cnt = data; }); 
+        socket.ipbus_read(oh_counter_reg(OHID, 105), function(data) { $scope.gtxCounters[1].cnt = data; }); 
     }
 
     function get_status_loop() {
@@ -166,12 +179,12 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     };
 
     $scope.reset_t1_counters = function() {       
-        for (var i = 84; i <= 99; ++i) socket.ipbus_write(oh_counter_reg(OHID, i), 0);
+        for (var i = 84; i <= 103; ++i) socket.ipbus_write(oh_counter_reg(OHID, i), 0);
         get_oh_counters();
     };
 
     $scope.reset_gtx_counters = function() {       
-        for (var i = 100; i <= 101; ++i) socket.ipbus_write(oh_counter_reg(OHID, i), 0);
+        for (var i = 104; i <= 105; ++i) socket.ipbus_write(oh_counter_reg(OHID, i), 0);
         get_oh_counters();
     };
 
