@@ -8,6 +8,8 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.tkDataEvents = []; 
 
+    $scope.tkEventsAvailable = 0;
+
     var tmpEvent = {
         bc: 0,
         ec: 0,
@@ -107,7 +109,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     }
 
     function get_vfat2_event() {
-        socket.ipbus_read(tkdata_reg(OHID), function(data) {
+        socket.ipbus_read(tkdata_reg(OHID, 0), function(data) {
             if (data != 0xf423f) readOutBuffer.push(data);
         });
     }
@@ -115,6 +117,9 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     function get_status_loop() {
         if ($scope.enableReadout) get_vfat2_event();
         form_vfat2_event();
+        socket.ipbus_read(tkdata_reg(OHID, 1), function(data) { $scope.tkEventsAvailable = Math.floor(data / 6.); });
+        socket.ipbus_read(tkdata_reg(OHID, 2), function(data) { $scope.tkFifoFull = (data == 1); });
+        socket.ipbus_read(tkdata_reg(OHID, 3), function(data) { $scope.tkFifoEmpty = (data == 1); });
         setTimeout(get_status_loop, 100);
     }
 

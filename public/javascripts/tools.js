@@ -12,7 +12,7 @@ function oh_counter_reg(oh, reg) { return 0x4A000000 + ((oh & 0xf) << 20) + (reg
 function oh_system_reg(oh, reg) { return 0x4B000000 + ((oh & 0xf) << 20) + (reg & 0xff); }
 
 
-function tkdata_reg(oh) { return 0x50000000 + ((oh & 0xf) << 20); }
+function tkdata_reg(oh, reg) { return 0x50000000 + ((oh & 0xf) << 20) + (reg & 0xf); }
 
 function glib_counter_reg(reg) { return 0x60000000 + (reg & 0xff); }
 

@@ -22,7 +22,12 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.clockSource = 0;
 
-    $scope.sbitSelect = 0;
+    $scope.sbitSelect0 = 0;
+    $scope.sbitSelect1 = 0;
+    $scope.sbitSelect2 = 0;
+    $scope.sbitSelect3 = 0;
+    $scope.sbitSelect4 = 0;
+    $scope.sbitSelect5 = 0;
 
     $scope.vfat2sMask = "000000";
 
@@ -81,7 +86,12 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         socket.ipbus_write(oh_system_reg(OHID, 1), $scope.t1Source.id);
         socket.ipbus_write(oh_system_reg(OHID, 2), $scope.loopbackSource);
         socket.ipbus_write(oh_system_reg(OHID, 4), $scope.clockSource.id);
-        socket.ipbus_write(oh_system_reg(OHID, 5), $scope.sbitSelect);
+        socket.ipbus_write(oh_system_reg(OHID, 5), $scope.sbitSelect0);
+        socket.ipbus_write(oh_system_reg(OHID, 6), $scope.sbitSelect1);
+        socket.ipbus_write(oh_system_reg(OHID, 7), $scope.sbitSelect2);
+        socket.ipbus_write(oh_system_reg(OHID, 8), $scope.sbitSelect3);
+        socket.ipbus_write(oh_system_reg(OHID, 9), $scope.sbitSelect4);
+        socket.ipbus_write(oh_system_reg(OHID, 10), $scope.sbitSelect5);
         get_oh_system_regs();
     };
 
@@ -94,7 +104,12 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         socket.ipbus_read(oh_system_reg(OHID, 1), function(data) { $scope.t1Source = $scope.t1SourceList[data]; }); 
         socket.ipbus_read(oh_system_reg(OHID, 2), function(data) { $scope.loopbackSource = data; }); 
         socket.ipbus_read(oh_system_reg(OHID, 4), function(data) { $scope.clockSource = $scope.clockSourceList[data]; }); 
-        socket.ipbus_read(oh_system_reg(OHID, 5), function(data) { $scope.sbitSelect = data; }); 
+        socket.ipbus_read(oh_system_reg(OHID, 5), function(data) { $scope.sbitSelect0 = data; }); 
+        socket.ipbus_read(oh_system_reg(OHID, 6), function(data) { $scope.sbitSelect1 = data; });
+        socket.ipbus_read(oh_system_reg(OHID, 7), function(data) { $scope.sbitSelect2 = data; });
+        socket.ipbus_read(oh_system_reg(OHID, 8), function(data) { $scope.sbitSelect3 = data; });
+        socket.ipbus_read(oh_system_reg(OHID, 9), function(data) { $scope.sbitSelect4 = data; });
+        socket.ipbus_read(oh_system_reg(OHID, 10), function(data) { $scope.sbitSelect5 = data; });
     }
 
     get_oh_system_regs();

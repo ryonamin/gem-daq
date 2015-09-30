@@ -53,6 +53,10 @@
                 </div>
                 <div class="panel-body">
                     <p>Acquired <b>{{ tkDataEvents.length }}</b> events!</p>
+                    <p ng-show="tkFifoFull == true">The FIFO is <b>full</b>!</p>
+                    <p ng-show="tkFifoEmpty == true">The FIFO is <b>empty</b>!</p>
+                    <p><b>{{ tkEventsAvailable }}</b> events are available for readout!</p>
+                    <hr>
                     <div id="chipid_chart"></div>
                     <div id="ec_chart"></div>   
                     <div id="strips_chart"></div>        
