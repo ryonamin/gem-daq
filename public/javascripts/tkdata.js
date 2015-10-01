@@ -10,17 +10,9 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.tkEventsAvailable = 0;
 
-    var tmpEvent = {
-        bc: 0,
-        ec: 0,
-        flags: 0,
-        chipID: 0,
-        strips0: 0,
-        strips1: 0,
-        strips2: 0,
-        strips3: 0,
-        crc: 0
-    };
+    $scope.nSent = 0;
+
+    $scope.nReceived = 0;
 
     var plotDataChipID = [ ['ChipID'] ];
 
@@ -39,6 +31,8 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         plotDataStrips = [ ['Strips'] ];
         plot_graphs();
         socket.ipbus_write(tkdata_reg(OHID), 0);
+        socket.ipbus_write(oh_counter_reg(OHID, 106), 0);
+        socket.ipbus_write(glib_counter_reg(18 + OHID), 0);
     };
 
     function plot_graph(id, title, data) {
@@ -63,7 +57,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     }
 
     function form_vfat2_event() {     
-        if (readOutBuffer.length < 6) return;  
+        if (readOutBuffer.length < 7) return;  
         packet0 = readOutBuffer.shift();            
         if (((packet0 >> 28) & 0xf) != 0xA) return;
         packet1 = readOutBuffer.shift();    
@@ -71,6 +65,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         packet3 = readOutBuffer.shift(); 
         packet4 = readOutBuffer.shift(); 
         packet5 = readOutBuffer.shift(); 
+        packet6 = readOutBuffer.shift(); 
 
         var bc = (0x0fff0000 & packet0) >> 16;
         var ec = (0x00000ff0 & packet0) >> 4;
@@ -83,6 +78,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         var crc = 0x0000ffff & packet5;
 
         $scope.tkDataEvents.push({
+            bx: packet6,
             bc: bc,
             ec: ec,
             flags: flags,
@@ -103,23 +99,25 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
             if (((strips1 >> i) & 0x1) == 1) plotDataStrips.push([ i + 32 ]);
             if (((strips2 >> i) & 0x1) == 1) plotDataStrips.push([ i + 64 ]);
             if (((strips3 >> i) & 0x1) == 1) plotDataStrips.push([ i + 96 ]);
-         }
+        }
         //
         plot_graphs();
     }
 
     function get_vfat2_event() {
         socket.ipbus_read(tkdata_reg(OHID, 0), function(data) {
-            if (data != 0xf423f) readOutBuffer.push(data);
+            if (data != null) readOutBuffer.push(data);
         });
     }
 
     function get_status_loop() {
         if ($scope.enableReadout) get_vfat2_event();
         form_vfat2_event();
-        socket.ipbus_read(tkdata_reg(OHID, 1), function(data) { $scope.tkEventsAvailable = Math.floor(data / 6.); });
+        socket.ipbus_read(tkdata_reg(OHID, 1), function(data) { $scope.tkEventsAvailable = Math.floor(data / 7.); });
         socket.ipbus_read(tkdata_reg(OHID, 2), function(data) { $scope.tkFifoFull = (data == 1); });
         socket.ipbus_read(tkdata_reg(OHID, 3), function(data) { $scope.tkFifoEmpty = (data == 1); });
+        socket.ipbus_read(oh_counter_reg(OHID, 106), function(data) { $scope.nSent = data; });
+        socket.ipbus_read(glib_counter_reg(18 + OHID), function(data) { $scope.nReceived = data; });
         setTimeout(get_status_loop, 100);
     }
 

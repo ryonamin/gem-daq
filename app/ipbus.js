@@ -32,7 +32,7 @@ udp.on('message', function(message) {
         ipbusVersion: (message[0] >> 4),
         packetId: ((message[4] & 0xf) << 8) | message[5],
         packetType: (message[7] & 0xf0) >> 4,
-        infoCode: (message[3] & 0x0f),
+        infoCode: (message[7] & 0x0f),
         data: null
     };
     // Read

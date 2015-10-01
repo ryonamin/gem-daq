@@ -23,6 +23,7 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th>BX</th>
                                 <th>BC</th>
                                 <th>EC</th>
                                 <th>Flags</th>
@@ -33,6 +34,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="event in tkDataEvents track by $index">
+                                <td>{{ event.bx | hex }}</td>
                                 <td>{{ event.bc | hex }}</td>
                                 <td>{{ event.ec | hex }}</td>
                                 <td>{{ event.flags | hex }}</td>
@@ -53,6 +55,8 @@
                 </div>
                 <div class="panel-body">
                     <p>Acquired <b>{{ tkDataEvents.length }}</b> events!</p>
+                    <p>The OptoHybrid sent <b>{{ nSent }}</b> events!</p>
+                    <p>The GLIB received <b>{{ nReceived }}</b> events!</p>
                     <p ng-show="tkFifoFull == true">The FIFO is <b>full</b>!</p>
                     <p ng-show="tkFifoEmpty == true">The FIFO is <b>empty</b>!</p>
                     <p><b>{{ tkEventsAvailable }}</b> events are available for readout!</p>
