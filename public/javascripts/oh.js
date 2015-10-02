@@ -151,7 +151,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         socket.ipbus_read(oh_counter_reg(OHID, 17), function(data) { $scope.wbCounters[13].stb = data; }); 
         socket.ipbus_read(oh_counter_reg(OHID, 18), function(data) { $scope.wbCounters[14].stb = data; }); 
         socket.ipbus_read(oh_counter_reg(OHID, 19), function(data) { $scope.wbCounters[15].stb = data; }); 
-        socket.ipbus_read(oh_counter_reg(OHID, 20), function(data) { $scope.wbCounters[16].stb = data; }); 
+        socket.ipbus_read(oh_counter_reg(OHID, 20), function(data) { $scope.wbCounters[16].stb = data + 1; }); 
         socket.ipbus_read(oh_counter_reg(OHID, 21), function(data) { $scope.wbCounters[17].stb = data; }); 
         // Slave acknowledgments        
         socket.ipbus_read(oh_counter_reg(OHID, 22), function(data) { $scope.wbCounters[4].ack = data; }); 
