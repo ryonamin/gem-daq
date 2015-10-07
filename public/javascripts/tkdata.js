@@ -14,10 +14,12 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.nReceived = 0;
 
-    var plotDataChipID = [ ['ChipID'] ];
 
+
+    var plotDataBC = [ ['Bunch Counter'] ];
     var plotDataEC = [ ['Event Counter'] ];
-
+    var plotDataFlags = [ ['Flags'] ];
+    var plotDataChipID = [ ['ChipID'] ];
     var plotDataStrips = [ ['Strips'] ];
 
     $scope.toggle_readout = function() {
@@ -26,8 +28,10 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.reset_module = function() {
         $scope.tkDataEvents = []; 
-        plotDataChipID = [ ['ChipID'] ];
+        plotDataBC = [ [ 'Bunch Counter' ] ];
         plotDataEC = [ ['Event Counter'] ];
+        plotDataFlags = [ ['Flags'] ];
+        plotDataChipID = [ ['ChipID'] ];
         plotDataStrips = [ ['Strips'] ];
         plot_graphs();
         socket.ipbus_write(tkdata_reg(OHID), 0);
@@ -51,9 +55,13 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     }
 
     function plot_graphs() {
-        plot_graph("chipid_chart", "Chip ID", plotDataChipID);
+        plot_graph("bc_chart", "Bunch Counter", plotDataBC);
         plot_graph("ec_chart", "Event Counter", plotDataEC);
+        plot_graph("flags_chart", "Flags", plotDataFlags);
+        plot_graph("chipid_chart", "Chip ID", plotDataChipID);
         plot_graph("strips_chart", "Beam Profile", plotDataStrips);
+    
+
     }
 
     function form_vfat2_event() {     
@@ -77,6 +85,8 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         var strips3 = ((0x0000ffff & packet4) << 16) | ((0xffff0000 & packet5) >> 16);
         var crc = 0x0000ffff & packet5;
 
+        if ($scope.tkDataEvents.length > 20) $scope.tkDataEvents.shift();
+
         $scope.tkDataEvents.push({
             bx: packet6,
             bc: bc,
@@ -88,11 +98,14 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
             strips2: strips2,
             strips3: strips3,
             crc: crc
-        });    
+        });   
+        
                        
         // Add to graphs
-        plotDataChipID.push([ chipID ]);
+        plotDataBC.push([ bc ]);
         plotDataEC.push([ ec ]);
+        plotDataFlags.push([ flags ]);
+        plotDataChipID.push([ chipID ]);
 
         for (var i = 0; i < 32; ++i) {
             if (((strips0 >> i) & 0x1) == 1) plotDataStrips.push([ i ]);
@@ -105,8 +118,10 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     }
 
     function get_vfat2_event() {
-        socket.ipbus_read(tkdata_reg(OHID, 0), function(data) {
-            if (data != null) readOutBuffer.push(data);
+        socket.ipbus_read(tkdata_reg(OHID, 1), function(data) {            
+            socket.ipbus_fifoRead(tkdata_reg(OHID, 0), (data > 100 ? 100 : data), function(data) {
+                readOutBuffer = readOutBuffer.concat(data);
+            });
         });
     }
 
