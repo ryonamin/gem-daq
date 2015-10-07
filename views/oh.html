@@ -29,7 +29,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label">VFAT2 trigger source</label>
                                     <div class="col-sm-8">   
-                                        <select class="form-control" ng-model="t1Source" ng-options="item.name for item in t1SourceList track by item.id"></select>
+                                        <select class="form-control" ng-model="t1Source" ng-options="item.name for item in t1SourceChoices track by item.id"></select>
                                     </div>
                                 </div>  
                                 <div class="form-group">
@@ -41,7 +41,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label">Clock source</label>
                                     <div class="col-sm-8">   
-                                        <select class="form-control" ng-model="clockSource" ng-options="item.name for item in clockSourceList track by item.id"></select>
+                                        <select class="form-control" ng-model="clockSource" ng-options="item.name for item in clockSourceChoices track by item.id"></select>
                                     </div>
                                 </div>  
                                 <div class="form-group">
@@ -57,12 +57,12 @@
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label">TDC SBit outputs</label>
                                     <div class="col-sm-8">   
-                                        <input type="number" min="0" max="23" class="form-control" ng-model="sbitSelect0">
-                                        <input type="number" min="0" max="23" class="form-control" ng-model="sbitSelect1">
-                                        <input type="number" min="0" max="23" class="form-control" ng-model="sbitSelect2">
-                                        <input type="number" min="0" max="23" class="form-control" ng-model="sbitSelect3">
-                                        <input type="number" min="0" max="23" class="form-control" ng-model="sbitSelect4">
-                                        <input type="number" min="0" max="23" class="form-control" ng-model="sbitSelect5">
+                                        <input type="number" min="0" max="23" class="form-control" ng-model="sbitSelect[0]">
+                                        <input type="number" min="0" max="23" class="form-control" ng-model="sbitSelect[1]">
+                                        <input type="number" min="0" max="23" class="form-control" ng-model="sbitSelect[2]">
+                                        <input type="number" min="0" max="23" class="form-control" ng-model="sbitSelect[3]">
+                                        <input type="number" min="0" max="23" class="form-control" ng-model="sbitSelect[4]">
+                                        <input type="number" min="0" max="23" class="form-control" ng-model="sbitSelect[5]">
                                     </div>
                                 </div>  
                             </div>
@@ -86,7 +86,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="reg in statRegs">
+                            <tr ng-repeat="reg in statRegs" ng-class="{ danger: reg.data == 0 }">
                                 <td>{{ reg.name }}</td>
                                 <td>{{ reg.data | hex }}</td>
                             </tr>

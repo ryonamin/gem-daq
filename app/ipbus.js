@@ -5,8 +5,8 @@ var ipaddr = "192.168.0.161";
 var port = 50001;
 
 var packets = new Array();
-var packetId = 0;
 var packet = undefined;
+var packetId = 0;
 
 
 udp.bind();
@@ -28,24 +28,30 @@ setInterval(function() {
 
 udp.on('message', function(message) {
     // Response
-    var data = {
+    var response = {
         ipbusVersion: (message[0] >> 4),
-        packetId: ((message[4] & 0xf) << 8) | message[5],
-        packetType: (message[7] & 0xf0) >> 4,
-        infoCode: (message[7] & 0x0f),
-        data: null
+        id: ((message[4] & 0xf) << 8) | message[5],
+        size: message[6],
+        type: (message[7] & 0xf0) >> 4,
+        infoCode: message[7] & 0xf,
+        data: [ ]
     };
     // Read
-    if (data.packetType == 0) data.data = (message[8] << 24) | (message[9] << 16) | (message[10] << 8) | message[11];
+    if (response.type == 0 || response.type == 2) {
+        if (response.size == 1) response.data = (message[8] << 24) | (message[9] << 16) | (message[10] << 8) | message[11];
+        else {
+            for (var i = 0; i < response.size; ++i) response.data.push((message[8 + i * 4] << 24) | (message[9 + i * 4] << 16) | (message[10 + i * 4] << 8) | message[11 + i * 4]);
+        }
+    }
     // Write
-    else if (data.packetType == 1) data.data = 0;
+    else if (response.type == 1) response.data = 0;
 
     // Callback
     if (packet !== undefined) {
-        (packet.callback)(data);
+        (packet.callback)(response);
         packet = undefined;
     }
-    else console.log('UDP: received packet', data.packetId, 'but NO callback :(');
+    else console.log('UDP: received packet', response.id, 'but NO callback :(');
 });
 
 /*
@@ -58,8 +64,8 @@ setInterval(function() {
         else {
             (packet.callback)({
                 ipbusVersion: 0x2,
-                packetId: packet.id,
-                packetType: null,
+                id: packet.id,
+                type: null,
                 infoCode: 0x6,
                 data: null
             });
@@ -70,69 +76,6 @@ setInterval(function() {
 }, 10);  
 
 /*
- * IPBus read transaction in queue
- */
-
-function ipbus_read(addr, callback) {
-    packets.push({
-        id: packetId++,
-        data: new Buffer([
-            // Transaction Header
-            0x20, // Protocol version & RSVD
-            0x0, // Transaction ID (0 or bug)
-            0x0, // Transaction ID (0 or bug)
-            0xf0, // Packet order & type
-            // Packet Header
-            (0x20 | ((packetId & 0xf00) >> 8)), // Protocol version & Packet ID MSB
-            (packetId & 0xff), // Packet ID MSB,
-            0x1, // Words
-            0x0f, // Type & Info code
-            // Read address
-            ((addr & 0xff000000) >> 24),
-            ((addr & 0x00ff0000) >> 16),
-            ((addr & 0x0000ff00) >> 8),
-            (addr & 0x000000ff)
-        ]),
-        callback: callback,
-        timeout: 100
-    });     
-};
-
-/*
- * IPBus write transaction in queue
- */
-
-function ipbus_write(addr, data, callback) {
-    packets.push({
-        id: packetId++,
-        data: new Buffer([
-            // Transaction Header
-            0x20, // Protocol version & RSVD
-            0x0, // Transaction ID (0 or bug)
-            0x0, // Transaction ID (0 or bug)
-            0xf0, // Packet order & type
-            // Packet Header
-            (0x20 | ((packetId & 0xf00) >> 8)), // Protocol version & Packet ID MSB
-            (packetId & 0x0ff), // Packet ID MSB,
-            0x1, // Words
-            0x1f, // Type & Info code
-            // Write address
-            ((addr & 0xff000000) >> 24),
-            ((addr & 0x00ff0000) >> 16),
-            ((addr & 0x0000ff00) >> 8),
-            (addr & 0x000000ff),
-            // Write data
-            ((data & 0xff000000) >> 24),
-            ((data & 0x00ff0000) >> 16),
-            ((data & 0x0000ff00) >> 8),
-            (data & 0x000000ff)
-        ]),
-        callback: callback,
-        timeout: 100
-    });      
-};
-
-/*
  * Socket IO interface
  */
 
@@ -140,16 +83,39 @@ module.exports = function(io) {
 
     io.on('connection', function (socket) {
 
-        // IPBus read
-        socket.on('ipbus_read', function(request, callback) {
-            ipbus_read(request.addr, callback);
-        });
-
-        // IPBus write
-        socket.on('ipbus_write', function(request, callback) {
-            ipbus_write(request.addr, request.data, callback);
-        });
+        socket.on('ipbus', function(transaction, callback) {
+            var udp_data = [
+                // Transaction Header
+                0x20, // Protocol version & RSVD
+                0x0, // Transaction ID (0 or bug)
+                0x0, // Transaction ID (0 or bug)
+                0xf0, // Packet order & type
+                // Packet Header
+                (0x20 | ((packetId & 0xf00) >> 8)), // Protocol version & Packet ID MSB
+                (packetId & 0xff), // Packet ID LSB,
+                transaction.size, // Words
+                (((transaction.type & 0xf) << 4) | 0xf), // Type & Info code
+                // Address
+                ((transaction.addr & 0xff000000) >> 24),
+                ((transaction.addr & 0x00ff0000) >> 16),
+                ((transaction.addr & 0x0000ff00) >> 8),
+                (transaction.addr & 0x000000ff)
+            ];
+            if (transaction.type == 1 || transaction.type == 3) {
+                for (var i = 0; i < transaction.size; ++i) {
+                    udp_data.push((transaction.data[i] & 0xff000000) >> 24);
+                    udp_data.push((transaction.data[i] & 0x00ff0000) >> 16);
+                    udp_data.push((transaction.data[i] & 0x0000ff00) >> 8);
+                    udp_data.push(transaction.data[i] & 0x000000ff);
+                }
+            }
+            packets.push({
+                id: packetId++,
+                data: new Buffer(udp_data),
+                callback: callback,
+                timeout: 100
+            });
+        }); 
 
     });
-
 };

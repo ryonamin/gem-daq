@@ -28,25 +28,54 @@ app.factory('socket', function ($rootScope) {
         },
 
         ipbus_read: function(addr, clientCallback) {
-            socket.emit('ipbus_read', { addr: addr }, function(response) {
-                $rootScope.$apply(function() {
-                    if (clientCallback) {
-                        if (response.infoCode == 0x0) clientCallback(response.data);
-                        else clientCallback(null);
-                    }
-                });
-            });
+            socket.emit('ipbus', { 
+                type: 0,
+                size: 1,
+                addr: addr 
+            }, function(response) { $rootScope.$apply(function() { if (clientCallback) clientCallback(response.data); }); });
+        },
+
+        ipbus_blockRead: function(addr, size, clientCallback) {
+            socket.emit('ipbus', { 
+                type: 0,
+                size: size,
+                addr: addr 
+            }, function(response) { $rootScope.$apply(function() { if (clientCallback) clientCallback(response.data); }); });
+        },
+
+        ipbus_fifoRead: function(addr, size, clientCallback) {
+            socket.emit('ipbus', { 
+                type: 2,
+                size: size,
+                addr: addr 
+            }, function(response) { $rootScope.$apply(function() { if (clientCallback) clientCallback(response.data); }); });
         },
 
         ipbus_write: function(addr, data, clientCallback) {
-            socket.emit('ipbus_write', { addr: addr, data: data }, function(response) {
-                $rootScope.$apply(function() {
-                    if (clientCallback) {
-                        if (response.infoCode == 0x0) clientCallback(true);
-                        else clientCallback(false);
-                    }
-                });
-            });
+            socket.emit('ipbus', {
+                type: 1,
+                size: 1, 
+                addr: addr, 
+                data: [ data ] 
+            }, function(response) { $rootScope.$apply(function() { if (clientCallback) clientCallback(true); }); });
+        },
+
+        ipbus_blockWrite: function(addr, data, clientCallback) {
+            socket.emit('ipbus', {
+                type: 1,
+                size: data.length, 
+                addr: addr, 
+                data: data 
+            }, function(response) { $rootScope.$apply(function() { if (clientCallback) clientCallback(true); }); });
+        },
+
+        ipbus_fifoWrite: function(addr, data, clientCallback) {
+            socket.emit('ipbus', {
+                type: 3,
+                size: data.length, 
+                addr: addr, 
+                data: data 
+            }, function(response) { $rootScope.$apply(function() { if (clientCallback) clientCallback(true); }); });
         }
 
     };

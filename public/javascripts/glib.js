@@ -17,34 +17,32 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.gtxCounters = [
         { name: 'Tracking data link 0', cnt: 0 },
-        { name: 'Tracking data link 1', cnt: 0 },
         { name: 'Trigger data link 0', cnt: 0 },
+        { name: 'Tracking data link 1', cnt: 0 },
         { name: 'Trigger data link 1', cnt: 0 } 
     ];
 
     function get_glib_counters() {
-        // IPBus strobes
-        socket.ipbus_read(glib_counter_reg(0), function(data) { $scope.ipbusCounters[0].stb = data; }); 
-        socket.ipbus_read(glib_counter_reg(1), function(data) { $scope.ipbusCounters[1].stb = data; }); 
-        socket.ipbus_read(glib_counter_reg(2), function(data) { $scope.ipbusCounters[2].stb = data; }); 
-        socket.ipbus_read(glib_counter_reg(3), function(data) { $scope.ipbusCounters[3].stb = data; }); 
-        socket.ipbus_read(glib_counter_reg(4), function(data) { $scope.ipbusCounters[4].stb = data; });
-        // IPBus acknowledgments
-        socket.ipbus_read(glib_counter_reg(5), function(data) { $scope.ipbusCounters[0].ack = data; }); 
-        socket.ipbus_read(glib_counter_reg(6), function(data) { $scope.ipbusCounters[1].ack = data; }); 
-        socket.ipbus_read(glib_counter_reg(7), function(data) { $scope.ipbusCounters[2].ack = data; }); 
-        socket.ipbus_read(glib_counter_reg(8), function(data) { $scope.ipbusCounters[3].ack = data; }); 
-        socket.ipbus_read(glib_counter_reg(9), function(data) { $scope.ipbusCounters[4].ack = data; }); 
-        // T1
-        socket.ipbus_read(glib_counter_reg(10), function(data) { $scope.t1Counters[0].cnt = data; }); 
-        socket.ipbus_read(glib_counter_reg(11), function(data) { $scope.t1Counters[1].cnt = data; }); 
-        socket.ipbus_read(glib_counter_reg(12), function(data) { $scope.t1Counters[2].cnt = data; }); 
-        socket.ipbus_read(glib_counter_reg(13), function(data) { $scope.t1Counters[3].cnt = data; }); 
-        // GTX
-        socket.ipbus_read(glib_counter_reg(14), function(data) { $scope.gtxCounters[0].cnt = data; }); 
-        socket.ipbus_read(glib_counter_reg(15), function(data) { $scope.gtxCounters[1].cnt = data; }); 
-        socket.ipbus_read(glib_counter_reg(16), function(data) { $scope.gtxCounters[2].cnt = data; }); 
-        socket.ipbus_read(glib_counter_reg(17), function(data) { $scope.gtxCounters[3].cnt = data; }); 
+        socket.ipbus_blockRead(glib_counter_reg(0), 18, function(data) { 
+            $scope.ipbusCounters[0].stb = data[0];  
+            $scope.ipbusCounters[1].stb = data[1];  
+            $scope.ipbusCounters[2].stb = data[2];  
+            $scope.ipbusCounters[3].stb = data[3];  
+            $scope.ipbusCounters[4].stb = data[4]; 
+            $scope.ipbusCounters[0].ack = data[5];  
+            $scope.ipbusCounters[1].ack = data[6];  
+            $scope.ipbusCounters[2].ack = data[7];  
+            $scope.ipbusCounters[3].ack = data[8];  
+            $scope.ipbusCounters[4].ack = data[9];  
+            $scope.t1Counters[0].cnt = data[10];  
+            $scope.t1Counters[1].cnt = data[11];  
+            $scope.t1Counters[2].cnt = data[12];  
+            $scope.t1Counters[3].cnt = data[13];  
+            $scope.gtxCounters[0].cnt = data[14];  
+            $scope.gtxCounters[1].cnt = data[16];  
+            $scope.gtxCounters[2].cnt = data[15];  
+            $scope.gtxCounters[3].cnt = data[17];   
+        });
     }
 
     function get_status_loop() {
@@ -55,17 +53,17 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     get_status_loop();
 
     $scope.reset_ipbus_counters = function() {       
-        for (var i = 0; i <= 9; ++i) socket.ipbus_write(glib_counter_reg(i), 0);
+        socket.ipbus_blockWrite(glib_counter_reg(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         get_glib_counters();
     };
 
     $scope.reset_t1_counters = function() {       
-        for (var i = 10; i <= 13; ++i) socket.ipbus_write(glib_counter_reg(i), 0);
+        socket.ipbus_blockWrite(glib_counter_reg(10), [0, 0, 0, 0]);
         get_glib_counters();
     };
 
-    $scope.reset_gtx_counters = function() {       
-        for (var i = 14; i <= 17; ++i) socket.ipbus_write(glib_counter_reg(i), 0);
+    $scope.reset_gtx_counters = function() {   
+        socket.ipbus_blockWrite(glib_counter_reg(14), [0, 0, 0, 0]);    
         get_glib_counters();
     };
 
