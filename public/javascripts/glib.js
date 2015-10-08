@@ -2,8 +2,8 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
      
     $scope.ipbusCounters = [ 
         { name: 'OptoHybrid forward 0', stb: 0, ack: 0 }, 
-        { name: 'OptoHybrid forward 1', stb: 0, ack: 0 }, 
         { name: 'Tracking data readout 0', stb: 0, ack: 0 }, 
+        { name: 'OptoHybrid forward 1', stb: 0, ack: 0 }, 
         { name: 'Tracking data readout 1', stb: 0, ack: 0 }, 
         { name: 'Counters', stb: 0, ack: 0 }
     ];    
@@ -25,13 +25,13 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     function get_glib_counters() {
         socket.ipbus_blockRead(glib_counter_reg(0), 18, function(data) { 
             $scope.ipbusCounters[0].stb = data[0];  
-            $scope.ipbusCounters[1].stb = data[1];  
-            $scope.ipbusCounters[2].stb = data[2];  
+            $scope.ipbusCounters[1].stb = data[2];  
+            $scope.ipbusCounters[2].stb = data[1];  
             $scope.ipbusCounters[3].stb = data[3];  
             $scope.ipbusCounters[4].stb = data[4]; 
             $scope.ipbusCounters[0].ack = data[5];  
-            $scope.ipbusCounters[1].ack = data[6];  
-            $scope.ipbusCounters[2].ack = data[7];  
+            $scope.ipbusCounters[1].ack = data[7];  
+            $scope.ipbusCounters[2].ack = data[6];  
             $scope.ipbusCounters[3].ack = data[8];  
             $scope.ipbusCounters[4].ack = data[9];  
             $scope.t1Counters[0].cnt = data[10];  

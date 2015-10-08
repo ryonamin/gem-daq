@@ -2,6 +2,8 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     var OHID = (window.sessionStorage === undefined ? 0 : window.sessionStorage.OHID);
 
+    $scope.fifoFull = false;
+
     $scope.t1Status = false;
 
     $scope.scanStatus = 0;
@@ -9,6 +11,10 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     $scope.vfat2Status = [];
 
     for (var i = 0; i < 24; ++i) $scope.vfat2Status.push({ id: i, isPresent: false, isOn: false }); 
+
+    function get_glib_status() {        
+        socket.ipbus_read(tkdata_reg(OHID, 2), function(data) { $scope.fifoFull = (data == 1); });
+    }
 
     function get_oh_status() {
         socket.ipbus_read(oh_scan_reg(OHID, 9), function(data) { $scope.scanStatus = data; }); 
@@ -21,6 +27,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     };
         
     function get_status_loop() {
+        get_glib_status();
         get_oh_status();  
         for (var i = 0; i < 24; ++i) get_vfat2_status(i); 
         setTimeout(get_status_loop, 5000);

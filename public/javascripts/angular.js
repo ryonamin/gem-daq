@@ -91,7 +91,7 @@ app.filter('hex', function() {
 
 app.controller('commonCtrl', ['$scope', 'socket', function($scope, socket) {
 
-    $scope.OHID = (window.sessionStorage === undefined ? 0 : window.sessionStorage.OHID);
+    $scope.OHID = (window.sessionStorage.OHID == undefined ? 0 : window.sessionStorage.OHID);
 
     $scope.oh_change = function() {
         window.sessionStorage.OHID = $scope.OHID;

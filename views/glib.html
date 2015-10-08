@@ -23,7 +23,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="counter in ipbusCounters" ng-class="{ danger: counter.stb != counter.ack }">
+                            <tr ng-repeat="counter in ipbusCounters" ng-class="{ warning: counter.stb != counter.ack }">
                                 <td>{{ counter.name }}</td>
                                 <td>{{ counter.stb | hex }}</td>
                                 <td>{{ counter.ack | hex }}</td>
@@ -87,6 +87,18 @@
                 </div>
             </div>           
         </div>   
+    </div>    
+    <div class="row">
+        <div class="col-md-12">   
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Help</h3>
+                </div>
+                <div class="panel-body">
+                    <p>All the warnings on this page are not critical and do not prevent the system from running. They can be ignored. However, do not reset the counters unless the system has been restarted. This information will help the developers to stabilize the system.</p>
+                </div>
+            </div>   
+        </div>
     </div>
 </div>
 

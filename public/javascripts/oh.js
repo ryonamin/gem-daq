@@ -220,4 +220,14 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         get_oh_counters();
     };
 
+    $scope.solve_trigger = function() {
+        socket.ipbus_write(oh_system_reg(OHID, 1), 2);
+        get_oh_system_regs();
+    };
+
+    $scope.solve_clock = function() {
+        socket.ipbus_write(oh_system_reg(OHID, 4), 2);
+        get_oh_system_regs();
+    };
+
 }]);

@@ -32,9 +32,9 @@
                     <p>Acquired <b>{{ tkDataEvents.length }}</b> events!</p>
                     <p>The OptoHybrid sent <b>{{ nSent }}</b> events!</p>
                     <p>The GLIB received <b>{{ nReceived }}</b> events!</p>
+                    <p><b>{{ tkEventsAvailable }}</b> events are available for readout! ({{ tkEventsAvailable / 16383 * 100 | number: 1 }}% filled)</p>
                     <p ng-show="tkFifoFull == true">The FIFO is <b>full</b>!</p>
-                    <p ng-show="tkFifoEmpty == true">The FIFO is <b>empty</b>!</p>
-                    <p><b>{{ tkEventsAvailable }}</b> events are available for readout!</p>     
+                    <p ng-show="tkFifoEmpty == true">The FIFO is <b>empty</b>!</p>     
                 </div>
             </div>  
         </div>

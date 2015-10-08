@@ -6,15 +6,19 @@
 
 <div>
     <h1>GEM DAQ Interface</h1>
-    <div class="row">
-        <div class="col-md-4"> 
+    <div class="row">        
+        <div class="col-md-4">                
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">GLIB status</h3>
                 </div>
                 <div class="panel-body">
+                    <p>
+                        <a class="btn btn-block btn-danger btn-xs" href="/tkdata" ng-show="fifoFull">The FIFOs are <b>full</b> on GLIB</a>
+                        <a class="btn btn-block btn-default btn-xs" href="/tkdata" ng-show="!fifoFull">The FIFOs are <b>not full</b> on GLIB</a>
+                    </p>
                 </div>
-            </div>  
+            </div>
         </div>
         <div class="col-md-4">                
             <div class="panel panel-default">
@@ -23,12 +27,12 @@
                 </div>
                 <div class="panel-body">
                     <p>
-                        <a class="btn btn-block btn-success btn-xs" href="/threshold" ng-show="scanStatus == 1">A <b>threshold scan</b> is running on OptoHybrid</a>
-                        <a class="btn btn-block btn-success btn-xs" href="/latency" ng-show="scanStatus == 3">A <b>latency scan</b> is running on OptoHybrid</a>
-                        <a class="btn btn-block btn-danger btn-xs" ng-show="scanStatus == 0"><b>No scan</b> is running on OptoHybrid</a>
+                        <a class="btn btn-block btn-danger btn-xs" href="/threshold" ng-show="scanStatus == 1">A <b>threshold scan</b> is running on OptoHybrid</a>
+                        <a class="btn btn-block btn-danger btn-xs" href="/latency" ng-show="scanStatus == 3">A <b>latency scan</b> is running on OptoHybrid</a>
+                        <a class="btn btn-block btn-default btn-xs" ng-show="scanStatus == 0"><b>No scan</b> is running on OptoHybrid</a>
 
-                        <a class="btn btn-block btn-success btn-xs" href="/t1" ng-show="t1Status">The T1 controller is <b>running</b> on OptoHybrid</a>
-                        <a class="btn btn-block btn-danger btn-xs" href="/t1" ng-show="!t1Status">The T1 controller is <b>not running</b> on OptoHybrid</a>
+                        <a class="btn btn-block btn-danger btn-xs" href="/t1" ng-show="t1Status">The T1 controller is <b>running</b> on OptoHybrid</a>
+                        <a class="btn btn-block btn-default btn-xs" href="/t1" ng-show="!t1Status">The T1 controller is <b>not running</b> on OptoHybrid</a>
                     </p>
                 </div>
             </div>
@@ -49,6 +53,26 @@
                 </div>
             </div>  
         </div>   
+    </div>    
+    <div class="row">
+        <div class="col-md-12"> 
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Instructions</h3>
+                </div>
+                <div class="panel-body">
+                    <p>1. Check that "OptoHybrid > System registers > VFAT2 trigger source" is set to "External".</p>
+                    <p>2. Check that "OptoHybrid > System registers > Clock source" is set to "External".</p>
+                    <p>3. Reset all the counters on the "GLIB" and "OptoHybrid" control pages.</p>
+                    <p>4. Select "Apply default parameters to all VFAT2s" and "Start all VFAT2s" on the "VFAT2s" control page.</p>
+                    <p>5. Perform a "Threshold scan" on every VFAT2.</p>
+                    <p>6. For each VFAT2, set the "VThreshold1" register at a correct level by using the "I2C > Basic I2C request" tool.</p>
+                    <p>7. Perform a "Latency scan" on every VFAT2.</p>
+                    <p>8. For each VFAT2, set the "latency" register at a correct value by using the "I2C > Basic I2C request" tool.</p>
+                    <p>9. Run "Start data acquisition" on the "Tracking Data" page to check the collected data.</p>
+                </div>
+            </div>  
+        </div>
     </div>
 </div>
 
