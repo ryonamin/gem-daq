@@ -1,6 +1,11 @@
 app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {    
 
-    var OHID = (window.sessionStorage === undefined ? 0 : window.sessionStorage.OHID);
+    var OHID = (window.sessionStorage.OHID == undefined ? 0 : parseInt(window.sessionStorage.OHID));
+
+    $scope.statRegs = [
+        { name: "GLIB firmware version", data: 0 },
+        { name: "OptoHybrid firmware version", data: 0 }
+    ];
 
     $scope.fifoFull = false;
 
@@ -12,6 +17,11 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     for (var i = 0; i < 24; ++i) $scope.vfat2Status.push({ id: i, isPresent: false, isOn: false }); 
 
+    function get_stat_registers() {
+        socket.ipbus_read("00000002", function(data) { $scope.statRegs[0].data = data; });
+        socket.ipbus_read(oh_stat_reg(OHID, 0), function(data) { $scope.statRegs[1].data = data; });
+    }
+
     function get_glib_status() {        
         socket.ipbus_read(tkdata_reg(OHID, 2), function(data) { $scope.fifoFull = (data == 1); });
     }
@@ -21,15 +31,23 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         socket.ipbus_read(oh_t1_reg(OHID, 14), function(data) { $scope.t1Status = (data == 0 ? false : true); }); 
     }
 
-    function get_vfat2_status(vfat2) {
-        socket.ipbus_read(vfat2_reg(OHID, vfat2, 8), function(data) { $scope.vfat2Status[vfat2].isPresent = ((data & 0xff) == 0 || ((data & 0xF000000) >> 24) == 0x5 ? false : true); });    
-        socket.ipbus_read(vfat2_reg(OHID, vfat2, 0), function(data) { $scope.vfat2Status[vfat2].isOn = (((data & 0xF000000) >> 24) == 0x5 || (data & 0x1) == 0 ? false : true); });        
+    function get_vfat2_status() {
+        socket.ipbus_write(oh_ei2c_reg(OHID, 256), 0);
+        socket.ipbus_read(oh_ei2c_reg(OHID, 8));
+        socket.ipbus_fifoRead(oh_ei2c_reg(OHID, 257), 24, function(data) {
+            for (var i = 0; i < data.length; ++i) $scope.vfat2Status[i].isPresent = ((data[i] & 0xff) == 0 || ((data[i] & 0xF000000) >> 24) == 0x5 ? false : true);
+        });
+        socket.ipbus_read(oh_ei2c_reg(OHID, 0));
+        socket.ipbus_fifoRead(oh_ei2c_reg(OHID, 257), 24, function(data) {
+            for (var i = 0; i < data.length; ++i) $scope.vfat2Status[i].isOn = (((data[i] & 0xF000000) >> 24) == 0x5 || (data[i] & 0x1) == 0 ? false : true);
+        });   
     };
         
     function get_status_loop() {
+        get_stat_registers();
         get_glib_status();
         get_oh_status();  
-        for (var i = 0; i < 24; ++i) get_vfat2_status(i); 
+        get_vfat2_status(); 
         setTimeout(get_status_loop, 5000);
     }
 

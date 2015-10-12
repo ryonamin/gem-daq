@@ -1,6 +1,6 @@
 app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {    
 
-    var OHID = (window.sessionStorage === undefined ? 0 : window.sessionStorage.OHID);
+    var OHID = (window.sessionStorage.OHID == undefined ? 0 : parseInt(window.sessionStorage.OHID));
 
     $scope.dispRegisters = [
         { name: "ControlReg 0", id: 0 },
@@ -156,6 +156,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         { name: "ChannelReg 127", id: 144 }
     ];
 
+
     $scope.vfat2ID = ((window.location.href.split('/'))[4] === undefined ? 0 : parseInt((window.location.href.split('/'))[4]));
 
     $scope.vfat2Register = { id: ((window.location.href.split('/'))[5] === undefined ? 0 : parseInt((window.location.href.split('/'))[5])) }; 
@@ -166,6 +167,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.writeResult = null;
 
+
     $scope.vfat2sMask = "000000";
 
     $scope.vfat2sRegister = { id: ((window.location.href.split('/'))[5] === undefined ? 0 : parseInt((window.location.href.split('/'))[5])) }; 
@@ -175,6 +177,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     $scope.readsResult = [];    
 
     $scope.writesResult = null;
+
 
     $scope.read = function() {      
         $scope.readResult = $scope.writeResult = null;
@@ -191,17 +194,10 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         $scope.writesResult = null;
         var mask = parseInt($scope.vfat2sMask, 16);
         var nReads = 24 - popcount(mask);
-        socket.ipbus_write(oh_ei2c_reg(OHID, 256), mask, function() { 
-            socket.ipbus_read(oh_ei2c_reg(OHID, $scope.vfat2sRegister.id), function() {
-                for (var i = 0; i < nReads; ++i) {
-                    socket.ipbus_read(oh_ei2c_reg(OHID, 257), function(data) {
-                        $scope.readsResult.push({
-                            vfat2: (data >> 8) & 0xFF,
-                            data: data & 0xFF
-                        });
-                    });
-                }
-            });
+        socket.ipbus_write(oh_ei2c_reg(OHID, 256), mask);
+        socket.ipbus_read(oh_ei2c_reg(OHID, $scope.vfat2sRegister.id));
+        socket.ipbus_fifoRead(oh_ei2c_reg(OHID, 257), nReads, function(data) {
+            for (var i = 0; i < data.length; ++i) $scope.readsResult.push({ vfat2: (data[i] >> 8) & 0xFF, data: data[i] & 0xFF });
         });
     };
 
@@ -209,11 +205,8 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         $scope.readsResult = [];
         $scope.writesResult = null;
         var mask = parseInt($scope.vfat2sMask, 16);
-        socket.ipbus_write(oh_ei2c_reg(OHID, 256), mask, function() { 
-            socket.ipbus_write(oh_ei2c_reg(OHID, $scope.vfat2sRegister.id), $scope.vfat2sData, function() {
-                $scope.writesResult = true;
-            });
-        });
+        socket.ipbus_write(oh_ei2c_reg(OHID, 256), mask);
+        socket.ipbus_write(oh_ei2c_reg(OHID, $scope.vfat2sRegister.id), $scope.vfat2sData, function() { $scope.writesResult = true; });
     };
 
     $scope.reset_module = function() {

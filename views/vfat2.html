@@ -7,6 +7,19 @@
 <div>
     <h1>VFAT2s monitoring and control</h1>
     <div class="row">
+        <div class="col-md-12">   
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Help</h3>
+                </div>
+                <div class="panel-body">
+                    <p>You can display more information about a given VFAT2 by selecting it in the "Overview" panel. Once the VFAT2 registers are listed, you can change their value by clicking the icon in the "Edit" column. A green icon signifies that the VFAT2 is well biased for data taking; a red icon means that its value differs from the recommended value for data taking; an orange value means that the register has no recommended value.</p>
+                    <p>In order to mask noisy VFAT2s, you can toggle individual positions in the "Tracking data counter and masking" panel. Red warnings indicate that a position is sending fake events to the system.</p>
+                </div>
+            </div>   
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-4">
             <!-- VFAT2 overview -->
             <div class="panel panel-default">
@@ -244,18 +257,7 @@
                     </div>
                 </div>
             </div>
-        </div>         
-        <div class="col-md-8">   
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Help</h3>
-                </div>
-                <div class="panel-body">
-                    <p>You can display more information about a given VFAT2 by selecting it in the "Overview" panel. Once the VFAT2 registers are listed, you can change their value by clicking the icon in the "Edit" column. A green icon signifies that the VFAT2 is well biased for data taking; a red icon means that its value differs from the recommended value for data taking; an orange value means that the register has no recommended value.</p>
-                    <p>In order to mask noisy VFAT2s, you can toggle individual positions in the "Tracking data counter and masking" panel. Red warnings indicate that a position is sending fake events to the system.</p>
-                </div>
-            </div>   
-        </div>
+        </div>       
     </div>
 </div>
 

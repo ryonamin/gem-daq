@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>GEM Web DAQ interface</title>
-        <link rel="stylesheet" href="http://bootswatch.com/sandstone/bootstrap.css">
+        <link rel="stylesheet" href="http://bootswatch.com/lumen/bootstrap.css">
         <link rel="stylesheet" href="/stylesheets/style.css">
     </head>
     <body>
@@ -36,7 +36,9 @@
             </div>
 
             <div class="col-md-10" ng-controller="appCtrl">
-                {% block content %}{% endblock %}
+                <div class="container">
+                    {% block content %}{% endblock %}
+                </div>
             </div>
         </div>
 

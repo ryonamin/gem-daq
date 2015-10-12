@@ -1,6 +1,6 @@
 app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {    
     
-    var OHID = (window.sessionStorage === undefined ? 0 : window.sessionStorage.OHID);
+    var OHID = (window.sessionStorage.OHID == undefined ? 0 : parseInt(window.sessionStorage.OHID));
 
     $scope.enableReadout = false;
 
@@ -8,13 +8,13 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.tkDataEvents = []; 
 
+    $scope.nAcquired = 0; 
+
     $scope.tkEventsAvailable = 0;
 
     $scope.nSent = 0;
 
     $scope.nReceived = 0;
-
-
 
     var plotDataBC = [ ['Bunch Counter'] ];
     var plotDataEC = [ ['Event Counter'] ];
@@ -28,6 +28,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.reset_module = function() {
         $scope.tkDataEvents = []; 
+        $scope.nAcquired = 0;
         plotDataBC = [ [ 'Bunch Counter' ] ];
         plotDataEC = [ ['Event Counter'] ];
         plotDataFlags = [ ['Flags'] ];
@@ -60,12 +61,12 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         plot_graph("flags_chart", "Flags", plotDataFlags);
         plot_graph("chipid_chart", "Chip ID", plotDataChipID);
         plot_graph("strips_chart", "Beam Profile", plotDataStrips);
-    
-
+        setTimeout(plot_graphs, 1000);
     }
 
+    plot_graphs();
+
     function form_vfat2_event() {     
-        if (readOutBuffer.length < 7) return;  
         packet0 = readOutBuffer.shift();            
         if (((packet0 >> 28) & 0xf) != 0xA) return;
         packet1 = readOutBuffer.shift();    
@@ -85,7 +86,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         var strips3 = ((0x0000ffff & packet4) << 16) | ((0xffff0000 & packet5) >> 16);
         var crc = 0x0000ffff & packet5;
 
-        if ($scope.tkDataEvents.length > 20) $scope.tkDataEvents.shift();
+        if ($scope.tkDataEvents.length >= 20) $scope.tkDataEvents.shift();
 
         $scope.tkDataEvents.push({
             bx: packet6,
@@ -99,8 +100,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
             strips3: strips3,
             crc: crc
         });   
-        
-                       
+                               
         // Add to graphs
         plotDataBC.push([ bc ]);
         plotDataEC.push([ ec ]);
@@ -113,24 +113,24 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
             if (((strips2 >> i) & 0x1) == 1) plotDataStrips.push([ i + 64 ]);
             if (((strips3 >> i) & 0x1) == 1) plotDataStrips.push([ i + 96 ]);
         }
-        //
-        plot_graphs();
+
+        ++$scope.nAcquired;
     }
 
     function get_vfat2_event() {
         socket.ipbus_read(tkdata_reg(OHID, 1), function(data) {            
-            socket.ipbus_fifoRead(tkdata_reg(OHID, 0), (data > 100 ? 100 : data), function(data) {
-                readOutBuffer = readOutBuffer.concat(data);
-            });
+            socket.ipbus_fifoRead(tkdata_reg(OHID, 0), (data > 100 ? 100 : data), function(data) { readOutBuffer = readOutBuffer.concat(data); });
         });
     }
 
     function get_status_loop() {
         if ($scope.enableReadout) get_vfat2_event();
-        form_vfat2_event();
-        socket.ipbus_read(tkdata_reg(OHID, 1), function(data) { $scope.tkEventsAvailable = Math.floor(data / 7.); });
-        socket.ipbus_read(tkdata_reg(OHID, 2), function(data) { $scope.tkFifoFull = (data == 1); });
-        socket.ipbus_read(tkdata_reg(OHID, 3), function(data) { $scope.tkFifoEmpty = (data == 1); });
+        if (readOutBuffer.length > 7) form_vfat2_event();
+        socket.ipbus_blockRead(tkdata_reg(OHID, 1), 3, function(data) { 
+            $scope.tkEventsAvailable = Math.floor(data[0] / 7.);
+            $scope.tkFifoFull = (data[1] == 1);
+            $scope.tkFifoEmpty = (data[2] == 1); 
+        });
         socket.ipbus_read(oh_counter_reg(OHID, 106), function(data) { $scope.nSent = data; });
         socket.ipbus_read(glib_counter_reg(18 + OHID), function(data) { $scope.nReceived = data; });
         setTimeout(get_status_loop, 100);

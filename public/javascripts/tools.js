@@ -21,6 +21,6 @@ function glib_counter_reg(reg) { return 0x60000000 + (reg & 0xff); }
 
 function popcount(n) {
     n >>>= 0;
-    for(var popcnt = 0; n; n &= n - 1) popcnt++;
+    for (var popcnt = 0; n; n &= n - 1) ++popcnt;
     return popcnt;
 }

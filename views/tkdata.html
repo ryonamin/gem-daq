@@ -29,7 +29,7 @@
                     <h3 class="panel-title">Events statistics</h3>
                 </div>
                 <div class="panel-body">
-                    <p>Acquired <b>{{ tkDataEvents.length }}</b> events!</p>
+                    <p>Acquired <b>{{ nAcquired }}</b> events!</p>
                     <p>The OptoHybrid sent <b>{{ nSent }}</b> events!</p>
                     <p>The GLIB received <b>{{ nReceived }}</b> events!</p>
                     <p><b>{{ tkEventsAvailable }}</b> events are available for readout! ({{ tkEventsAvailable / 16383 * 100 | number: 1 }}% filled)</p>
