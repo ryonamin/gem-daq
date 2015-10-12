@@ -2,6 +2,9 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     
     var OHID = (window.sessionStorage.OHID == undefined ? 0 : parseInt(window.sessionStorage.OHID));
 
+    var chart = new google.visualization.LineChart(document.getElementById('latency_chart'));
+    google.visualization.events.addListener(chart, 'select', selectHandler);
+
     $scope.scanStatus = false;
 
     $scope.vfat2ID = 0;
@@ -68,8 +71,6 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
             }
         };  
 
-        var chart = new google.visualization.LineChart(document.getElementById('latency_chart'));
-
         socket.ipbus_fifoRead(oh_scan_reg(OHID, 8), nSamples, function(data) {
             for (var i = 0; i <= data.length; ++i) {
                 chartData.addRow([ (data[i] >> 24) & 0xFF, (data[i] & 0x00FFFFFF) / (1. * $scope.nEvents) * 100 ]);
@@ -77,5 +78,9 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
             }
         });
     };
+
+    function selectHandler() { 
+        socket.ipbus_write(vfat2_reg(OHID, $scope.vfat2ID, 146), chart.getSelection()[0].row);
+    }     
 
 }]);
