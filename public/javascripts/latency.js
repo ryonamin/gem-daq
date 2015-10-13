@@ -1,4 +1,4 @@
-app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {    
+app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, socket, Notification) {    
     
     var OHID = (window.sessionStorage.OHID == undefined ? 0 : parseInt(window.sessionStorage.OHID));
 
@@ -45,7 +45,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     };
 
     $scope.reset_scan = function() {
-        socket.ipbus_write(oh_scan_reg(OHID, 10), 1);
+        socket.ipbus_write(oh_scan_reg(OHID, 10), 1, function() { Notification.primary('The module has been reset'); });
         get_current_values();
     };
 
@@ -80,7 +80,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     };
 
     function selectHandler() { 
-        socket.ipbus_write(vfat2_reg(OHID, $scope.vfat2ID, 146), chart.getSelection()[0].row);
+        socket.ipbus_write(vfat2_reg(OHID, $scope.vfat2ID, 146), chart.getSelection()[0].row, function() { Notification.primary('The latency\'s value has been updated'); });
     }     
 
 }]);

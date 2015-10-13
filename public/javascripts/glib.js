@@ -1,4 +1,4 @@
-app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
+app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, socket, Notification) {
      
     $scope.ipbusCounters = [ 
         { name: 'OptoHybrid forward 0', stb: 0, ack: 0 }, 
@@ -53,17 +53,17 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     get_status_loop();
 
     $scope.reset_ipbus_counters = function() {       
-        socket.ipbus_blockWrite(glib_counter_reg(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        socket.ipbus_blockWrite(glib_counter_reg(0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], function() { Notification.primary('The IPBus counters have been reset'); });
         get_glib_counters();
     };
 
     $scope.reset_t1_counters = function() {       
-        socket.ipbus_blockWrite(glib_counter_reg(10), [0, 0, 0, 0]);
+        socket.ipbus_blockWrite(glib_counter_reg(10), [0, 0, 0, 0], function() { Notification.primary('The T1 counters have been reset'); });
         get_glib_counters();
     };
 
     $scope.reset_gtx_counters = function() {   
-        socket.ipbus_blockWrite(glib_counter_reg(14), [0, 0, 0, 0]);    
+        socket.ipbus_blockWrite(glib_counter_reg(14), [0, 0, 0, 0], function() { Notification.primary('The GTX counters have been reset'); }); 
         get_glib_counters();
     };
 

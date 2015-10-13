@@ -1,4 +1,4 @@
-app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {    
+app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, socket, Notification) {    
     
     var OHID = (window.sessionStorage.OHID == undefined ? 0 : parseInt(window.sessionStorage.OHID));
 
@@ -38,7 +38,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     };
 
     $scope.reset_controller = function() {
-        socket.ipbus_write(oh_t1_reg(OHID, 15), 1);
+        socket.ipbus_write(oh_t1_reg(OHID, 15), 1, function() { Notification.primary('The module has been reset'); });
         get_t1_status();
     };
         

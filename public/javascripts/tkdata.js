@@ -1,4 +1,4 @@
-app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {    
+app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, socket, Notification) {    
     
     var OHID = (window.sessionStorage.OHID == undefined ? 0 : parseInt(window.sessionStorage.OHID));
 
@@ -37,7 +37,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
         plot_graphs();
         socket.ipbus_write(tkdata_reg(OHID), 0);
         socket.ipbus_write(oh_counter_reg(OHID, 106), 0);
-        socket.ipbus_write(glib_counter_reg(18 + OHID), 0);
+        socket.ipbus_write(glib_counter_reg(18 + OHID), 0, function() { Notification.primary('The buffers have been emptied'); });
     };
 
     function plot_graph(id, title, data) {

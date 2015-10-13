@@ -1,4 +1,4 @@
-app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
+app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, socket, Notification) {
   
     var OHID = (window.sessionStorage.OHID == undefined ? 0 : parseInt(window.sessionStorage.OHID));
 
@@ -98,8 +98,9 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
               (($scope.sbitSelect[3] & 0x1F) << 15) | 
               (($scope.sbitSelect[2] & 0x1F) << 10) | 
               (($scope.sbitSelect[1] & 0x1F) << 5) | 
-              ($scope.sbitSelect[0] & 0x1F)
-        ]);
+              ($scope.sbitSelect[0] & 0x1F) ],
+            function() { Notification.primary('The OptoHybrid system registers have been updated'); }
+        );
         get_oh_system_regs();
     };
 
@@ -207,27 +208,27 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     get_status_loop();
 
     $scope.reset_wb_counters = function() {
-        socket.ipbus_blockWrite(oh_counter_reg(OHID, 0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);       
+        socket.ipbus_blockWrite(oh_counter_reg(OHID, 0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], function() { Notification.primary('The WishBone counters have been reset'); });      
         get_oh_counters();
     };
 
     $scope.reset_t1_counters = function() {       
-        socket.ipbus_blockWrite(oh_counter_reg(OHID, 84), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        socket.ipbus_blockWrite(oh_counter_reg(OHID, 84), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], function() { Notification.primary('The T1 counters have been reset'); });
         get_oh_counters();
     };
 
     $scope.reset_gtx_counters = function() {    
-        socket.ipbus_blockWrite(oh_counter_reg(OHID, 104), [0, 0]);         
+        socket.ipbus_blockWrite(oh_counter_reg(OHID, 104), [0, 0], function() { Notification.primary('The GTX counters have been reset'); });      
         get_oh_counters();
     };
 
     $scope.solve_trigger = function() {
-        socket.ipbus_write(oh_system_reg(OHID, 1), 2);
+        socket.ipbus_write(oh_system_reg(OHID, 1), 2, function() { Notification.primary('The trigger source on the OptoHybrid has been changed'); });
         get_oh_system_regs();
     };
 
     $scope.solve_clock = function() {
-        socket.ipbus_write(oh_system_reg(OHID, 4), 2);
+        socket.ipbus_write(oh_system_reg(OHID, 4), 2, function() { Notification.primary('The clock source on the OptoHybrid has been changed'); });
         get_oh_system_regs();
     };
 

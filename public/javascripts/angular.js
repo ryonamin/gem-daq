@@ -1,7 +1,7 @@
 // Load the Visualization API and the piechart package.
 google.load('visualization', '1.0', { 'packages': ['corechart'] });
 
-var app = angular.module('app', []);
+var app = angular.module('app', ['ui-notification']);
 
 app.factory('socket', function ($rootScope) {
     
@@ -87,6 +87,18 @@ app.filter('hex', function() {
         if (n < 0) n += 0xFFFFFFFF + 1;
         return '0x' + n.toString(16).toUpperCase();
     };
+});
+
+app.config(function(NotificationProvider) {
+    NotificationProvider.setOptions({
+        delay: 3000,
+        startTop: 10,
+        startRight: 10,
+        verticalSpacing: 10,
+        horizontalSpacing: 10,
+        positionX: 'right',
+        positionY: 'top'
+    });
 });
 
 app.controller('commonCtrl', ['$scope', 'socket', function($scope, socket) {

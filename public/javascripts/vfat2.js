@@ -1,4 +1,4 @@
-app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {   
+app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, socket, Notification) {   
 
     var OHID = (window.sessionStorage.OHID == undefined ? 0 : parseInt(window.sessionStorage.OHID));
 
@@ -122,17 +122,17 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
             $scope.defaultVFAT2.iComp
         ]);
         socket.ipbus_write(vfat2_reg(OHID, vfat2, 147), $scope.defaultVFAT2.vthreshold2);
-        socket.ipbus_blockWrite(vfat2_reg(OHID, vfat2, 149), [ $scope.defaultVFAT2.ctrl2, $scope.defaultVFAT2.ctrl3 ]);
+        socket.ipbus_blockWrite(vfat2_reg(OHID, vfat2, 149), [ $scope.defaultVFAT2.ctrl2, $scope.defaultVFAT2.ctrl3 ], function() { Notification.primary('The default parameters have been applied'); });
         get_vfat2_status();
     };
 
     $scope.start_vfat2 = function(vfat2) {
-        socket.ipbus_write(vfat2_reg(OHID, vfat2, 0), $scope.defaultVFAT2.ctrl0);
+        socket.ipbus_write(vfat2_reg(OHID, vfat2, 0), $scope.defaultVFAT2.ctrl0, function() { Notification.primary('The VFAT2 has been started'); });
         get_vfat2_status();
     };
 
     $scope.stop_vfat2 = function(vfat2) {
-        socket.ipbus_write(vfat2_reg(OHID, vfat2, 0), 0);
+        socket.ipbus_write(vfat2_reg(OHID, vfat2, 0), 0, function() { Notification.primary('The VFAT2 has been stopped'); });
         get_vfat2_status();
     };
 
@@ -148,19 +148,19 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
             $scope.defaultVFAT2.iComp
         ]);
         socket.ipbus_write(oh_ei2c_reg(OHID, 147), $scope.defaultVFAT2.vthreshold2);
-        socket.ipbus_blockWrite(oh_ei2c_reg(OHID, 149), [ $scope.defaultVFAT2.ctrl2, $scope.defaultVFAT2.ctrl3 ]);
+        socket.ipbus_blockWrite(oh_ei2c_reg(OHID, 149), [ $scope.defaultVFAT2.ctrl2, $scope.defaultVFAT2.ctrl3 ], function() { Notification.primary('The default parameters have been applied to all VFAT2s'); });
         get_vfat2_status();
     };
 
     $scope.start_vfat2_all = function() {
         socket.ipbus_write(oh_ei2c_reg(OHID, 256), 0);
-        socket.ipbus_write(oh_ei2c_reg(OHID, 0), $scope.defaultVFAT2.ctrl0);
+        socket.ipbus_write(oh_ei2c_reg(OHID, 0), $scope.defaultVFAT2.ctrl0, function() { Notification.primary('All the VFAT2s have been started'); });
         get_vfat2_status();
     };
 
     $scope.stop_vfat2_all = function() {
         socket.ipbus_write(oh_ei2c_reg(OHID, 256), 0);
-        socket.ipbus_write(oh_ei2c_reg(OHID, 0), 0);
+        socket.ipbus_write(oh_ei2c_reg(OHID, 0), 0, function() { Notification.primary('All the VFAT2s have been stopped'); });
         get_vfat2_status();
     };
 
@@ -180,7 +180,7 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
     };
 
     $scope.reset_counters = function() {
-        socket.ipbus_blockWrite(oh_counter_reg(OHID, 36), [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]);
+        socket.ipbus_blockWrite(oh_counter_reg(OHID, 36), [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], function() { Notification.primary('The data counters have been reset'); });
         get_vfat2_status();
     };
     

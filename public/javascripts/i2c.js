@@ -1,4 +1,4 @@
-app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {    
+app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, socket, Notification) {    
 
     var OHID = (window.sessionStorage.OHID == undefined ? 0 : parseInt(window.sessionStorage.OHID));
 
@@ -165,8 +165,6 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.readResult = null;
 
-    $scope.writeResult = null;
-
 
     $scope.vfat2sMask = "000000";
 
@@ -176,22 +174,19 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.readsResult = [];    
 
-    $scope.writesResult = null;
-
 
     $scope.read = function() {      
-        $scope.readResult = $scope.writeResult = null;
+        $scope.readResult = null;
         socket.ipbus_read(vfat2_reg(OHID, $scope.vfat2ID, $scope.vfat2Register.id), function(data) { $scope.readResult = data & 0xff; });
     };
 
     $scope.write = function() {
-        $scope.readResult = $scope.writeResult = null;
-        socket.ipbus_write(vfat2_reg(OHID, $scope.vfat2ID, $scope.vfat2Register.id), $scope.vfat2Data, function(data) { $scope.writeResult = true; });
+        $scope.readResult = null;
+        socket.ipbus_write(vfat2_reg(OHID, $scope.vfat2ID, $scope.vfat2Register.id), $scope.vfat2Data, function(data) { Notification.primary('The write transaction has been completed'); });
     };
 
     $scope.reads = function() {  
         $scope.readsResult = [];
-        $scope.writesResult = null;
         var mask = parseInt($scope.vfat2sMask, 16);
         var nReads = 24 - popcount(mask);
         socket.ipbus_write(oh_ei2c_reg(OHID, 256), mask);
@@ -203,17 +198,16 @@ app.controller('appCtrl', ['$scope', 'socket', function($scope, socket) {
 
     $scope.writes = function() {
         $scope.readsResult = [];
-        $scope.writesResult = null;
         var mask = parseInt($scope.vfat2sMask, 16);
         socket.ipbus_write(oh_ei2c_reg(OHID, 256), mask);
-        socket.ipbus_write(oh_ei2c_reg(OHID, $scope.vfat2sRegister.id), $scope.vfat2sData, function() { $scope.writesResult = true; });
+        socket.ipbus_write(oh_ei2c_reg(OHID, $scope.vfat2sRegister.id), $scope.vfat2sData, function() { Notification.primary('The write transaction has been broadcasted'); });
     };
 
     $scope.reset_module = function() {
         $scope.vfat2sMask = "000000";
         $scope.readsResult = [];   
         $scope.writesResult = null;
-        socket.ipbus_write(oh_ei2c_reg(OHID, 258), 1);
+        socket.ipbus_write(oh_ei2c_reg(OHID, 258), 1, function() { Notification.primary('The module has been reset'); });
     };
 
 }]);
