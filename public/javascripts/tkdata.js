@@ -61,7 +61,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         plot_graph("flags_chart", "Flags", plotDataFlags);
         plot_graph("chipid_chart", "Chip ID", plotDataChipID);
         plot_graph("strips_chart", "Beam Profile", plotDataStrips);
-        setTimeout(plot_graphs, 1000);
+        setTimeout(plot_graphs, 5000);
     }
 
     plot_graphs();
