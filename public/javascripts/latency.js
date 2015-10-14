@@ -72,10 +72,8 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         };  
 
         socket.ipbus_fifoRead(oh_scan_reg(OHID, 8), nSamples, function(data) {
-            for (var i = 0; i <= data.length; ++i) {
-                chartData.addRow([ (data[i] >> 24) & 0xFF, (data[i] & 0x00FFFFFF) / (1. * $scope.nEvents) * 100 ]);
-                chart.draw(chartData, options);
-            }
+            for (var i = 0; i < data.length; ++i) chartData.addRow([ (data[i] >> 24) & 0xFF, (data[i] & 0x00FFFFFF) / (1. * $scope.nEvents) * 100 ]);
+            chart.draw(chartData, options);
         });
     };
 
