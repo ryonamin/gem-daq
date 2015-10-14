@@ -71,9 +71,7 @@
                     <hr>
                     <p><a class="btn btn-primary btn-xs btn-block" ng-click="reset_t1_counters()">Reset the counters</a></p>
                 </div>
-            </div>           
-        </div>       
-        <div class="col-md-4">
+            </div>  
             <!-- GTX counters -->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -97,8 +95,58 @@
                     <hr>
                     <p><a class="btn btn-primary btn-xs btn-block" ng-click="reset_gtx_counters()">Reset the counters</a></p>
                 </div>
-            </div>           
-        </div>   
+            </div>                  
+        </div>       
+        <div class="col-md-4">
+            <!-- Network regs --> 
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Network info</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Register</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>MAC address</td>
+                                <td>{{ network[0] }}</td>
+                            </tr>
+                            <tr>
+                                <td>IP address</td>
+                                <td>{{ network[1] }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>    
+            <!-- Status regs --> 
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Status registers</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Register</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="reg in statRegs">
+                                <td>{{ reg.name }}</td>
+                                <td>{{ reg.data | hex }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>  
+        </div>           
     </div>    
 </div>
 

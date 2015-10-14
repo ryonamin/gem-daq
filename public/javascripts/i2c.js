@@ -157,9 +157,9 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
     ];
 
 
-    $scope.vfat2ID = ((window.location.href.split('/'))[4] === undefined ? 0 : parseInt((window.location.href.split('/'))[4]));
+    $scope.vfat2ID = 0;
 
-    $scope.vfat2Register = { id: ((window.location.href.split('/'))[5] === undefined ? 0 : parseInt((window.location.href.split('/'))[5])) }; 
+    $scope.vfat2Register = { id: 0 }; 
 
     $scope.vfat2Data = 0;
 
@@ -168,7 +168,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
 
     $scope.vfat2sMask = "000000";
 
-    $scope.vfat2sRegister = { id: ((window.location.href.split('/'))[5] === undefined ? 0 : parseInt((window.location.href.split('/'))[5])) }; 
+    $scope.vfat2sRegister = { id: 0 }; 
 
     $scope.vfat2sData = 0;
 

@@ -51,7 +51,7 @@
                     <p><a class="btn btn-info btn-xs btn-block" ng-click="apply_defaults_all()">Apply default parameters to all VFAT2s</a></p>
                     <p><a class="btn btn-success btn-xs btn-block" ng-click="start_vfat2_all()">Start all VFAT2s</a></p>
                     <p><a class="btn btn-warning btn-xs btn-block" ng-click="stop_vfat2_all()">Stop all VFAT2s</a></p>                      
-                    <p><a class="btn btn-danger btn-xs btn-block" ng-click="reset_vfat2_all()">Reset all VFAT2s</a></p>
+                    <!--<p><a class="btn btn-danger btn-xs btn-block" ng-click="reset_vfat2_all()">Reset all VFAT2s</a></p>-->
                 </div>
             </div>
             <!-- Tracking data counter and masking -->
@@ -106,44 +106,44 @@
                                 <tbody>
                                     <tr>
                                         <td>Control Register 0</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].ctrl0 | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].ctrl0 }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/0" class="label label-danger" ng-show="vfat2Status[selectedVFAT2].ctrl0 != defaultVFAT2.ctrl0"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/0" class="label label-success" ng-show="vfat2Status[selectedVFAT2].ctrl0 == defaultVFAT2.ctrl0"><span class="glyphicon glyphicon-ok"></span></a>
+                                            <a class="label label-danger" ng-show="vfat2Status[selectedVFAT2].ctrl0 != defaultVFAT2.ctrl0" ng-click="open_i2c(0)"><span class="glyphicon glyphicon-remove"></span></a>
+                                            <a class="label label-success" ng-show="vfat2Status[selectedVFAT2].ctrl0 == defaultVFAT2.ctrl0" ng-click="open_i2c(0)"><span class="glyphicon glyphicon-ok"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Control Register 1</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].ctrl1 | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].ctrl1 }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/1" class="label label-danger" ng-show="vfat2Status[selectedVFAT2].ctrl1 != defaultVFAT2.ctrl1"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/1" class="label label-success" ng-show="vfat2Status[selectedVFAT2].ctrl1 == defaultVFAT2.ctrl1"><span class="glyphicon glyphicon-ok"></span></a>
+                                            <a class="label label-danger" ng-show="vfat2Status[selectedVFAT2].ctrl1 != defaultVFAT2.ctrl1" ng-click="open_i2c(1)"><span class="glyphicon glyphicon-remove"></span></a>
+                                            <a class="label label-success" ng-show="vfat2Status[selectedVFAT2].ctrl1 == defaultVFAT2.ctrl1" ng-click="open_i2c(1)"><span class="glyphicon glyphicon-ok"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Control Register 2</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].ctrl2 | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].ctrl2 }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/149" class="label label-danger" ng-show="vfat2Status[selectedVFAT2].ctrl2 != defaultVFAT2.ctrl2"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/149" class="label label-success" ng-show="vfat2Status[selectedVFAT2].ctrl2 == defaultVFAT2.ctrl2"><span class="glyphicon glyphicon-ok"></span></a>
+                                            <a class="label label-danger" ng-show="vfat2Status[selectedVFAT2].ctrl2 != defaultVFAT2.ctrl2" ng-click="open_i2c(149)"><span class="glyphicon glyphicon-remove"></span></a>
+                                            <a class="label label-success" ng-show="vfat2Status[selectedVFAT2].ctrl2 == defaultVFAT2.ctrl2" ng-click="open_i2c(149)"><span class="glyphicon glyphicon-ok"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Control Register 3</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].ctrl3 | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].ctrl3 }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/150" class="label label-danger" ng-show="vfat2Status[selectedVFAT2].ctrl3 != defaultVFAT2.ctrl3"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/150" class="label label-success" ng-show="vfat2Status[selectedVFAT2].ctrl3 == defaultVFAT2.ctrl3"><span class="glyphicon glyphicon-ok"></span></a>
+                                            <a class="label label-danger" ng-show="vfat2Status[selectedVFAT2].ctrl3 != defaultVFAT2.ctrl3" ng-click="open_i2c(150)"><span class="glyphicon glyphicon-remove"></span></a>
+                                            <a class="label label-success" ng-show="vfat2Status[selectedVFAT2].ctrl3 == defaultVFAT2.ctrl3" ng-click="open_i2c(150)"><span class="glyphicon glyphicon-ok"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>ChipID0</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].chipId0 | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].chipId0 }}</td>
                                         <td></td>
                                     </tr>
                                     <tr>
                                         <td>ChipID1</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].chipId1 | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].chipId1 }}</td>
                                         <td></td>
                                     </tr>
                                 </tbody>
@@ -161,86 +161,86 @@
                                 <tbody>                          
                                     <tr>
                                         <td>IPreampIn</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].iPreampIn | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].iPreampIn }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/2" class="label label-danger" ng-show="vfat2Status[selectedVFAT2].iPreampIn != defaultVFAT2.iPreampIn"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/2" class="label label-success" ng-show="vfat2Status[selectedVFAT2].iPreampIn == defaultVFAT2.iPreampIn"><span class="glyphicon glyphicon-ok"></span></a>
+                                            <a class="label label-danger" ng-show="vfat2Status[selectedVFAT2].iPreampIn != defaultVFAT2.iPreampIn" ng-click="open_i2c(2)"><span class="glyphicon glyphicon-remove"></span></a>
+                                            <a class="label label-success" ng-show="vfat2Status[selectedVFAT2].iPreampIn == defaultVFAT2.iPreampIn" ng-click="open_i2c(2)"><span class="glyphicon glyphicon-ok"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>IPreampFeed</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].iPremapFeed | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].iPremapFeed }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/3" class="label label-danger" ng-show="vfat2Status[selectedVFAT2].iPremapFeed != defaultVFAT2.iPremapFeed"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/3" class="label label-success" ng-show="vfat2Status[selectedVFAT2].iPremapFeed == defaultVFAT2.iPremapFeed"><span class="glyphicon glyphicon-ok"></span></a>
+                                            <a class="label label-danger" ng-show="vfat2Status[selectedVFAT2].iPremapFeed != defaultVFAT2.iPremapFeed" ng-click="open_i2c(3)"><span class="glyphicon glyphicon-remove"></span></a>
+                                            <a class="label label-success" ng-show="vfat2Status[selectedVFAT2].iPremapFeed == defaultVFAT2.iPremapFeed" ng-click="open_i2c(3)"><span class="glyphicon glyphicon-ok"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>IPreampOut</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].iPreampOut | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].iPreampOut }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/4" class="label label-danger" ng-show="vfat2Status[selectedVFAT2].iPreampOut != defaultVFAT2.iPreampOut"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/4" class="label label-success" ng-show="vfat2Status[selectedVFAT2].iPreampOut == defaultVFAT2.iPreampOut"><span class="glyphicon glyphicon-ok"></span></a>
+                                            <a class="label label-danger" ng-show="vfat2Status[selectedVFAT2].iPreampOut != defaultVFAT2.iPreampOut" ng-click="open_i2c(4)"><span class="glyphicon glyphicon-remove"></span></a>
+                                            <a class="label label-success" ng-show="vfat2Status[selectedVFAT2].iPreampOut == defaultVFAT2.iPreampOut" ng-click="open_i2c(4)"><span class="glyphicon glyphicon-ok"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>IShaper</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].iShaper | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].iShaper }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/5" class="label label-danger" ng-show="vfat2Status[selectedVFAT2].iShaper != defaultVFAT2.iShaper"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/5" class="label label-success" ng-show="vfat2Status[selectedVFAT2].iShaper == defaultVFAT2.iShaper"><span class="glyphicon glyphicon-ok"></span></a>
+                                            <a class="label label-danger" ng-show="vfat2Status[selectedVFAT2].iShaper != defaultVFAT2.iShaper" ng-click="open_i2c(5)"><span class="glyphicon glyphicon-remove"></span></a>
+                                            <a class="label label-success" ng-show="vfat2Status[selectedVFAT2].iShaper == defaultVFAT2.iShaper" ng-click="open_i2c(5)"><span class="glyphicon glyphicon-ok"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>IShaperFeed</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].iShaperFeed | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].iShaperFeed }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/6" class="label label-danger" ng-show="vfat2Status[selectedVFAT2].iShaperFeed != defaultVFAT2.iShaperFeed"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/6" class="label label-success" ng-show="vfat2Status[selectedVFAT2].iShaperFeed == defaultVFAT2.iShaperFeed"><span class="glyphicon glyphicon-ok"></span></a>
+                                            <a class="label label-danger" ng-show="vfat2Status[selectedVFAT2].iShaperFeed != defaultVFAT2.iShaperFeed" ng-click="open_i2c(6)"><span class="glyphicon glyphicon-remove"></span></a>
+                                            <a class="label label-success" ng-show="vfat2Status[selectedVFAT2].iShaperFeed == defaultVFAT2.iShaperFeed" ng-click="open_i2c(6)"><span class="glyphicon glyphicon-ok"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>IComp</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].iComp | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].iComp }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/7" class="label label-danger" ng-show="vfat2Status[selectedVFAT2].iComp != defaultVFAT2.iComp"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/7" class="label label-success" ng-show="vfat2Status[selectedVFAT2].iComp == defaultVFAT2.iComp"><span class="glyphicon glyphicon-ok"></span></a>
+                                            <a class="label label-danger" ng-show="vfat2Status[selectedVFAT2].iComp != defaultVFAT2.iComp" ng-click="open_i2c(7)"><span class="glyphicon glyphicon-remove"></span></a>
+                                            <a class="label label-success" ng-show="vfat2Status[selectedVFAT2].iComp == defaultVFAT2.iComp" ng-click="open_i2c(7)"><span class="glyphicon glyphicon-ok"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Latency</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].latency | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].latency }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/16" class="label label-warning"><span class="glyphicon glyphicon-th"></span></a>
+                                            <a class="label label-warning" ng-click="open_i2c(16)"><span class="glyphicon glyphicon-th"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>VThreshold1</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].vthreshold1 | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].vthreshold1 }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/146" class="label label-warning"><span class="glyphicon glyphicon-th"></span></a>
+                                            <a class="label label-warning" ng-click="open_i2c(146)"><span class="glyphicon glyphicon-th"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>VThreshold2</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].vthreshold2 | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].vthreshold2 }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/147" class="label label-danger" ng-show="vfat2Status[selectedVFAT2].vthreshold2 != defaultVFAT2.vthreshold2"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/147" class="label label-success" ng-show="vfat2Status[selectedVFAT2].vthreshold2 == defaultVFAT2.vthreshold2"><span class="glyphicon glyphicon-ok"></span></a>
+                                            <a class="label label-danger" ng-show="vfat2Status[selectedVFAT2].vthreshold2 != defaultVFAT2.vthreshold2" ng-click="open_i2c(147)"><span class="glyphicon glyphicon-remove"></span></a>
+                                            <a class="label label-success" ng-show="vfat2Status[selectedVFAT2].vthreshold2 == defaultVFAT2.vthreshold2" ng-click="open_i2c(147)"><span class="glyphicon glyphicon-ok"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>VCal</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].vcal | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].vcal }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/145" class="label label-warning"><span class="glyphicon glyphicon-th"></span></a>
+                                            <a class="label label-warning" ng-click="open_i2c(145)"><span class="glyphicon glyphicon-th"></span></a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Calibration Phase</td>
-                                        <td>{{ vfat2Status[selectedVFAT2].calphase | hex }}</td>
+                                        <td>{{ vfat2Status[selectedVFAT2].calphase }}</td>
                                         <td>
-                                            <a href="/i2c/{{ selectedVFAT2 }}/148" class="label label-warning"><span class="glyphicon glyphicon-th"></span></a>
+                                            <a class="label label-warning" ng-click="open_i2c(148)"><span class="glyphicon glyphicon-th"></span></a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -252,11 +252,38 @@
                         <a class="btn btn-info btn-xs" ng-click="apply_defaults(selectedVFAT2)">Apply default parameters</a>
                         <a class="btn btn-success btn-xs" ng-click="start_vfat2(selectedVFAT2)">Start the VFAT2</a>
                         <a class="btn btn-warning btn-xs" ng-click="stop_vfat2(selectedVFAT2)">Stop the VFAT2</a>
+                        <a class="btn btn-primary btn-xs" ng-click="reset_channels(selectedVFAT2)">Reset all the channels</a>
                     </div>
                 </div>
             </div>
         </div>       
     </div>
+
+
+    <div class="modal fade" id="i2cModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Update the register value</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ regName }}</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" min="0" max="255" ng-model="regValue">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal">Close</a>
+                    <a class="btn btn-primary" ng-click="perform_i2c()">Apply</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->    
 </div>
 
 {% endraw %}

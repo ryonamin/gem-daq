@@ -51,10 +51,6 @@ app.get("/i2c", function (req, res) {
     res.render("i2c.html", { js: "i2c" }); 
 });
 
-app.get(/i2c\/[0-9]+\/[0-9]+/, function (req, res) { 
-    res.render("i2c.html", { js: "i2c" }); 
-});
-
 app.get("/threshold", function (req, res) { 
     res.render("threshold.html", { js: "threshold" }); 
 });

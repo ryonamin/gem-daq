@@ -18,7 +18,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
     for (var i = 0; i < 24; ++i) $scope.vfat2Status.push({ id: i, isPresent: false, isOn: false }); 
 
     function get_stat_registers() {
-        socket.ipbus_read("00000002", function(data) { $scope.statRegs[0].data = data; });
+        socket.ipbus_read(0x00000002, function(data) { $scope.statRegs[0].data = data; });
         socket.ipbus_read(oh_stat_reg(OHID, 0), function(data) { $scope.statRegs[1].data = data; });
     }
 

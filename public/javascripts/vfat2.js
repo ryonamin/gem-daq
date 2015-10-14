@@ -22,6 +22,12 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         vthreshold2: 0
     };
 
+    $scope.regName = "";
+
+    $scope.regValue = 0;
+
+    $scope.regSel = 0;
+
     for (var i = 0; i < 24; ++i) $scope.vfat2Status.push({
         id: i,
         isPresent: false,
@@ -136,6 +142,15 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         get_vfat2_status();
     };
 
+    $scope.reset_channels = function(vfat2) {
+        socket.ipbus_blockWrite(vfat2_reg(OHID, vfat2, 17), [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        ], function() { Notification.primary('The VFAT2\'s channels have been reset'); });
+    };
+
     $scope.apply_defaults_all = function() {
         socket.ipbus_write(oh_ei2c_reg(OHID, 256), 0);
         socket.ipbus_blockWrite(oh_ei2c_reg(OHID, 1), [ 
@@ -181,6 +196,36 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
 
     $scope.reset_counters = function() {
         socket.ipbus_blockWrite(oh_counter_reg(OHID, 36), [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], function() { Notification.primary('The data counters have been reset'); });
+        get_vfat2_status();
+    };
+
+    $scope.open_i2c = function(reg) {
+        if (reg == 0) $scope.regName = "ControlReg 0";
+        else if (reg == 1) $scope.regName = "ControlReg 1";
+        else if (reg == 149) $scope.regName = "ControlReg 2";
+        else if (reg == 150) $scope.regName = "ControlReg 3";
+        else if (reg == 2) $scope.regName = "iPreampIn";
+        else if (reg == 3) $scope.regName = "iPreampFeed";
+        else if (reg == 4) $scope.regName = "iPreampOut";
+        else if (reg == 5) $scope.regName = "iShaper";
+        else if (reg == 6) $scope.regName = "iShaperFeed";
+        else if (reg == 7) $scope.regName = "iComp";
+        else if (reg == 16) $scope.regName = "Latency";
+        else if (reg == 146) $scope.regName = "VThreshold 1";
+        else if (reg == 147) $scope.regName = "VThreshold 2";
+        else if (reg == 148) $scope.regName = "Calibration phase";
+        else if (reg == 145) $scope.regName = "VCal";
+        else $scope.regName = "Unknown register";
+        $scope.regSel = reg;
+        socket.ipbus_read(vfat2_reg(OHID, $scope.selectedVFAT2, reg), function(data) {  
+            $scope.regValue = data & 0xff;
+            $("#i2cModal").modal('show'); 
+        });
+    };
+
+    $scope.perform_i2c = function() {
+        socket.ipbus_write(vfat2_reg(OHID, $scope.selectedVFAT2, $scope.regSel), $scope.regValue, function(data) { Notification.primary('The register has been updated'); });
+        $("#i2cModal").modal('hide');
         get_vfat2_status();
     };
     
