@@ -1,5 +1,7 @@
+var fs = require('fs');
+
 var dgram = require('dgram');
-var udp = dgram.createSocket({ type: 'udp4', reuseAddr : true });
+var udp = dgram.createSocket('udp4');
 
 var ipaddr = "192.168.0.161";
 var port = 50001;
@@ -116,6 +118,47 @@ module.exports = function(io) {
                 timeout: 100
             });
         }); 
+
+        socket.on('save', function(transaction, callback) {
+            var now = require('moment')();
+            var fileName = "../data/" + transaction.type + "/" + now.format('YY-MM-DD-HH-mm-ss') + ".txt";
+            var content = "";
+
+            if (transaction.type == "threshold" || transaction.type == "latency") {
+                content += "VFAT2\t" + transaction.vfat2 + "\n";
+                content += "MIN\t" + transaction.min + "\n";
+                content += "MAX\t" + transaction.max + "\n";
+                content += "STEP\t" + transaction.step + "\n";
+                content += "N\t" + transaction.n + "\n";
+                for (var i = 0; i < transaction.data.length; ++i) content += transaction.data[i] + "\n";
+            }
+            else if (transaction.type == "vfat2") {
+                for (var i = 0; i < transaction.data.length; ++i) {
+                    content += "--------------------" + transaction.data[i].id + "--------------------\n";
+                    content += "isPresent\t" + (transaction.data[i].isPresent ? "1" : "0") + "\n";
+                    content += "isOn\t" + (transaction.data[i].isOn ? "1" : "0") + "\n";
+                    content += "ctrl0\t" + transaction.data[i].ctrl0 + "\n";
+                    content += "ctrl1\t" + transaction.data[i].ctrl1 + "\n";
+                    content += "ctrl2\t" + transaction.data[i].ctrl2 + "\n";
+                    content += "ctrl3\t" + transaction.data[i].ctrl3 + "\n";
+                    content += "iPreampIn\t" + transaction.data[i].iPreampIn + "\n";
+                    content += "iPremapFeed\t" + transaction.data[i].iPremapFeed + "\n";
+                    content += "iPreampOut\t" + transaction.data[i].iPreampOut + "\n";
+                    content += "iShaper\t" + transaction.data[i].iShaper + "\n";
+                    content += "iShaperFeed\t" + transaction.data[i].iShaperFeed + "\n";
+                    content += "iComp\t" + transaction.data[i].iComp + "\n";
+                    content += "chipId0\t" + transaction.data[i].chipId0 + "\n";
+                    content += "chipId1\t" + transaction.data[i].chipId1 + "\n";
+                    content += "latency\t" + transaction.data[i].latency + "\n";
+                    content += "vthreshold1\t" + transaction.data[i].vthreshold1 + "\n";
+                    content += "vthreshold2\t" + transaction.data[i].vthreshold2 + "\n";
+                    content += "vcal\t" + transaction.data[i].vcal + "\n";
+                    content += "calphase\t" + transaction.data[i].calphase + "\n";
+                }
+            }
+
+            fs.writeFile(fileName, content, callback);
+        });
 
     });
 };

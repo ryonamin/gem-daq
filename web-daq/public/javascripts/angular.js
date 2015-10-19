@@ -76,6 +76,10 @@ app.factory('socket', function ($rootScope) {
                 addr: addr, 
                 data: data 
             }, function(response) { $rootScope.$apply(function() { if (clientCallback) clientCallback(true); }); });
+        },
+
+        save: function(data, clientCallback) {
+            socket.emit('save', data, clientCallback);
         }
 
     };

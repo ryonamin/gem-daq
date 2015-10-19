@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys, os, random, time
+import sys, os, time
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/kernel")
 from ipbus import *
 

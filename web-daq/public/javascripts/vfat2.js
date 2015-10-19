@@ -63,12 +63,39 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
             for (var i = 0; i < 24; ++i) $scope.tkReadoutStatus[i].masked = (((data >> i) & 0x1) == 1 ? true : false);
         });         
     }
+
+    function get_detailed_status(vfat2) {
+        socket.ipbus_blockRead(vfat2_reg(OHID, vfat2, 0), 10, function(data) { 
+            $scope.vfat2Status[vfat2].ctrl0 = data[0] & 0xff;
+            $scope.vfat2Status[vfat2].ctrl1 = data[1] & 0xff;
+            $scope.vfat2Status[vfat2].iPreampIn = data[2] & 0xff;
+            $scope.vfat2Status[vfat2].iPremapFeed = data[3] & 0xff;
+            $scope.vfat2Status[vfat2].iPreampOut = data[4] & 0xff;
+            $scope.vfat2Status[vfat2].iShaper = data[5] & 0xff;
+            $scope.vfat2Status[vfat2].iShaperFeed = data[6] & 0xff;
+            $scope.vfat2Status[vfat2].iComp = data[7] & 0xff;
+            $scope.vfat2Status[vfat2].chipId0 = data[8] & 0xff;
+            $scope.vfat2Status[vfat2].chipId1 = data[9] & 0xff; 
+        });
+        socket.ipbus_read(vfat2_reg(OHID, vfat2, 16), function(data) { $scope.vfat2Status[vfat2].latency = data & 0xff; });
+        socket.ipbus_blockRead(vfat2_reg(OHID, vfat2, 145), 6, function(data) { 
+            $scope.vfat2Status[vfat2].vcal = data[0] & 0xff;
+            $scope.vfat2Status[vfat2].vthreshold1 = data[1] & 0xff;
+            $scope.vfat2Status[vfat2].vthreshold2 = data[2] & 0xff;
+            $scope.vfat2Status[vfat2].calphase = data[3] & 0xff;
+            $scope.vfat2Status[vfat2].ctrl2 = data[4] & 0xff;
+            $scope.vfat2Status[vfat2].ctrl3 = data[5] & 0xff; 
+        });
+    }
         
     function get_vfat2_status() {
         socket.ipbus_write(oh_ei2c_reg(OHID, 256), 0);
         socket.ipbus_read(oh_ei2c_reg(OHID, 8));
         socket.ipbus_fifoRead(oh_ei2c_reg(OHID, 257), 24, function(data) {
-            for (var i = 0; i < data.length; ++i) $scope.vfat2Status[i].isPresent = ((data[i] & 0xff) == 0 || ((data[i] & 0xF000000) >> 24) == 0x5 ? false : true);
+            for (var i = 0; i < data.length; ++i) {
+                $scope.vfat2Status[i].isPresent = ((data[i] & 0xff) == 0 || ((data[i] & 0xF000000) >> 24) == 0x5 ? false : true);
+                if ($scope.vfat2Status[i].isPresent) get_detailed_status(i);
+            }
         });
         socket.ipbus_read(oh_ei2c_reg(OHID, 0));
         socket.ipbus_fifoRead(oh_ei2c_reg(OHID, 257), 24, function(data) {
@@ -79,29 +106,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
                 $scope.tkReadoutStatus[i].good = data[i];
                 $scope.tkReadoutStatus[i].bad = data[i + 24];
             }
-        });        
-        if ($scope.selectedVFAT2 == null) return;   
-        socket.ipbus_blockRead(vfat2_reg(OHID, $scope.selectedVFAT2, 0), 10, function(data) { 
-            $scope.vfat2Status[$scope.selectedVFAT2].ctrl0 = data[0] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].ctrl1 = data[1] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].iPreampIn = data[2] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].iPremapFeed = data[3] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].iPreampOut = data[4] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].iShaper = data[5] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].iShaperFeed = data[6] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].iComp = data[7] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].chipId0 = data[8] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].chipId1 = data[9] & 0xff; 
-        });
-        socket.ipbus_read(vfat2_reg(OHID, $scope.selectedVFAT2, 16), function(data) { $scope.vfat2Status[$scope.selectedVFAT2].latency = data & 0xff; });
-        socket.ipbus_blockRead(vfat2_reg(OHID, $scope.selectedVFAT2, 145), 6, function(data) { 
-            $scope.vfat2Status[$scope.selectedVFAT2].vcal = data[0] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].vthreshold1 = data[1] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].vthreshold2 = data[2] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].calphase = data[3] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].ctrl2 = data[4] & 0xff;
-            $scope.vfat2Status[$scope.selectedVFAT2].ctrl3 = data[5] & 0xff; 
-        });
+        });   
     }
 
     function get_status_loop() {
@@ -227,6 +232,15 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         socket.ipbus_write(vfat2_reg(OHID, $scope.selectedVFAT2, $scope.regSel), $scope.regValue, function(data) { Notification.primary('The register has been updated'); });
         $("#i2cModal").modal('hide');
         get_vfat2_status();
+    };
+
+    $scope.save = function() {
+        socket.save({
+                type: 'vfat2', 
+                data: $scope.vfat2Status
+            },
+            function() { Notification.primary('The data has been saved to disk'); }
+        );
     };
     
 }]);
