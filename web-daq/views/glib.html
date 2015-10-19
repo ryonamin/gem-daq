@@ -1,0 +1,155 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+{% raw %}
+
+<div>
+    <h1>GLIB monitoring and control</h1>
+    <div class="row">
+        <div class="col-md-12">   
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Help</h3>
+                </div>
+                <div class="panel-body">
+                    <p>The warnings on this page are not critical and do not prevent the system from running. They can be ignored. However, do not reset the counters unless the system has been restarted. This information will help the developers to stabilize the system.</p>
+                </div>
+            </div>   
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <!-- IPBus counters -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">IPBus counters</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>IPBus module</th>
+                                <th>Strobes</th>
+                                <th>Acknowledgments</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="counter in ipbusCounters" ng-class="{ warning: counter.stb != counter.ack }">
+                                <td>{{ counter.name }}</td>
+                                <td>{{ counter.stb | hex }}</td>
+                                <td>{{ counter.ack | hex }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <p><a class="btn btn-primary btn-xs btn-block" ng-click="reset_ipbus_counters()">Reset the counters</a></p>
+                </div>
+            </div>           
+        </div>             
+        <div class="col-md-4">
+            <!-- T1 counters -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">T1 commands counters</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Counter</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="counter in t1Counters">
+                                <td>{{ counter.name }}</td>
+                                <td>{{ counter.cnt | hex }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <p><a class="btn btn-primary btn-xs btn-block" ng-click="reset_t1_counters()">Reset the counters</a></p>
+                </div>
+            </div>  
+            <!-- GTX counters -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">GTX error counters</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Counter</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="counter in gtxCounters">
+                                <td>{{ counter.name }}</td>
+                                <td>{{ counter.cnt | hex }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <p><a class="btn btn-primary btn-xs btn-block" ng-click="reset_gtx_counters()">Reset the counters</a></p>
+                </div>
+            </div>                  
+        </div>       
+        <div class="col-md-4">
+            <!-- Network regs --> 
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Network info</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Register</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>MAC address</td>
+                                <td>{{ network[0] }}</td>
+                            </tr>
+                            <tr>
+                                <td>IP address</td>
+                                <td>{{ network[1] }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>    
+            <!-- Status regs --> 
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Status registers</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Register</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="reg in statRegs">
+                                <td>{{ reg.name }}</td>
+                                <td>{{ reg.data | hex }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>  
+        </div>           
+    </div>    
+</div>
+
+{% endraw %}
+
+{% endblock %}

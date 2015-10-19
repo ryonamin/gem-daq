@@ -1,0 +1,85 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+{% raw %}
+
+<div>
+    <h1>GEM DAQ Interface</h1>
+    <div class="row">        
+        <div class="col-md-4">                
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">System info</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <tbody>
+                            <tr ng-repeat="reg in statRegs" ng-class="{ danger: reg.data == 0 }">
+                                <td>{{ reg.name }}</td>
+                                <td>{{ reg.data | hex }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">                
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">System status</h3>
+                </div>
+                <div class="panel-body">
+                    <p ng-show="fifoFull"><a class="btn btn-block btn-danger btn-xs" href="/tkdata">The FIFOs are <b>full</b> on GLIB</a></p>
+                    <p ng-show="!fifoFull"><a class="btn btn-block btn-default btn-xs" href="/tkdata">The FIFOs are <b>not full</b> on GLIB</a></p>
+
+                    <p ng-show="scanStatus == 1"><a class="btn btn-block btn-danger btn-xs" href="/threshold">A <b>threshold scan</b> is running on OptoHybrid</a></p>
+                    <p ng-show="scanStatus == 3"><a class="btn btn-block btn-danger btn-xs" href="/latency">A <b>latency scan</b> is running on OptoHybrid</a></p>
+                    <p ng-show="scanStatus == 0"><a class="btn btn-block btn-default btn-xs"><b>No scan</b> is running on OptoHybrid</a></p>
+
+                    <p ng-show="t1Status"><a class="btn btn-block btn-danger btn-xs" href="/t1">The T1 controller is <b>running</b> on OptoHybrid</a></p>
+                    <p ng-show="!t1Status"><a class="btn btn-block btn-default btn-xs" href="/t1">The T1 controller is <b>not running</b> on OptoHybrid</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"> 
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">VFAT2s status</h3>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        <span class="vfat2-item" ng-repeat="vfat2 in vfat2Status">
+                            <a class="btn btn-block btn-success btn-xs" href="/vfat2/{{ vfat2.id }}" ng-show="vfat2.isPresent && vfat2.isOn">#{{ vfat2.id }}</a>
+                            <a class="btn btn-block btn-danger btn-xs" href="/vfat2/{{ vfat2.id }}" ng-show="vfat2.isPresent && !vfat2.isOn">#{{ vfat2.id }}</a>
+                            <a class="btn btn-block btn-default btn-xs" disabled="disabled" ng-show="!vfat2.isPresent">#{{ vfat2.id }}</a>
+                        </span>
+                    </p>
+                </div>
+            </div>  
+        </div>   
+    </div>    
+    <div class="row">
+        <div class="col-md-12"> 
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Instructions</h3>
+                </div>
+                <div class="panel-body">
+                    <p>1. Check that "OptoHybrid > System registers > VFAT2 trigger source" is set to "External".</p>
+                    <p>2. Check that "OptoHybrid > System registers > Clock source" is set to "External".</p>
+                    <p>3. Reset all the counters on the "GLIB" and "OptoHybrid" control pages.</p>
+                    <p>4. Select "Apply default parameters to all VFAT2s" and "Start all VFAT2s" on the "VFAT2s" control page.</p>
+                    <p>5. Mask all the empty VFAT2 slots on the "VFAT2" control page.</p>
+                    <p>6. Perform a "Threshold scan" on every VFAT2 and select a data point in the graph to set the threshold to a given value.</p>
+                    <p>7. Perform a "Latency scan" on every VFAT2 and select a data point in the graph to set the latency to a given value.</p>
+                    <p>8. Run "Start data acquisition" on the "Tracking Data" page to check the collected data.</p>
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>
+
+{% endraw %}
+
+{% endblock %}

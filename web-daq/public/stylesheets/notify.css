@@ -1,0 +1,8 @@
+/**
+ * angular-ui-notification - Angular.js service providing simple notifications using Bootstrap 3 styles with css transitions for animating
+ * @author Alex_Crack
+ * @version v0.0.14
+ * @link https://github.com/alexcrack/angular-ui-notification
+ * @license MIT
+ */
+.ui-notification{position:fixed;z-index:9999;width:300px;cursor:pointer;-webkit-transition:all ease .5s;-o-transition:all ease .5s;transition:all ease .5s;color:#fff;background:#158cba;border-color:#127ba3;border: 2px solid}.ui-notification.killed{-webkit-transition:opacity ease 1s;-o-transition:opacity ease 1s;transition:opacity ease 1s;opacity:0}.ui-notification>h3{font-size:14px;font-weight:700;display:block;margin:10px 10px 0;padding:0 0 5px;text-align:left;border-bottom:1px solid rgba(255,255,255,.3)}.ui-notification a{color:#fff}.ui-notification a:hover{text-decoration:underline}.ui-notification>.message{margin:10px}.ui-notification.warning{color:#fff;background:#ff851b;border-color:#ff7701}.ui-notification.error{color:#fff;background:#ff4136;border-color:#ff291c}.ui-notification.success{color:#fff;background:#28b62c;border-color:#23a127;}.ui-notification.info{color:#fff;background:#75caeb;border-color:#5fc1e8}.ui-notification:hover{opacity:.8}
