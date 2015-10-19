@@ -15,7 +15,12 @@
             <div class="col-sm-2" ng-controller="commonCtrl">        
                  <h2 class="text-center"><span class="glyphicon glyphicon-fire text-warning"></span> GEM DAQ</h2>  
                 {% raw %}
-                    <ul class="nav nav-pills nav-stacked">
+                    <hr>
+                    <a class="btn btn-block btn-xs btn-primary navbar-toggle collapsed" data-toggle="collapse" data-target="#collapseExample">
+                        Menu
+                    </a>
+
+                    <ul class="nav nav-pills nav-stacked navbar-collapse collapse" id="collapseExample">
                         <li ng-class=""><a href="/">Home</a></li>
                         <li><a href="/glib">GLIB</a></li>
                         <li><a href="/oh">OptoHybrid</a></li>
@@ -27,8 +32,7 @@
                         <li><a href="/tkdata">Tracking Data</a></li>                  
                     </ul>    
                 {% endraw %}
-                <hr>
-                <div class="col-md-offset-1">
+                <div class="col-xs-offset-1">
                     <span class="label label-default">GEM Chamber Selection</span>
                     <div class="radio"><label><input type="radio" name="ohSelect" id="ohSelect" value="0" checked="" ng-model="OHID" ng-value="0" ng-change="oh_change()"> GEM <b>#0</b></label></div>
                     <div class="radio"><label><input type="radio" name="ohSelect" id="ohSelect" value="1" ng-model="OHID" ng-value="1" ng-change="oh_change()"> GEM <b>#1</b></label></div>   
