@@ -27,6 +27,8 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
 
     $scope.vfat2sMask = "000000";
 
+    $scope.triggerThrottling = 0;
+
     $scope.wbCounters = [ 
         { name: 'GTX master', stb: 0, ack: 0 }, 
         { name: 'Extended I2C master', stb: 0, ack: 0 }, 
@@ -98,14 +100,15 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
               (($scope.sbitSelect[3] & 0x1F) << 15) | 
               (($scope.sbitSelect[2] & 0x1F) << 10) | 
               (($scope.sbitSelect[1] & 0x1F) << 5) | 
-              ($scope.sbitSelect[0] & 0x1F) ],
+              ($scope.sbitSelect[0] & 0x1F),
+              $scope.triggerThrottling ],
             function() { Notification.primary('The OptoHybrid system registers have been updated'); }
         );
         get_oh_system_regs();
     };
 
     function get_oh_system_regs() {
-        socket.ipbus_blockRead(oh_system_reg(OHID, 0), 6, function(data) { 
+        socket.ipbus_blockRead(oh_system_reg(OHID, 0), 7, function(data) { 
             var mask = data[0].toString(16).toUpperCase(); 
             if (mask.length == 6) $scope.vfat2sMask = mask;
             else $scope.vfat2sMask = Array(6 - mask.length + 1).join('0') + mask;            
@@ -118,6 +121,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
             $scope.sbitSelect[3] = (data[5] >> 15) & 0x1F; 
             $scope.sbitSelect[4] = (data[5] >> 20) & 0x1F; 
             $scope.sbitSelect[5] = (data[5] >> 25) & 0x1F; 
+            $scope.triggerThrottling = data[6];
         }); 
     }
 
