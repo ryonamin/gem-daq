@@ -29,14 +29,14 @@ while (True):
         fmt = ">" + "I" * depth
         raw_data = glib.fifoRead("tk_data_rd", depth)
         str_data = struct.pack(fmt, *raw_data)
-        for d in str_data: f.write(d)
+        for d in str_data: f0.write(d)
     depth = glib.get("tk_data_cnt_1")
     if (depth > 0):
         fmt = ">" + "I" * depth
         raw_data = glib.fifoRead("tk_data_rd_1", depth)
         str_data = struct.pack(fmt, *raw_data)
-        for d in str_data: g.write(d)
+        for d in str_data: f1.write(d)
 
 
-f.close()
-g.close()
+f0.close()
+f1.close()
