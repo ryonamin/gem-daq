@@ -16,7 +16,6 @@
                     <p>The ORANGE warnings on this page are not critical and do not prevent the system from running. They can be ignored. However, do not reset the counters unless the system has been restarted. This information will help the developers to stabilize the system.</p>
                     <p>The RED warnings indicate that the values read from or written in the system are not the optimal values for data taking. In case you plan on performing a data taking run, all RED warnings should be resolved before the start of the run.</p>
                     <div class="alert alert-danger" ng-show="t1Source.id != 2">The <b>VFAT2 trigger source</b> register should be set to "External"! <a class="btn btn-xs btn-success pull-right" ng-click="solve_trigger()">Solve</a></div>
-                    <div class="alert alert-danger" ng-show="clockSource.id != 2">The <b>Clock source</b> register should be set to "External"! <a class="btn btn-xs btn-success pull-right" ng-click="solve_clock()">Solve</a></div>
                 </div>
             </div>   
         </div>

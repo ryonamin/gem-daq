@@ -92,6 +92,7 @@ oh_sys_tdc_sbits        0x4B000000  ffffffff 1 1
 
 oh_clk_source           4B000004 ffffffff 1 1
 oh_trigger_source       4B000001 ffffffff 1 1
+oh_trigger_limit        4B000006 ffffffff 1 1
 
 
 
