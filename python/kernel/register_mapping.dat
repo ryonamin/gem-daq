@@ -9,6 +9,12 @@ tk_data_cnt             0x50000001  ffffffff  1  1
 tk_data_full            0x50000002  ffffffff  1  1
 tk_data_empty           0x50000003  ffffffff  1  1
 
+
+tk_data_rd_1              0x50100000  ffffffff  1  1
+tk_data_cnt_1             0x50100001  ffffffff  1  1
+tk_data_full_1            0x50100002  ffffffff  1  1
+tk_data_empty_1           0x50100003  ffffffff  1  1
+
 glib_cnt_stb_oh0        0x60000000   ffffffff 1 1
 glib_cnt_stb_oh1        0x60000001   ffffffff 1 1
 glib_cnt_stb_tk0        0x60000002   ffffffff 1 1

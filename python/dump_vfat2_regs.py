@@ -10,7 +10,7 @@ print "Dumping the VFAT2 registers to disk"
 
 glib = GLIB()
 
-filename = time.strftime("vfat2_%Y_%m_%d_%H_%M_%S.txt", time.gmtime())
+filename = time.strftime("../data/vfat2/vfat2_%Y_%m_%d_%H_%M_%S.txt", time.gmtime())
 f = open(filename, "w")
 
 for i in range(0, 24):
