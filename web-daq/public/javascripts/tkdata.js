@@ -124,7 +124,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
     }
 
     function get_status_loop() {
-        if ($scope.enableReadout) get_vfat2_event();
+        if ($scope.enableReadout && eadOutBuffer.length <= 700) get_vfat2_event();
         if (readOutBuffer.length >= 7) form_vfat2_event();
         socket.ipbus_blockRead(tkdata_reg(OHID, 1), 3, function(data) { 
             $scope.tkEventsAvailable = Math.floor(data[0] / 7.);
