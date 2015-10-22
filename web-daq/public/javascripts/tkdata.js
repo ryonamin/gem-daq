@@ -119,6 +119,13 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
             if (((strips3 >> i) & 0x1) == 1) plotDataStrips.push([ mapping2_15[i + 96] ]);
         }
 
+        if (plotDataBC.length > 500) {
+            plotDataBC.splice(1, 100);
+            plotDataEC.splice(1, 100);
+            plotDataFlags.splice(1, 100);
+            plotDataChipID.splice(1, 100);
+        }
+
         ++$scope.nAcquired;
     }
 
