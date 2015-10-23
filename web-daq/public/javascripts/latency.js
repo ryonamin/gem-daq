@@ -81,7 +81,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
     };
 
     function selectHandler() { 
-        socket.ipbus_write(vfat2_reg(OHID, $scope.vfat2ID, 146), chart.getSelection()[0].row, function() { Notification.primary('The latency\'s value has been updated'); });
+        socket.ipbus_write(vfat2_reg(OHID, $scope.vfat2ID, 16), chart.getSelection()[0].row, function() { Notification.primary('The latency\'s value has been updated'); });
     }       
 
     $scope.save = function() {
