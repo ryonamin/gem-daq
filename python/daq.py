@@ -28,6 +28,7 @@ while(True):
     print
 
 if (option == "0"): SaveVFAT2()
+elif (option == "1"): AcquireData()
 
 
 ####################################################
