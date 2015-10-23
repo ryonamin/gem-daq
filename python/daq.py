@@ -13,26 +13,6 @@ def signal_handler(signal, frame):
 
 ####################################################
 
-print 
-print "Welcome to the Python DAQ scripts"
-print
-
-while(True):
-    print "Select what you want to do:" 
-    print "0: save the VFAT2 parameters to disk"
-    print "1: acquire tracking data"
-    print "2: acquire AND monitor tracking data (slower than above option)"
-    option = raw_input("> Select an option:")
-    if (option == "0" or option == "1" or option == "2"): break
-    print "You entered an invalid option"
-    print
-
-if (option == "0"): SaveVFAT2()
-elif (option == "1"): AcquireData()
-
-
-####################################################
-
 def SaveVFAT2():
     print "Dumping the VFAT2 registers to disk"
     filename = time.strftime("../data/vfat2/vfat2_%Y_%m_%d_%H_%M_%S.txt", time.gmtime())
@@ -68,3 +48,22 @@ def AcquireData():
             for d in str_data: f1.write(d)
     f0.close()
     f1.close()
+    
+####################################################
+
+print 
+print "Welcome to the Python DAQ scripts"
+print
+
+while(True):
+    print "Select what you want to do:" 
+    print "0: save the VFAT2 parameters to disk"
+    print "1: acquire tracking data"
+    print "2: acquire AND monitor tracking data (slower than above option)"
+    option = raw_input("> Select an option:")
+    if (option == "0" or option == "1" or option == "2"): break
+    print "You entered an invalid option"
+    print
+
+if (option == "0"): SaveVFAT2()
+elif (option == "1"): AcquireData()
