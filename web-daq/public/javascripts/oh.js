@@ -232,7 +232,13 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
     };
 
     $scope.solve_clock = function() {
-        socket.ipbus_write(oh_system_reg(OHID, 4), 2, function() { Notification.primary('The clock source on the OptoHybrid has been changed'); });
+        socket.ipbus_write(oh_system_reg(OHID, 4), 1, function() { Notification.primary('The clock source on the OptoHybrid has been changed'); });
+        get_oh_system_regs();
+    };
+
+    $scope.solve_sbits = function() {
+        socket.ipbus_write(oh_system_reg(OHID, 5), 0xB,
+            function() { Notification.primary('The TDC SBits output on the OptoHybrid has been changed'); });
         get_oh_system_regs();
     };
 
