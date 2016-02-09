@@ -17,7 +17,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         iPremapFeed: 80,
         iPreampOut: 150,
         iShaper: 150,
-        iShaperFeed: 150,
+        iShaperFeed: 100,
         iComp: 75,
         vthreshold2: 0
     };

@@ -78,11 +78,12 @@ oh_cnt_err_tr           0x4A000069   ffffffff 1 1
 oh_cnt_tk               0x4A00006A   ffffffff 1 1
 
 oh_sys_vfat2_mask       0x4B000000  ffffffff 1 1
-oh_sys_t1_src           0x4B000000  ffffffff 1 1
-oh_sys_loop_sel         0x4B000000  ffffffff 1 1
-oh_sys_vfat2_reset      0x4B000000  ffffffff 1 1
-oh_sys_clk_src          0x4B000000  ffffffff 1 1
-oh_sys_tdc_sbits        0x4B000000  ffffffff 1 1
+oh_sys_t1_src           0x4B000001  ffffffff 1 1
+oh_sys_loop_sel         0x4B000002  ffffffff 1 1
+oh_sys_vfat2_reset      0x4B000003  ffffffff 1 1
+oh_sys_clk_src          0x4B000004  ffffffff 1 1
+oh_sys_tdc_sbits        0x4B000005  ffffffff 1 1
+oh_sys_trigger_lim      0x4B000006  ffffffff 1 1
 
 oh_clk_source           4B000004 ffffffff 1 1
 oh_trigger_source       4B000001 ffffffff 1 1

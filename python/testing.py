@@ -57,10 +57,11 @@ print
 txtTitle("B. Testing the OH's presence")
 print "   Trying to set the OptoHybrid registers... If this test fails, the script will stop."
 
-glib.set("oh_clk_source", 1)
-glib.set("oh_trigger_source", 1)
+glib.set("oh_sys_clk_src", 0)
+glib.set("oh_sys_t1_src", 1)
+glib.set("oh_sys_trigger_lim", 0)
 
-if (glib.get("oh_trigger_source") == 1): print Passed
+if (glib.get("oh_sys_t1_src") == 1): print Passed
 else:
     print Failed
     sys.exit()
@@ -184,7 +185,7 @@ for i in presentVFAT2sSingle:
     glib.set("t1_mode", 0)
     glib.set("t1_type", 0)
     glib.set("t1_n", TK_RD_TEST)
-    glib.set("t1_interval", 200)
+    glib.set("t1_interval", 600)
     glib.set("t1_toggle", 1)
 
     while (glib.get("tk_data_cnt") != 7 * TK_RD_TEST): 

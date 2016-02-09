@@ -91,6 +91,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         socket.save({
                 type: 'latency', 
                 data: saveData, 
+                oh: OHID,
                 vfat2: $scope.vfat2ID,
                 min: $scope.minVal,
                 max: $scope.maxVal,
