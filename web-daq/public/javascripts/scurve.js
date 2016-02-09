@@ -2,7 +2,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
     
     var OHID = (window.sessionStorage.OHID == undefined ? 0 : parseInt(window.sessionStorage.OHID));
 
-    var chart = new google.visualization.LineChart(document.getElementById('latency_chart'));
+    var chart = new google.visualization.LineChart(document.getElementById('scurve_chart'));
     google.visualization.events.addListener(chart, 'select', selectHandler);
 
     var saveData = [];
@@ -35,7 +35,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
     get_current_values();
 
     $scope.start_scan = function() {   
-        socket.ipbus_blockWrite(oh_scan_reg(OHID, 1), [ 2, $scope.vfat2ID, $scope.channel, $scope.minVal, $scope.maxVal, $scope.steps, $scope.nEvents ]);
+        socket.ipbus_blockWrite(oh_scan_reg(OHID, 1), [ 3, $scope.vfat2ID, $scope.channel, $scope.minVal, $scope.maxVal, $scope.steps, $scope.nEvents ]);
         socket.ipbus_write(oh_scan_reg(OHID, 0), 1);
         $scope.scanStatus = 1; 
         check_results();
@@ -63,9 +63,9 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         chartData.removeRows(0, chartData.getNumberOfRows());
 
         var options = {
-            title: 'Latency scan',
+            title: 'SCurve scan',
             hAxis: {
-                title: 'Latency (BX)'
+                title: 'VCal (VFAT2 units)'
             },
             vAxis: {
                 title: 'Hit percentage'
@@ -84,14 +84,15 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
     };
 
     function selectHandler() { 
-        socket.ipbus_write(vfat2_reg(OHID, $scope.vfat2ID, 16), chart.getSelection()[0].row, function() { Notification.primary('The latency\'s value has been updated'); });
+        socket.ipbus_write(vfat2_reg(OHID, $scope.vfat2ID, 145), chart.getSelection()[0].row, function() { Notification.primary('The VCal\'s value has been updated'); });
     }       
 
     $scope.save = function() {
         socket.save({
-                type: 'latency', 
+                type: 'scurve', 
                 data: saveData, 
                 vfat2: $scope.vfat2ID,
+                channel: $scope.channel,
                 min: $scope.minVal,
                 max: $scope.maxVal,
                 step: $scope.steps,

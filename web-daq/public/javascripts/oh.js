@@ -223,12 +223,12 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
     };
 
     $scope.solve_trigger = function() {
-        socket.ipbus_write(oh_system_reg(OHID, 1), 2, function() { Notification.primary('The trigger source on the OptoHybrid has been changed'); });
+        socket.ipbus_write(oh_system_reg(OHID, 1), 1, function() { Notification.primary('The trigger source on the OptoHybrid has been changed'); });
         get_oh_system_regs();
     };
 
     $scope.solve_clock = function() {
-        socket.ipbus_write(oh_system_reg(OHID, 4), 2, function() { Notification.primary('The clock source on the OptoHybrid has been changed'); });
+        socket.ipbus_write(oh_system_reg(OHID, 4), 0, function() { Notification.primary('The clock source on the OptoHybrid has been changed'); });
         get_oh_system_regs();
     };
 

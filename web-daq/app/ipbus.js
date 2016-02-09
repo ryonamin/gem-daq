@@ -131,6 +131,15 @@ module.exports = function(io) {
                 content += "STEP\t" + transaction.step + "\n";
                 content += "N\t" + transaction.n + "\n";
                 for (var i = 0; i < transaction.data.length; ++i) content += transaction.data[i] + "\n";
+            } 
+            else if (transaction.type == "scurve") {
+                content += "VFAT2\t" + transaction.vfat2 + "\n";
+                content += "CHANNEL\t" + transaction.channel + "\n";
+                content += "MIN\t" + transaction.min + "\n";
+                content += "MAX\t" + transaction.max + "\n";
+                content += "STEP\t" + transaction.step + "\n";
+                content += "N\t" + transaction.n + "\n";
+                for (var i = 0; i < transaction.data.length; ++i) content += transaction.data[i] + "\n";
             }
             else if (transaction.type == "vfat2") {
                 for (var i = 0; i < transaction.data.length; ++i) {

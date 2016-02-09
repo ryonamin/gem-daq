@@ -59,6 +59,10 @@ app.get("/latency", function (req, res) {
     res.render("latency.html", { js: "latency" }); 
 });
 
+app.get("/scurve", function (req, res) { 
+    res.render("scurve.html", { js: "scurve" }); 
+});
+
 app.get("/t1", function (req, res) { 
     res.render("t1.html", { js: "t1" }); 
 });

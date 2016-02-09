@@ -11,6 +11,8 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
 
     $scope.vfat2ID = 0;
 
+    $scope.channel = 0;
+
     $scope.minVal = 0;
 
     $scope.maxVal = 255;
@@ -22,6 +24,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
     function get_current_values() {
         socket.ipbus_blockRead(oh_scan_reg(OHID, 2), 6, function(data) { 
             $scope.vfat2ID = data[0];
+            $scope.channel = data[1];
             $scope.minVal = data[2];
             $scope.maxVal = data[3];
             $scope.steps = data[4];
@@ -32,7 +35,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
     get_current_values();
 
     $scope.start_scan = function() {   
-        socket.ipbus_blockWrite(oh_scan_reg(OHID, 1), [ 0, $scope.vfat2ID, 0, $scope.minVal, $scope.maxVal, $scope.steps, $scope.nEvents ]);
+        socket.ipbus_blockWrite(oh_scan_reg(OHID, 1), [ 0, $scope.vfat2ID, $scope.channel, $scope.minVal, $scope.maxVal, $scope.steps, $scope.nEvents ]);
         socket.ipbus_write(oh_scan_reg(OHID, 0), 1);  
         $scope.scanStatus = 1; 
         check_results();

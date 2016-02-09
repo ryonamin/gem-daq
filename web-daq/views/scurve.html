@@ -5,7 +5,7 @@
 {% raw %}
 
 <div>
-    <h1>VFAT2 latency scan</h1>
+    <h1>VFAT2 SCurve scan</h1>
     <div class="row">
         <div class="col-md-4">
             <!-- Scan parameters -->
@@ -22,19 +22,25 @@
                             </div>
                         </div>  
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Minimum latency<br>(default = 0)</label>
+                            <label class="col-sm-4 control-label">Channel</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" min="0" max="127" ng-model="channel" ng-disabled="scanStatus == 1">
+                            </div>
+                        </div>  
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Minimum VCal<br>(default = 0)</label>
                             <div class="col-sm-8">
                                 <input type="number" class="form-control" min="0" max="255" ng-model="minVal" ng-disabled="scanStatus == 1">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Maximum latency<br>(default = 255)</label>
+                            <label class="col-sm-4 control-label">Maximum VCal<br>(default = 255)</label>
                             <div class="col-sm-8">
                                 <input type="number" class="form-control" min="0" max="255" ng-model="maxVal" ng-disabled="scanStatus == 1">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Steps<br>(default = 1)</label>
+                            <label class="col-sm-4 control-label">Steps<br>(default = != 0)</label>
                             <div class="col-sm-8">
                                 <input type="number" class="form-control" ng-model="steps" ng-disabled="scanStatus == 1">
                             </div>
@@ -59,8 +65,8 @@
                 </div>
                 <div class="panel-body">
                     <div class="alert alert-warning" ng-show="scanStatus == 1">A scan is currently running on the system...</div>           
-                    <div id="latency_chart"></div>
-                    <p ng-show="scanStatus == 2">Click on a data point of the graph to set the corresponding latency to the VFAT.</p>
+                    <div id="scurve_chart"></div>
+                    <p ng-show="scanStatus == 2">Click on a data point of the graph to set the corresponding VCal to the VFAT.</p>
                     <a class="btn btn-primary btn-xs" ng-click="save()" ng-show="scanStatus == 2">Save to disk</a>
                 </div>
             </div>
