@@ -228,6 +228,10 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         });
     };
 
+    $('#i2cModal').on('shown.bs.modal', function () {
+        $('#regValueInput').focus();
+    });
+
     $scope.perform_i2c = function() {
         socket.ipbus_write(vfat2_reg(OHID, $scope.selectedVFAT2, $scope.regSel), $scope.regValue, function(data) { Notification.primary('The register has been updated'); });
         $("#i2cModal").modal('hide');

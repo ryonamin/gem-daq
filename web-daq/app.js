@@ -51,16 +51,8 @@ app.get("/i2c", function (req, res) {
     res.render("i2c.html", { js: "i2c" }); 
 });
 
-app.get("/threshold", function (req, res) { 
-    res.render("threshold.html", { js: "threshold" }); 
-});
-
-app.get("/latency", function (req, res) { 
-    res.render("latency.html", { js: "latency" }); 
-});
-
-app.get("/scurve", function (req, res) { 
-    res.render("scurve.html", { js: "scurve" }); 
+app.get("/scan", function (req, res) { 
+    res.render("scan.html", { js: "scan" }); 
 });
 
 app.get("/t1", function (req, res) { 
@@ -69,6 +61,10 @@ app.get("/t1", function (req, res) {
 
 app.get("/tkdata", function (req, res) { 
     res.render("tkdata.html", { js: "tkdata" }); 
+});
+
+app.get("/adc", function (req, res) { 
+    res.render("adc.html", { js: "adc" }); 
 });
 
 

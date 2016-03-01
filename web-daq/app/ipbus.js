@@ -3,7 +3,7 @@ var fs = require('fs');
 var dgram = require('dgram');
 var udp = dgram.createSocket('udp4');
 
-var ipaddr = "137.138.115.185";
+var ipaddr = "192.168.0.161";
 var port = 50001;
 
 var packets = new Array();
@@ -20,9 +20,9 @@ udp.bind();
 setInterval(function() {
     if (packet === undefined && packets.length > 0) {
         packet = packets.shift();
-        udp.send(packet.data, 0, packet.data.length, port, ipaddr); 
+        udp.send(packet.data, 0, packet.data.length, port, ipaddr);
     }
-}, 1);  
+}, 1);
 
 /*
  * Receive transactions
@@ -75,7 +75,7 @@ setInterval(function() {
             packet = undefined;
         }
     }
-}, 10);  
+}, 10);
 
 /*
  * IPBus
@@ -112,16 +112,16 @@ function ipbus(transaction, callback) {
         data: new Buffer(udp_data),
         callback: callback,
         timeout: 100
-    });    
+    });
 }
 
-/* 
+/*
  * Save to disk
  */
 
 var vfat2Status = {
     id: 0,
-    ctrl0: 0, 
+    ctrl0: 0,
     ctrl1: 0,
     ctrl2: 0,
     ctrl3: 0,
@@ -143,7 +143,7 @@ var vfat2Status = {
 function vfat2_reg(oh, vfat2, reg) { return 0x40000000 + ((oh & 0xf) << 20) + ((vfat2 & 0xff) << 8) + (reg & 0xff); }
 
 function save_threshold_latency(transaction, callback) {
-    ipbus({ type: 0, size: 10, addr: vfat2_reg(transaction.oh, transaction.vfat2, 0) }, function(data) { 
+    ipbus({ type: 0, size: 10, addr: vfat2_reg(transaction.oh, transaction.vfat2, 0) }, function(data) {
         vfat2Status.ctrl0 = data.data[0] & 0xff;
         vfat2Status.ctrl1 = data.data[1] & 0xff;
         vfat2Status.iPreampIn = data.data[2] & 0xff;
@@ -153,10 +153,10 @@ function save_threshold_latency(transaction, callback) {
         vfat2Status.iShaperFeed = data.data[6] & 0xff;
         vfat2Status.iComp = data.data[7] & 0xff;
         vfat2Status.chipId0 = data.data[8] & 0xff;
-        vfat2Status.chipId1 = data.data[9] & 0xff; 
+        vfat2Status.chipId1 = data.data[9] & 0xff;
     });
     ipbus({ type: 0, size: 1, addr: vfat2_reg(transaction.oh, transaction.vfat2, 16) }, function(data) { vfat2Status.latency = data.data & 0xff; });
-    ipbus({ type: 0, size: 6, addr: vfat2_reg(transaction.oh, transaction.vfat2, 145) }, function(data) { 
+    ipbus({ type: 0, size: 6, addr: vfat2_reg(transaction.oh, transaction.vfat2, 145) }, function(data) {
         vfat2Status.vcal = data.data[0] & 0xff;
         vfat2Status.vthreshold1 = data.data[1] & 0xff;
         vfat2Status.vthreshold2 = data.data[2] & 0xff;
@@ -229,7 +229,7 @@ function save_vfat2(transaction, callback) {
         content += "calphase\t" + transaction.data[i].calphase + "\n";
     }
 
-    fs.writeFile(fileName, content, callback);    
+    fs.writeFile(fileName, content, callback);
 }
 
 /*
@@ -240,7 +240,7 @@ module.exports = function(io) {
 
     io.on('connection', function (socket) {
 
-        socket.on('ipbus', function(transaction, callback) { ipbus(transaction, callback); }); 
+        socket.on('ipbus', function(transaction, callback) { ipbus(transaction, callback); });
 
         socket.on('save', function(transaction, callback) {
             var now = require('moment')();
@@ -254,8 +254,8 @@ module.exports = function(io) {
                 content += "STEP\t" + transaction.step + "\n";
                 content += "N\t" + transaction.n + "\n";
                 for (var i = 0; i < transaction.data.length; ++i) content += transaction.data[i] + "\n";
-            } 
-            else if (transaction.type == "scurve") {
+            }
+            else if (transaction.type == "scurve" || transaction.type == "threshold_channel") {
                 content += "VFAT2\t" + transaction.vfat2 + "\n";
                 content += "CHANNEL\t" + transaction.channel + "\n";
                 content += "MIN\t" + transaction.min + "\n";

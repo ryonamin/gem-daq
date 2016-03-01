@@ -57,7 +57,7 @@ print
 txtTitle("B. Testing the OH's presence")
 print "   Trying to set the OptoHybrid registers... If this test fails, the script will stop."
 
-glib.set("oh_sys_clk_src", 0)
+glib.set("oh_sys_clk_src", 1)
 glib.set("oh_sys_t1_src", 1)
 glib.set("oh_sys_trigger_lim", 0)
 
