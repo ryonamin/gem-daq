@@ -95,7 +95,15 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         socket.ipbus_read(oh_ei2c_reg(OHID, 8));
         socket.ipbus_fifoRead(oh_ei2c_reg(OHID, 257), 24, function(data) {
             for (var i = 0; i < data.length; ++i) {
-                $scope.vfat2Status[i].isPresent = (((data[i] & 0xF000000) >> 24) == 0x5 ? false : true);
+                /*
+                 * missing VFAT shows 0x0003XX00 in I2C broadcast result
+                 *                    0x05XX0800 in single I2C request
+                 * XX is slot number
+                 * so if ((result >> 16) & 0x3) == 0x3, chip is missing
+                 * or if ((result) & 0x30000)   == 0x30000, chip is missing
+                 */
+                // $scope.vfat2Status[i].isPresent = (((data[i] & 0xF000000) >> 24) == 0x5 ? false : true);
+                $scope.vfat2Status[i].isPresent = ((data[i] >> 16) == 0x3 ? false : true);
                 if ($scope.vfat2Status[i].isPresent) get_detailed_status(i);
             }
         });
