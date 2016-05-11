@@ -35,11 +35,13 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         socket.ipbus_write(oh_ei2c_reg(OHID, 256), 0);
         socket.ipbus_read(oh_ei2c_reg(OHID, 8));
         socket.ipbus_fifoRead(oh_ei2c_reg(OHID, 257), 24, function(data) {
-            for (var i = 0; i < data.length; ++i) $scope.vfat2Status[i].isPresent = ((data[i] & 0xff) == 0 || ((data[i] & 0xF000000) >> 24) == 0x5 ? false : true);
+            for (var i = 0; i < data.length; ++i)
+                $scope.vfat2Status[i].isPresent = (((data[i] & 0xF000000) >> 24) == 0x5 ? false : true);
         });
         socket.ipbus_read(oh_ei2c_reg(OHID, 0));
         socket.ipbus_fifoRead(oh_ei2c_reg(OHID, 257), 24, function(data) {
-            for (var i = 0; i < data.length; ++i) $scope.vfat2Status[i].isOn = (((data[i] & 0xF000000) >> 24) == 0x5 || (data[i] & 0x1) == 0 ? false : true);
+            for (var i = 0; i < data.length; ++i)
+                $scope.vfat2Status[i].isOn = (((data[i] & 0xF000000) >> 24) == 0x5 || (data[i] & 0x1) == 0 ? false : true);
         });   
     };
         

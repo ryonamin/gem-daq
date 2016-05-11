@@ -42,6 +42,7 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         iShaper: 0,
         iShaperFeed: 0,
         iComp: 0,
+        chipId:  0,
         chipId0: 0,
         chipId1: 0,
         latency: 0,
@@ -66,25 +67,26 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
 
     function get_detailed_status(vfat2) {
         socket.ipbus_blockRead(vfat2_reg(OHID, vfat2, 0), 10, function(data) { 
-            $scope.vfat2Status[vfat2].ctrl0 = data[0] & 0xff;
-            $scope.vfat2Status[vfat2].ctrl1 = data[1] & 0xff;
-            $scope.vfat2Status[vfat2].iPreampIn = data[2] & 0xff;
+            $scope.vfat2Status[vfat2].ctrl0       = data[0] & 0xff;
+            $scope.vfat2Status[vfat2].ctrl1       = data[1] & 0xff;
+            $scope.vfat2Status[vfat2].iPreampIn   = data[2] & 0xff;
             $scope.vfat2Status[vfat2].iPremapFeed = data[3] & 0xff;
-            $scope.vfat2Status[vfat2].iPreampOut = data[4] & 0xff;
-            $scope.vfat2Status[vfat2].iShaper = data[5] & 0xff;
+            $scope.vfat2Status[vfat2].iPreampOut  = data[4] & 0xff;
+            $scope.vfat2Status[vfat2].iShaper     = data[5] & 0xff;
             $scope.vfat2Status[vfat2].iShaperFeed = data[6] & 0xff;
-            $scope.vfat2Status[vfat2].iComp = data[7] & 0xff;
-            $scope.vfat2Status[vfat2].chipId0 = data[8] & 0xff;
-            $scope.vfat2Status[vfat2].chipId1 = data[9] & 0xff; 
+            $scope.vfat2Status[vfat2].iComp       = data[7] & 0xff;
+            $scope.vfat2Status[vfat2].chipId      = ((data[9] & 0xff)<<8)+(data[8] & 0xff);
+            $scope.vfat2Status[vfat2].chipId0     = data[8] & 0xff;
+            $scope.vfat2Status[vfat2].chipId1     = data[9] & 0xff; 
         });
         socket.ipbus_read(vfat2_reg(OHID, vfat2, 16), function(data) { $scope.vfat2Status[vfat2].latency = data & 0xff; });
         socket.ipbus_blockRead(vfat2_reg(OHID, vfat2, 145), 6, function(data) { 
-            $scope.vfat2Status[vfat2].vcal = data[0] & 0xff;
+            $scope.vfat2Status[vfat2].vcal        = data[0] & 0xff;
             $scope.vfat2Status[vfat2].vthreshold1 = data[1] & 0xff;
             $scope.vfat2Status[vfat2].vthreshold2 = data[2] & 0xff;
-            $scope.vfat2Status[vfat2].calphase = data[3] & 0xff;
-            $scope.vfat2Status[vfat2].ctrl2 = data[4] & 0xff;
-            $scope.vfat2Status[vfat2].ctrl3 = data[5] & 0xff; 
+            $scope.vfat2Status[vfat2].calphase    = data[3] & 0xff;
+            $scope.vfat2Status[vfat2].ctrl2       = data[4] & 0xff;
+            $scope.vfat2Status[vfat2].ctrl3       = data[5] & 0xff; 
         });
     }
         
@@ -93,13 +95,14 @@ app.controller('appCtrl', ['$scope', 'socket', 'Notification', function($scope, 
         socket.ipbus_read(oh_ei2c_reg(OHID, 8));
         socket.ipbus_fifoRead(oh_ei2c_reg(OHID, 257), 24, function(data) {
             for (var i = 0; i < data.length; ++i) {
-                $scope.vfat2Status[i].isPresent = ((data[i] & 0xff) == 0 || ((data[i] & 0xF000000) >> 24) == 0x5 ? false : true);
+                $scope.vfat2Status[i].isPresent = (((data[i] & 0xF000000) >> 24) == 0x5 ? false : true);
                 if ($scope.vfat2Status[i].isPresent) get_detailed_status(i);
             }
         });
         socket.ipbus_read(oh_ei2c_reg(OHID, 0));
         socket.ipbus_fifoRead(oh_ei2c_reg(OHID, 257), 24, function(data) {
-            for (var i = 0; i < data.length; ++i) $scope.vfat2Status[i].isOn = (((data[i] & 0xF000000) >> 24) == 0x5 || (data[i] & 0x1) == 0 ? false : true);
+            for (var i = 0; i < data.length; ++i)
+                $scope.vfat2Status[i].isOn = (((data[i] & 0xF000000) >> 24) == 0x5 || (data[i] & 0x1) == 0 ? false : true);
         });   
         socket.ipbus_blockRead(oh_counter_reg(OHID, 36), 48, function(data) {
             for (var i = 0; i < 24; ++i) {

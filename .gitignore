@@ -31,3 +31,6 @@ web-daq/node_modules
 
 # Debug log from npm
 web-daq/npm-debug.log
+
+# Compiled python
+*.pyc
