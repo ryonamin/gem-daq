@@ -3,7 +3,7 @@ var fs = require('fs');
 var dgram = require('dgram');
 var udp = dgram.createSocket('udp4');
 
-var ipaddr = "192.168.250.42";
+var ipaddr = "192.168.0.162";
 var port = 50001;
 
 var packets = new Array();
