@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 import sys, os, random, time
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/kernel")
