@@ -81,6 +81,7 @@ class ChipsBusBase(object):
             chipsLog.debug("Read queued: register '" + name + "' with addrOffset = 0x" + uInt32HexStr(addrOffset))
 
             addrTableItem = self.addrTable.getItem(name) # Get the details of the relevant item from the addr table.
+	    print "TEST : " + addrTableItem.getName() + " " + '%x' % addrTableItem.getAddress()
 
             if not addrTableItem.getReadFlag():
                 raise ChipsException("Read transaction creation error: read is not allowed on register '" + addrTableItem.getName() + "'.")
